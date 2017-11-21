@@ -82,6 +82,8 @@ public final class AchievementModel extends Model {
             cursor.moveToNext();
         }
 
+        cursor.close();
+
         return achievementModels;
     }
 
