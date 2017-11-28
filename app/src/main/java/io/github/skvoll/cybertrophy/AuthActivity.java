@@ -1,4 +1,4 @@
-package io.github.skvoll.cybertrophy.screens;
+package io.github.skvoll.cybertrophy;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,8 +16,6 @@ import android.webkit.WebViewClient;
 
 import com.android.volley.VolleyError;
 
-import io.github.skvoll.cybertrophy.R;
-import io.github.skvoll.cybertrophy.VolleySingleton;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.steam.SteamApi;
 import io.github.skvoll.cybertrophy.steam.SteamProfile;

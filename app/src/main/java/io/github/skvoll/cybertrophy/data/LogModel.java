@@ -6,13 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public final class LogModel extends Model {
-    private static final int TYPE_DEBUG = 0;
-    private static final int TYPE_MESSAGE = 1;
-    private static final int TYPE_NEW_GAME = 2;
-    private static final int TYPE_GAME_REMOVED = 3;
-    private static final int TYPE_NEW_ACHIEVEMENT = 4;
-    private static final int TYPE_ACHIEVEMENT_REMOVED = 5;
-    private static final int TYPE_ACHIEVEMENT_UNLOCKED = 6;
+    public static final int TYPE_DEBUG = 0;
+    public static final int TYPE_MESSAGE = 1;
+    public static final int TYPE_NEW_GAME = 2;
+    public static final int TYPE_GAME_REMOVED = 3;
+    public static final int TYPE_NEW_ACHIEVEMENT = 4;
+    public static final int TYPE_ACHIEVEMENT_REMOVED = 5;
+    public static final int TYPE_ACHIEVEMENT_UNLOCKED = 6;
 
     private Long mId;
     private Long mTime;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context="io.github.skvoll.cybertrophy.screens.SplashActivity">
+    tools:context="io.github.skvoll.cybertrophy.SplashActivity">
 
     <io.github.skvoll.cybertrophy.views.CompanyNameTextView
         android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package io.github.skvoll.cybertrophy.screens;
+package io.github.skvoll.cybertrophy;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.services.AllGamesParserJob;
 import io.github.skvoll.cybertrophy.services.FirstGamesParserService;

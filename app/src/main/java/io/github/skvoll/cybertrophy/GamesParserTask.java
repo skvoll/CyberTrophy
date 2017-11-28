@@ -14,6 +14,7 @@ import java.util.HashMap;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.DataContract;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.LogModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.steam.SteamAchievement;
 import io.github.skvoll.cybertrophy.steam.SteamApi;
@@ -162,6 +163,8 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                             if (mProfileModel.isInitialized()) {
                                 mAchievementUnlockedNotification.show(gameModel, achievementModel);
                             }
+
+                            LogModel.achievementUnlocked(achievementModel).save(mContentResolver);
                         }
 
                         updateAchievement(achievementModel, steamAchievement);
@@ -190,6 +193,8 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                             mNewGameNotification.show(gameModel);
                         }
                     }
+
+                    LogModel.newGame(gameModel).save(mContentResolver);
 
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {
                         new AchievementModel(gameModel, steamAchievement).save(mContentResolver);

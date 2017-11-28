@@ -1,4 +1,4 @@
-package io.github.skvoll.cybertrophy.screens;
+package io.github.skvoll.cybertrophy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.github.skvoll.cybertrophy.GlideApp;
-import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class ProfileFragment extends Fragment {

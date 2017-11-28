@@ -1,4 +1,4 @@
-package io.github.skvoll.cybertrophy.screens;
+package io.github.skvoll.cybertrophy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import io.github.skvoll.cybertrophy.R;
+import io.github.skvoll.cybertrophy.dashboard.DashboardFragment;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class MainActivity extends AppCompatActivity {

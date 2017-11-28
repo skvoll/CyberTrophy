@@ -4,6 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="io.github.skvoll.cybertrophy.screens.ProfileFragment">
+    tools:context="io.github.skvoll.cybertrophy.ProfileFragment">
 
 </LinearLayout>
