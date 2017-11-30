@@ -37,6 +37,7 @@ public final class DashboardItem {
 
     private String mAchievementName;
     private String mAchievementIconUrl;
+    private Integer mAchievementUnlockTime;
 
     public DashboardItem(Cursor cursor) {
         mTime = cursor.getInt(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TIME));
@@ -52,6 +53,7 @@ public final class DashboardItem {
         mAppAchievementsUnlockedCount = cursor.getInt(cursor.getColumnIndex(GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT));
         mAchievementName = cursor.getString(cursor.getColumnIndex(AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_NAME));
         mAchievementIconUrl = cursor.getString(cursor.getColumnIndex(AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_ICON_URL));
+        mAchievementUnlockTime = cursor.getInt(cursor.getColumnIndex(AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME));
     }
 
     public static ArrayList<DashboardItem> getItems(SQLiteDatabase database, Integer[] types, Integer limit, Integer offset) {
@@ -64,12 +66,13 @@ public final class DashboardItem {
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_APP_ID + ", " +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_ACHIEVEMENT_CODE + ", " +
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_NAME + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_NAME + ", " +
-                GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_NAME + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ICON_URL + ", " +
-                GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_NAME + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_LOGO_URL + ", " +
+                GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ICON_URL + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ICON_URL + ", " +
+                GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_LOGO_URL + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_LOGO_URL + ", " +
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + ", " +
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + ", " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_NAME + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_NAME + ", " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_ICON_URL + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_ICON_URL + " " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_ICON_URL + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_ICON_URL + ", " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_UNLOCK_TIME + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME + " " +
                 "FROM " + LogEntry.TABLE_NAME + " " +
                 "LEFT JOIN " + GameEntry.TABLE_NAME + " " +
                 "ON " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " " +
@@ -156,5 +159,9 @@ public final class DashboardItem {
 
     public String getAchievementIconUrl() {
         return mAchievementIconUrl;
+    }
+
+    public Integer getAchievementUnlockTime() {
+        return mAchievementUnlockTime;
     }
 }

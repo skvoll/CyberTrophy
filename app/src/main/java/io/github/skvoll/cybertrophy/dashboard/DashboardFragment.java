@@ -1,10 +1,10 @@
 package io.github.skvoll.cybertrophy.dashboard;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,37 +18,32 @@ import io.github.skvoll.cybertrophy.data.LogModel;
 public class DashboardFragment extends Fragment {
     private static final String TAG = DashboardFragment.class.getSimpleName();
 
+    private ViewGroup mRootView;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     public DashboardFragment() {
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
-    }
+        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+        mRecyclerView = mRootView.findViewById(R.id.rv_list);
 
-        loadData();
-    }
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
-    private void loadData() {
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
         ArrayList<DashboardItem> dashboardItems = DashboardItem.getItems(
                 databaseHelper.getReadableDatabase(), getItemsTypes(), -1, 0);
 
-        for (DashboardItem dashboardItem : dashboardItems) {
-            switch (dashboardItem.getType()) {
-                case DashboardItem.TYPE_NEW_GAME:
-                    Log.i(TAG, "New game added: " + dashboardItem.getAppName());
-                    break;
-                case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
-                    Log.i(TAG, "Achievement unlocked: " + dashboardItem.getAchievementName());
-                    break;
-            }
-        }
+        mAdapter = new DashboardAdapter(getContext(), dashboardItems);
+        mRecyclerView.setAdapter(mAdapter);
+
+        return mRootView;
     }
 
     private Integer[] getItemsTypes() {
