@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
         ArrayList<DashboardItem> dashboardItems = DashboardItem.getItems(
-                databaseHelper.getReadableDatabase(), getItemsTypes(), -1, 0);
+                databaseHelper.getReadableDatabase(), getItemsTypes(), 100, 0);
 
         mAdapter = new DashboardAdapter(getContext(), dashboardItems);
         mRecyclerView.setAdapter(mAdapter);

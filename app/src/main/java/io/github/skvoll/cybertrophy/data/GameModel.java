@@ -11,6 +11,7 @@ import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 public final class GameModel extends Model {
     private static String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
+    private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
 
     private Long mId;
     private Long mSteamId;
@@ -43,7 +44,7 @@ public final class GameModel extends Model {
         mName = steamGame.name;
         mPlaytimeForever = steamGame.playtimeForever;
         mIconUrl = String.format(MEDIA_URL_TEMPLATE, steamGame.appId, steamGame.imgIconUrl);
-        mLogoUrl = String.format(MEDIA_URL_TEMPLATE, steamGame.appId, steamGame.imgLogoUrl);
+        mLogoUrl = String.format(MEDIA_LOGO_TEMPLATE, steamGame.appId);
         mLastPlay = System.currentTimeMillis() / 1000;
         mAchievementsTotalCount = steamGame.getAchievementsTotalCount();
         mAchievementsUnlockedCount = steamGame.getAchievementsUnlockedCount();

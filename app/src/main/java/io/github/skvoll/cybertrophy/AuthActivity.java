@@ -17,6 +17,7 @@ import android.webkit.WebViewClient;
 import com.android.volley.VolleyError;
 
 import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 import io.github.skvoll.cybertrophy.steam.SteamApi;
 import io.github.skvoll.cybertrophy.steam.SteamProfile;
 
@@ -123,6 +124,8 @@ public class AuthActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            mActivity.startService(new Intent(mActivity, FirstGamesParserService.class));
+
             Intent intent = new Intent(mActivity, MainActivity.class);
 
             Bundle bundle = new Bundle();

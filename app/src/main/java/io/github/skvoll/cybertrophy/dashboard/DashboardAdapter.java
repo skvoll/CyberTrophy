@@ -3,7 +3,6 @@ package io.github.skvoll.cybertrophy.dashboard;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,16 +56,14 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             case DashboardItem.TYPE_NEW_GAME:
                 NewGameViewHolder newGameViewHolder = (NewGameViewHolder) viewHolder;
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
-                        .fitCenter()
-                        .placeholder(R.drawable.no_image)
+                        .placeholder(R.drawable.no_game_logo)
                         .into(newGameViewHolder.gameLogo);
                 newGameViewHolder.gameName.setText(dashboardItem.getAppName());
                 break;
             case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
                 AchievementUnlockedViewHolder achievementUnlockedViewHolder = (AchievementUnlockedViewHolder) viewHolder;
                 GlideApp.with(mContext).load(dashboardItem.getAchievementIconUrl())
-                        .fitCenter()
-                        .placeholder(R.drawable.no_image)
+                        .placeholder(R.drawable.no_achievement_icon)
                         .into(achievementUnlockedViewHolder.achievementIcon);
                 achievementUnlockedViewHolder.achievementName.setText(dashboardItem.getAchievementName());
                 achievementUnlockedViewHolder.achievementTime.setText(

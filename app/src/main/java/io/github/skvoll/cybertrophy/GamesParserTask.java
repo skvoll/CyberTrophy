@@ -80,7 +80,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
             }
 
             if (steamGames == null || steamGames.size() <= 0) {
-                Log.d(TAG, "\"" + mProfileModel.getName() + "(" + mProfileModel.getSteamId() + ")\" has no games. terminate.");
+                Log.d(TAG, "\"" + mProfileModel.getName() + "(" + mProfileModel.getSteamId() + ")\" has no games. Terminate.");
 
                 if (mAction == ACTION_ALL) {
                     checkGamesForDeleting(gameModels, steamGames);
@@ -91,7 +91,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                 return true;
             }
 
-            Log.d(TAG, steamGames.size() + " game(s) loaded. parsing.");
+            Log.d(TAG, steamGames.size() + " game(s) loaded. Parsing.");
 
             for (int i = 0; i < steamGames.size(); i++) {
                 if (isCancelled()) {
@@ -107,6 +107,14 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                     continue;
                 }
 
+                if (mAction == ACTION_RECENT) {
+                    if (gameModel != null && gameModel.getPlaytimeForever().equals(steamGame.playtimeForever)) {
+                        Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" has not been launched. Skipping.");
+
+                        continue;
+                    }
+                }
+
                 loadSteamGameAchievements(steamGame, mProfileModel.getSteamId());
 
                 publishProgress(steamGame);
@@ -118,13 +126,13 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                         updateGame(gameModel, steamGame);
 
                         if (gameModel.getAchievementsTotalCount() != 0) {
-                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" achievements were removed. deleting.");
+                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" achievements were removed. Deleting.");
 
                             deleteGameAchievement(gameModel);
                         }
                     } else {
                         if (mAction != ACTION_FIRST) {
-                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is new. saving.");
+                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is new. Saving.");
                         }
 
                         new GameModel(mProfileModel, steamGame).save(mContentResolver);
@@ -135,7 +143,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                     continue;
                 }
 
-                Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" has " + steamGame.getAchievementsTotalCount() + " achievement(s). parsing.");
+                Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" has " + steamGame.getAchievementsTotalCount() + " achievement(s). Parsing.");
 
                 if (gameModel != null) {
                     updateGame(gameModel, steamGame);
@@ -172,7 +180,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
 
                     for (AchievementModel achievementModel : achievementModels.values()) {
                         if (!steamGame.getSteamAchievements().containsKey(achievementModel.getCode())) {
-                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" achievement \"" + achievementModel.getName() + "\" was removed. deleting.");
+                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" achievement \"" + achievementModel.getName() + "\" was removed. Deleting.");
 
                             if (mProfileModel.isInitialized()) {
                                 mAchievementRemovedNotification.show(gameModel);
@@ -187,7 +195,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                     gameModel = new GameModel(mProfileModel, steamGame);
 
                     if (mAction != ACTION_FIRST) {
-                        Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is new. saving.");
+                        Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is new. Saving.");
 
                         if (mProfileModel.isInitialized()) {
                             mNewGameNotification.show(gameModel);
@@ -197,7 +205,14 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                     LogModel.newGame(gameModel).save(mContentResolver);
 
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {
-                        new AchievementModel(gameModel, steamAchievement).save(mContentResolver);
+                        AchievementModel achievementModel = new AchievementModel(gameModel, steamAchievement);
+                        achievementModel.save(mContentResolver);
+
+                        // TODO: remove
+                        if (achievementModel.isUnlocked()) {
+                            Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" achievement \"" + steamAchievement.displayName + "\" unlocked.");
+                            LogModel.achievementUnlocked(achievementModel).save(mContentResolver);
+                        }
                     }
 
                     gameModel.save(mContentResolver);
@@ -318,7 +333,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
             GameModel gameModel = gameModels.valueAt(i);
 
             if (steamGames == null || steamGames.indexOfKey(gameModel.getAppId()) < 0) {
-                Log.d(TAG, "\"" + gameModel.getName() + "(" + gameModel.getAppId() + ")\" was removed. deleting.");
+                Log.d(TAG, "\"" + gameModel.getName() + "(" + gameModel.getAppId() + ")\" was removed. Deleting.");
 
                 if (mProfileModel.isInitialized()) {
                     mGameRemovedNotification.show(gameModel);
