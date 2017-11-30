@@ -1,6 +1,7 @@
 package io.github.skvoll.cybertrophy.dashboard;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -17,12 +18,43 @@ import io.github.skvoll.cybertrophy.R;
 public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = DashboardAdapter.class.getSimpleName();
 
+    private static int VISIBLE_THRESHOLD = 10;
     private Context mContext;
+    private DashboardAdapter.onEndReachListener mOnEndReachListener;
     private ArrayList<DashboardItem> mDashboardItems;
 
-    DashboardAdapter(Context context, ArrayList<DashboardItem> dashboardItems) {
+    private boolean mIsLoading = false;
+
+    DashboardAdapter(Context context, RecyclerView recyclerView, ArrayList<DashboardItem> dashboardItems) {
         mContext = context;
         mDashboardItems = dashboardItems;
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                int itemsCount = linearLayoutManager.getItemCount();
+                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (!mIsLoading && itemsCount <= (lastVisibleItem + VISIBLE_THRESHOLD)) {
+                    if (mOnEndReachListener != null) {
+                        mOnEndReachListener.onEndReached();
+                    }
+
+                    mIsLoading = true;
+                }
+            }
+        });
+    }
+
+    void setLoaded() {
+        mIsLoading = false;
+    }
+
+    void setOnEndReachListener(DashboardAdapter.onEndReachListener onEndReachListener) {
+        mOnEndReachListener = onEndReachListener;
     }
 
     @Override
@@ -76,6 +108,10 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return mDashboardItems.size();
+    }
+
+    interface onEndReachListener {
+        void onEndReached();
     }
 
     private static class NewGameViewHolder extends RecyclerView.ViewHolder {

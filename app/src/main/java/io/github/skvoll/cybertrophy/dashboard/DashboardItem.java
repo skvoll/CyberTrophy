@@ -1,5 +1,6 @@
 package io.github.skvoll.cybertrophy.dashboard;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 import io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 import io.github.skvoll.cybertrophy.data.DataContract.LogEntry;
+import io.github.skvoll.cybertrophy.data.DatabaseHelper;
 import io.github.skvoll.cybertrophy.data.LogModel;
 
 public final class DashboardItem {
@@ -56,7 +58,9 @@ public final class DashboardItem {
         mAchievementUnlockTime = cursor.getInt(cursor.getColumnIndex(AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME));
     }
 
-    public static ArrayList<DashboardItem> getItems(SQLiteDatabase database, Integer[] types, Integer limit, Integer offset) {
+    public static ArrayList<DashboardItem> getItems(Context context, Integer[] types, Integer limit, Integer offset) {
+        SQLiteDatabase database = (new DatabaseHelper(context)).getReadableDatabase();
+
         String query = "" +
                 "SELECT " +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TIME + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TIME + ", " +
