@@ -9,6 +9,8 @@ import android.support.v4.util.LongSparseArray;
 
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
+import static io.github.skvoll.cybertrophy.data.DataContract.*;
+
 public final class GameModel extends Model {
     private static String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
     private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
@@ -25,17 +27,17 @@ public final class GameModel extends Model {
     private Integer mAchievementsUnlockedCount;
 
     public GameModel(Cursor cursor) {
-        mId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry._ID));
+        mId = cursor.getLong(cursor.getColumnIndex(ProfileEntry._ID));
 
-        mSteamId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_STEAM_ID));
-        mAppId = cursor.getLong(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_APP_ID));
-        mName = cursor.getString(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_NAME));
-        mPlaytimeForever = cursor.getInt(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_PLAYTIME_FOREVER));
-        mIconUrl = cursor.getString(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_ICON_URL));
-        mLogoUrl = cursor.getString(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_LOGO_URL));
-        mLastPlay = cursor.getLong(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_LAST_PLAY));
-        mAchievementsTotalCount = cursor.getInt(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT));
-        mAchievementsUnlockedCount = cursor.getInt(cursor.getColumnIndex(DataContract.GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT));
+        mSteamId = cursor.getLong(cursor.getColumnIndex(ProfileEntry.COLUMN_STEAM_ID));
+        mAppId = cursor.getLong(cursor.getColumnIndex(GameEntry.COLUMN_APP_ID));
+        mName = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_NAME));
+        mPlaytimeForever = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_PLAYTIME_FOREVER));
+        mIconUrl = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_ICON_URL));
+        mLogoUrl = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_LOGO_URL));
+        mLastPlay = cursor.getLong(cursor.getColumnIndex(GameEntry.COLUMN_LAST_PLAY));
+        mAchievementsTotalCount = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT));
+        mAchievementsUnlockedCount = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT));
     }
 
     public GameModel(ProfileModel profileModel, SteamGame steamGame) {
@@ -51,7 +53,7 @@ public final class GameModel extends Model {
     }
 
     public static GameModel getById(ContentResolver contentResolver, Long id) {
-        Uri uri = ContentUris.withAppendedId(DataContract.GameEntry.URI, id);
+        Uri uri = ContentUris.withAppendedId(GameEntry.URI, id);
         Cursor cursor = contentResolver.query(uri,
                 null, null, null, null);
 
@@ -73,10 +75,10 @@ public final class GameModel extends Model {
     }
 
     public static GameModel getByAppId(ContentResolver contentResolver, Long appId) {
-        String selection = "app_id=?";
+        String selection = GameEntry.COLUMN_APP_ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(appId)};
 
-        Cursor cursor = contentResolver.query(DataContract.GameEntry.URI, null,
+        Cursor cursor = contentResolver.query(GameEntry.URI, null,
                 selection, selectionArgs, null);
 
         if (cursor == null) {
@@ -97,10 +99,10 @@ public final class GameModel extends Model {
     }
 
     public static LongSparseArray<GameModel> getByProfile(ContentResolver contentResolver, ProfileModel profileModel) {
-        String selection = "steam_id=?";
+        String selection = GameEntry.COLUMN_STEAM_ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getSteamId())};
 
-        Cursor cursor = contentResolver.query(DataContract.GameEntry.URI, null,
+        Cursor cursor = contentResolver.query(GameEntry.URI, null,
                 selection, selectionArgs, null);
 
         if (cursor == null) {
@@ -131,10 +133,10 @@ public final class GameModel extends Model {
     @Override
     Uri getUri(Long id) {
         if (id == null) {
-            return DataContract.GameEntry.URI;
+            return GameEntry.URI;
         }
 
-        return ContentUris.withAppendedId(DataContract.GameEntry.URI, id);
+        return ContentUris.withAppendedId(GameEntry.URI, id);
     }
 
     @Override
@@ -207,15 +209,15 @@ public final class GameModel extends Model {
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(DataContract.ProfileEntry.COLUMN_STEAM_ID, mSteamId);
-        contentValues.put(DataContract.GameEntry.COLUMN_APP_ID, mAppId);
-        contentValues.put(DataContract.GameEntry.COLUMN_NAME, mName);
-        contentValues.put(DataContract.GameEntry.COLUMN_PLAYTIME_FOREVER, mPlaytimeForever);
-        contentValues.put(DataContract.GameEntry.COLUMN_ICON_URL, mIconUrl);
-        contentValues.put(DataContract.GameEntry.COLUMN_LOGO_URL, mLogoUrl);
-        contentValues.put(DataContract.GameEntry.COLUMN_LAST_PLAY, mLastPlay);
-        contentValues.put(DataContract.GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT, mAchievementsTotalCount);
-        contentValues.put(DataContract.GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT, mAchievementsUnlockedCount);
+        contentValues.put(ProfileEntry.COLUMN_STEAM_ID, mSteamId);
+        contentValues.put(GameEntry.COLUMN_APP_ID, mAppId);
+        contentValues.put(GameEntry.COLUMN_NAME, mName);
+        contentValues.put(GameEntry.COLUMN_PLAYTIME_FOREVER, mPlaytimeForever);
+        contentValues.put(GameEntry.COLUMN_ICON_URL, mIconUrl);
+        contentValues.put(GameEntry.COLUMN_LOGO_URL, mLogoUrl);
+        contentValues.put(GameEntry.COLUMN_LAST_PLAY, mLastPlay);
+        contentValues.put(GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT, mAchievementsTotalCount);
+        contentValues.put(GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT, mAchievementsUnlockedCount);
 
         return contentValues;
     }

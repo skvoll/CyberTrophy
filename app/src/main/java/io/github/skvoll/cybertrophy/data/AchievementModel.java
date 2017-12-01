@@ -9,6 +9,7 @@ import android.net.Uri;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
+import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 import io.github.skvoll.cybertrophy.steam.SteamAchievement;
 
 public final class AchievementModel extends Model {
@@ -29,16 +30,16 @@ public final class AchievementModel extends Model {
         mId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry._ID));
 
         mSteamId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_STEAM_ID));
-        mAppId = cursor.getLong(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_APP_ID));
-        mCode = cursor.getString(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_CODE));
-        mName = cursor.getString(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_NAME));
-        mIsHidden = cursor.getInt(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_IS_HIDDEN));
-        mDescription = cursor.getString(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_DESCRIPTION));
-        mIconUrl = cursor.getString(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_ICON_URL));
-        mIconGrayUrl = cursor.getString(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_ICON_GRAY_URL));
-        mPercent = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_PERCENT)));
-        mIsUnlocked = cursor.getInt(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_IS_UNLOCKED));
-        mUnlockTime = cursor.getInt(cursor.getColumnIndex(DataContract.AchievementEntry.COLUMN_UNLOCK_TIME));
+        mAppId = cursor.getLong(cursor.getColumnIndex(AchievementEntry.COLUMN_APP_ID));
+        mCode = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_CODE));
+        mName = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_NAME));
+        mIsHidden = cursor.getInt(cursor.getColumnIndex(AchievementEntry.COLUMN_IS_HIDDEN));
+        mDescription = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_DESCRIPTION));
+        mIconUrl = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_ICON_URL));
+        mIconGrayUrl = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_ICON_GRAY_URL));
+        mPercent = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndex(AchievementEntry.COLUMN_PERCENT)));
+        mIsUnlocked = cursor.getInt(cursor.getColumnIndex(AchievementEntry.COLUMN_IS_UNLOCKED));
+        mUnlockTime = cursor.getInt(cursor.getColumnIndex(AchievementEntry.COLUMN_UNLOCK_TIME));
     }
 
     public AchievementModel(GameModel gameModel, SteamAchievement steamAchievement) {
@@ -55,11 +56,35 @@ public final class AchievementModel extends Model {
         mUnlockTime = steamAchievement.getUnlockTime();
     }
 
+    public static AchievementModel getByCode(ContentResolver contentResolver, String code) {
+        String selection = AchievementEntry.COLUMN_CODE + "=?";
+        String[] selectionArgs = new String[]{code};
+
+        Cursor cursor = contentResolver.query(AchievementEntry.URI, null,
+                selection, selectionArgs, null);
+
+        if (cursor == null) {
+            return null;
+        }
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            return null;
+        }
+
+        AchievementModel achievementEntry = new AchievementModel(cursor);
+
+        cursor.close();
+
+        return achievementEntry;
+    }
+
     public static HashMap<String, AchievementModel> getByGame(ContentResolver contentResolver, GameModel gameModel) {
-        String selection = "steam_id=? AND app_id=?";
+        String selection = AchievementEntry.COLUMN_STEAM_ID + "=? AND " + AchievementEntry.COLUMN_APP_ID + "=?";
         String[] selectionArgs = new String[]{gameModel.getSteamId().toString(), gameModel.getAppId().toString()};
 
-        Cursor cursor = contentResolver.query(DataContract.AchievementEntry.URI, null,
+        Cursor cursor = contentResolver.query(AchievementEntry.URI, null,
                 selection, selectionArgs, null);
 
         if (cursor == null) {
@@ -91,10 +116,10 @@ public final class AchievementModel extends Model {
     Uri getUri(Long id) {
         // TODO: check with null id
         if (id == null) {
-            return DataContract.AchievementEntry.URI;
+            return AchievementEntry.URI;
         }
 
-        return ContentUris.withAppendedId(DataContract.AchievementEntry.URI, id);
+        return ContentUris.withAppendedId(AchievementEntry.URI, id);
     }
 
     @Override
@@ -184,16 +209,16 @@ public final class AchievementModel extends Model {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(DataContract.ProfileEntry.COLUMN_STEAM_ID, mSteamId);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_APP_ID, mAppId);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_CODE, mCode);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_NAME, mName);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_IS_HIDDEN, mIsHidden);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_DESCRIPTION, mDescription);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_ICON_URL, mIconUrl);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_ICON_GRAY_URL, mIconGrayUrl);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_PERCENT, mPercent.doubleValue());
-        contentValues.put(DataContract.AchievementEntry.COLUMN_IS_UNLOCKED, mIsUnlocked);
-        contentValues.put(DataContract.AchievementEntry.COLUMN_UNLOCK_TIME, mUnlockTime);
+        contentValues.put(AchievementEntry.COLUMN_APP_ID, mAppId);
+        contentValues.put(AchievementEntry.COLUMN_CODE, mCode);
+        contentValues.put(AchievementEntry.COLUMN_NAME, mName);
+        contentValues.put(AchievementEntry.COLUMN_IS_HIDDEN, mIsHidden);
+        contentValues.put(AchievementEntry.COLUMN_DESCRIPTION, mDescription);
+        contentValues.put(AchievementEntry.COLUMN_ICON_URL, mIconUrl);
+        contentValues.put(AchievementEntry.COLUMN_ICON_GRAY_URL, mIconGrayUrl);
+        contentValues.put(AchievementEntry.COLUMN_PERCENT, mPercent.doubleValue());
+        contentValues.put(AchievementEntry.COLUMN_IS_UNLOCKED, mIsUnlocked);
+        contentValues.put(AchievementEntry.COLUMN_UNLOCK_TIME, mUnlockTime);
 
         return contentValues;
     }

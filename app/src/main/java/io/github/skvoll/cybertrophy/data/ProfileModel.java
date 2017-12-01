@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.github.skvoll.cybertrophy.VolleySingleton;
+import io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 import io.github.skvoll.cybertrophy.steam.SteamProfile;
 
 public final class ProfileModel extends Model {
@@ -37,19 +38,19 @@ public final class ProfileModel extends Model {
     private Integer mIsActive;
 
     public ProfileModel(Cursor cursor) {
-        mId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry._ID));
+        mId = cursor.getLong(cursor.getColumnIndex(ProfileEntry._ID));
 
-        mSteamId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_STEAM_ID));
-        mUrl = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_URL));
-        mName = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_NAME));
-        mRealName = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_REAL_NAME));
-        mAvatar = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_AVATAR));
-        mAvatarMedium = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_AVATAR_MEDIUM));
-        mAvatarFull = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_AVATAR_FULL));
-        mLocCountryCode = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_LOC_COUNTRY_CODE));
-        mBackgroundImage = cursor.getString(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_BACKGROUND_IMAGE));
-        mIsInitialized = cursor.getInt(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_IS_INITIALIZED));
-        mIsActive = cursor.getInt(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_IS_ACTIVE));
+        mSteamId = cursor.getLong(cursor.getColumnIndex(ProfileEntry.COLUMN_STEAM_ID));
+        mUrl = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_URL));
+        mName = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_NAME));
+        mRealName = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_REAL_NAME));
+        mAvatar = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_AVATAR));
+        mAvatarMedium = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_AVATAR_MEDIUM));
+        mAvatarFull = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_AVATAR_FULL));
+        mLocCountryCode = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_LOC_COUNTRY_CODE));
+        mBackgroundImage = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_BACKGROUND_IMAGE));
+        mIsInitialized = cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_IS_INITIALIZED));
+        mIsActive = cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_IS_ACTIVE));
     }
 
     public ProfileModel(SteamProfile steamProfile) {
@@ -67,10 +68,10 @@ public final class ProfileModel extends Model {
     }
 
     public static ProfileModel getActive(ContentResolver contentResolver) {
-        String selection = "is_active=?";
+        String selection = ProfileEntry.COLUMN_IS_ACTIVE + "=?";
         String[] selectionArgs = new String[]{"1"};
 
-        Cursor cursor = contentResolver.query(DataContract.ProfileEntry.URI, null,
+        Cursor cursor = contentResolver.query(ProfileEntry.URI, null,
                 selection, selectionArgs, null);
 
         if (cursor == null) {
@@ -91,10 +92,10 @@ public final class ProfileModel extends Model {
     }
 
     public static ProfileModel getBySteamId(ContentResolver contentResolver, Long steamId) {
-        String selection = "steam_id=?";
+        String selection = ProfileEntry.COLUMN_STEAM_ID + "=?";
         String[] selectionArgs = new String[]{steamId.toString()};
 
-        Cursor cursor = contentResolver.query(DataContract.ProfileEntry.URI, null,
+        Cursor cursor = contentResolver.query(ProfileEntry.URI, null,
                 selection, selectionArgs, null);
 
         if (cursor == null) {
@@ -117,10 +118,10 @@ public final class ProfileModel extends Model {
     @Override
     Uri getUri(Long id) {
         if (id == null) {
-            return DataContract.ProfileEntry.URI;
+            return ProfileEntry.URI;
         }
 
-        return ContentUris.withAppendedId(DataContract.ProfileEntry.URI, id);
+        return ContentUris.withAppendedId(ProfileEntry.URI, id);
     }
 
     @Override
@@ -208,17 +209,17 @@ public final class ProfileModel extends Model {
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(DataContract.ProfileEntry.COLUMN_STEAM_ID, mSteamId);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_URL, mUrl);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_NAME, mName);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_REAL_NAME, mRealName);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_AVATAR, mAvatar);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_AVATAR_MEDIUM, mAvatarMedium);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_AVATAR_FULL, mAvatarFull);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_LOC_COUNTRY_CODE, mLocCountryCode);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_BACKGROUND_IMAGE, mBackgroundImage);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_IS_INITIALIZED, mIsInitialized);
-        contentValues.put(DataContract.ProfileEntry.COLUMN_IS_ACTIVE, mIsActive);
+        contentValues.put(ProfileEntry.COLUMN_STEAM_ID, mSteamId);
+        contentValues.put(ProfileEntry.COLUMN_URL, mUrl);
+        contentValues.put(ProfileEntry.COLUMN_NAME, mName);
+        contentValues.put(ProfileEntry.COLUMN_REAL_NAME, mRealName);
+        contentValues.put(ProfileEntry.COLUMN_AVATAR, mAvatar);
+        contentValues.put(ProfileEntry.COLUMN_AVATAR_MEDIUM, mAvatarMedium);
+        contentValues.put(ProfileEntry.COLUMN_AVATAR_FULL, mAvatarFull);
+        contentValues.put(ProfileEntry.COLUMN_LOC_COUNTRY_CODE, mLocCountryCode);
+        contentValues.put(ProfileEntry.COLUMN_BACKGROUND_IMAGE, mBackgroundImage);
+        contentValues.put(ProfileEntry.COLUMN_IS_INITIALIZED, mIsInitialized);
+        contentValues.put(ProfileEntry.COLUMN_IS_ACTIVE, mIsActive);
 
         return contentValues;
     }
