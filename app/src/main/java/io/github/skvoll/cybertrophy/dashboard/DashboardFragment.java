@@ -30,33 +30,34 @@ public class DashboardFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private DashboardAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private DashboardAdapter.DashboardOnItemClickListener mDashboardOnItemClickListener = new DashboardAdapter.DashboardOnItemClickListener() {
-        @Override
-        public void onClick(DashboardItem dashboardItem) {
-            if (getContext() == null) {
-                return;
-            }
-
-            ContentResolver contentResolver = getContext().getContentResolver();
-
-            switch (dashboardItem.getType()) {
-                case DashboardItem.TYPE_CURRENT_GAME:
-                    break;
-                case DashboardItem.TYPE_NEW_GAME:
-                    break;
-                case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
-                    AchievementModel achievementModel = AchievementModel.getByCode(
-                            contentResolver, dashboardItem.getAchievementCode());
-
-                    if (achievementModel == null) {
+    private DashboardAdapter.DashboardOnItemClickListener mDashboardOnItemClickListener =
+            new DashboardAdapter.DashboardOnItemClickListener() {
+                @Override
+                public void onClick(DashboardItem dashboardItem) {
+                    if (getContext() == null) {
                         return;
                     }
 
-                    showAchievementDialog(achievementModel);
-                    break;
-            }
-        }
-    };
+                    ContentResolver contentResolver = getContext().getContentResolver();
+
+                    switch (dashboardItem.getType()) {
+                        case DashboardItem.TYPE_CURRENT_GAME:
+                            break;
+                        case DashboardItem.TYPE_NEW_GAME:
+                            break;
+                        case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
+                            AchievementModel achievementModel = AchievementModel.getByCode(
+                                    contentResolver, dashboardItem.getAchievementCode());
+
+                            if (achievementModel == null) {
+                                return;
+                            }
+
+                            showAchievementDialog(achievementModel);
+                            break;
+                    }
+                }
+            };
 
     private ArrayList<DashboardItem> mDashboardItems = new ArrayList<>(0);
 
