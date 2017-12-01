@@ -249,8 +249,9 @@ public final class SteamApi {
 
     public SteamApiResponseListener<HashMap<String, SteamAchievement>> getSchemaForGame(
             final Long appId,
+            final String language,
             final SteamApiResponseListener<HashMap<String, SteamAchievement>> listener) {
-        String uri = String.format("/ISteamUserStats/GetSchemaForGame/v2/?appid=%s", appId);
+        String uri = String.format("/ISteamUserStats/GetSchemaForGame/v2/?appid=%s&l=%s", appId, language);
         String url = makeUrl(uri);
 
         SteamApiRequest request = new SteamApiRequest<HashMap<String, SteamAchievement>>(

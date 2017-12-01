@@ -278,7 +278,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
 
         SteamApi.FutureResponseListener<HashMap<String, SteamAchievement>> schemaListener =
                 new SteamApi.FutureResponseListener<>();
-        mSteamApi.getSchemaForGame(steamGame.appId, schemaListener);
+        mSteamApi.getSchemaForGame(steamGame.appId, "russian", schemaListener);
         HashMap<String, SteamAchievement> steamAchievements = schemaListener.get(SteamApi.REQUEST_TIMEOUT);
 
         if (steamAchievements == null || steamAchievements.size() <= 0) {
@@ -307,16 +307,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                 if (steamPlayerAchievement.achieved == 1) {
                     steamAchievement.setUnlocked(true);
                     steamAchievement.setUnlockTime(steamPlayerAchievement.unlockTime);
-                }
-
-                if (steamAchievement.displayName == null
-                        || !steamAchievement.displayName.equals(steamPlayerAchievement.name)) {
-                    steamAchievement.displayName = steamPlayerAchievement.name;
-                }
-
-                if (steamAchievement.description == null
-                        || !steamAchievement.description.equals(steamPlayerAchievement.description)) {
-                    steamAchievement.description = steamPlayerAchievement.description;
                 }
             }
 
