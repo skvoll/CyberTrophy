@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -65,6 +66,11 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
+            case DashboardItem.TYPE_CURRENT_GAME:
+                return new CurrentGameViewHolder(
+                        LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.fragment_dashboard_item_current_game, parent, false)
+                );
             case DashboardItem.TYPE_NEW_GAME:
                 return new NewGameViewHolder(
                         LayoutInflater.from(parent.getContext())
@@ -85,6 +91,21 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         DashboardItem dashboardItem = mDashboardItems.get(position);
 
         switch (viewHolder.getItemViewType()) {
+            case DashboardItem.TYPE_CURRENT_GAME:
+                CurrentGameViewHolder currentGameViewHolder = (CurrentGameViewHolder) viewHolder;
+                GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
+                        .placeholder(R.drawable.no_game_logo)
+                        .into(currentGameViewHolder.gameLogo);
+                currentGameViewHolder.gameName.setText(dashboardItem.getAppName());
+                currentGameViewHolder.gameProgress.setText(
+                        mContext.getResources().getString(R.string.game_achievements_progress,
+                                dashboardItem.getAppAchievementsUnlockedCount(),
+                                dashboardItem.getAppAchievementsTotalTount())
+                );
+                currentGameViewHolder.gameProgressBar.setScaleY(2f);
+                currentGameViewHolder.gameProgressBar.setMax(dashboardItem.getAppAchievementsTotalTount());
+                currentGameViewHolder.gameProgressBar.setProgress(dashboardItem.getAppAchievementsUnlockedCount());
+                break;
             case DashboardItem.TYPE_NEW_GAME:
                 NewGameViewHolder newGameViewHolder = (NewGameViewHolder) viewHolder;
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
@@ -115,6 +136,22 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     interface onEndReachListener {
         void onEndReached();
+    }
+
+    private static class CurrentGameViewHolder extends RecyclerView.ViewHolder {
+        ImageView gameLogo;
+        TextView gameName;
+        TextView gameProgress;
+        ProgressBar gameProgressBar;
+
+        CurrentGameViewHolder(View itemView) {
+            super(itemView);
+
+            gameLogo = itemView.findViewById(R.id.iv_game_logo);
+            gameName = itemView.findViewById(R.id.tv_game_name);
+            gameProgress = itemView.findViewById(R.id.tv_game_progress);
+            gameProgressBar = itemView.findViewById(R.id.pb_game_progress);
+        }
     }
 
     private static class NewGameViewHolder extends RecyclerView.ViewHolder {

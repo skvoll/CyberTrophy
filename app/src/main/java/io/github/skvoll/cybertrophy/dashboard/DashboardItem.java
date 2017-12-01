@@ -14,8 +14,6 @@ import io.github.skvoll.cybertrophy.data.DatabaseHelper;
 import io.github.skvoll.cybertrophy.data.LogModel;
 
 public final class DashboardItem {
-    private static final String TAG = DashboardItem.class.getSimpleName();
-
     public static final int TYPE_DEBUG = LogModel.TYPE_DEBUG;
     public static final int TYPE_MESSAGE = LogModel.TYPE_MESSAGE;
     public static final int TYPE_NEW_GAME = LogModel.TYPE_NEW_GAME;
@@ -23,6 +21,10 @@ public final class DashboardItem {
     public static final int TYPE_NEW_ACHIEVEMENT = LogModel.TYPE_NEW_ACHIEVEMENT;
     public static final int TYPE_ACHIEVEMENT_REMOVED = LogModel.TYPE_ACHIEVEMENT_REMOVED;
     public static final int TYPE_ACHIEVEMENT_UNLOCKED = LogModel.TYPE_ACHIEVEMENT_UNLOCKED;
+
+    public static final int TYPE_CURRENT_GAME = 1001;
+
+    private static final String TAG = DashboardItem.class.getSimpleName();
 
     private Integer mTime;
     private Integer mType;
@@ -41,7 +43,7 @@ public final class DashboardItem {
     private String mAchievementIconUrl;
     private Integer mAchievementUnlockTime;
 
-    public DashboardItem(Cursor cursor) {
+    private DashboardItem(Cursor cursor) {
         mTime = cursor.getInt(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TIME));
         mType = cursor.getInt(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TYPE));
         mMessage = cursor.getString(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_MESSAGE));
@@ -63,6 +65,94 @@ public final class DashboardItem {
 
         String query = "" +
                 "SELECT " +
+                getSelectFields() + " " +
+                "FROM " + LogEntry.TABLE_NAME + " " +
+                "LEFT JOIN " + GameEntry.TABLE_NAME + " " +
+                "ON " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " " +
+                "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
+                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " IN (" + TextUtils.join(", ", types) + ") " +
+                "ORDER BY " + LogEntry.TABLE_NAME + "." + LogEntry._ID + " DESC, " + AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_UNLOCK_TIME + " DESC " +
+                "LIMIT " + limit + " OFFSET " + offset;
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor == null) {
+            database.close();
+            return new ArrayList<>(0);
+        }
+
+        int count = cursor.getCount();
+
+        if (count <= 0) {
+            cursor.close();
+            database.close();
+
+            return new ArrayList<>(0);
+        }
+
+        ArrayList<DashboardItem> dashboardItems = new ArrayList<>(count);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            dashboardItems.add(new DashboardItem(cursor));
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        database.close();
+
+        return dashboardItems;
+    }
+
+    public static DashboardItem currentGame(Context context) {
+        SQLiteDatabase database = (new DatabaseHelper(context)).getReadableDatabase();
+
+        String query = "" +
+                "SELECT " +
+                getSelectFields() + " " +
+                "FROM " + GameEntry.TABLE_NAME + " " +
+                "LEFT JOIN " + LogEntry.TABLE_NAME + " " +
+                "ON " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " = " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_APP_ID + " " +
+                "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
+                "WHERE " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " > 0 " +
+                "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0 " +
+                "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " < " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " " +
+                "ORDER BY " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_LAST_PLAY + " DESC " +
+                "LIMIT " + 1;
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor == null) {
+            database.close();
+            return null;
+        }
+
+        if (cursor.getCount() != 1) {
+            cursor.close();
+            database.close();
+
+            return null;
+        }
+
+        DashboardItem dashboardItem;
+
+        cursor.moveToFirst();
+        dashboardItem = new DashboardItem(cursor);
+        dashboardItem.setType(TYPE_CURRENT_GAME);
+
+        cursor.close();
+        database.close();
+
+        return dashboardItem;
+    }
+
+    private static String getSelectFields() {
+        return "" +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TIME + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TIME + ", " +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TYPE + ", " +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_MESSAGE + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_MESSAGE + ", " +
@@ -76,41 +166,7 @@ public final class DashboardItem {
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + ", " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_NAME + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_NAME + ", " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_ICON_URL + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_ICON_URL + ", " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_UNLOCK_TIME + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME + " " +
-                "FROM " + LogEntry.TABLE_NAME + " " +
-                "LEFT JOIN " + GameEntry.TABLE_NAME + " " +
-                "ON " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " " +
-                "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
-                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " IN (" + TextUtils.join(", ", types) + ") " +
-                "ORDER BY " + LogEntry.TABLE_NAME + "." + LogEntry._ID + " DESC " +
-                "LIMIT " + limit + " OFFSET " + offset;
-
-        Cursor cursor = database.rawQuery(query, null);
-
-        if (cursor == null) {
-            database.close();
-            return new ArrayList<>(0);
-        }
-
-        int count = cursor.getCount();
-        ArrayList<DashboardItem> dashboardItems = new ArrayList<>(count);
-
-        if (count > 0) {
-            cursor.moveToFirst();
-
-            while (!cursor.isAfterLast()) {
-                dashboardItems.add(new DashboardItem(cursor));
-
-                cursor.moveToNext();
-            }
-        }
-
-        cursor.close();
-        database.close();
-
-        return dashboardItems;
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_UNLOCK_TIME + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME;
     }
 
     public Integer getTime() {
@@ -119,6 +175,10 @@ public final class DashboardItem {
 
     public Integer getType() {
         return mType;
+    }
+
+    public void setType(int type) {
+        mType = type;
     }
 
     public String getMessage() {

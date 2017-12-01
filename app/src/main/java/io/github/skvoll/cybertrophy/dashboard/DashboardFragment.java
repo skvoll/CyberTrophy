@@ -44,6 +44,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onRefresh() {
                 mDashboardItems.clear();
+                mDashboardItems.add(DashboardItem.currentGame(getContext()));
                 mDashboardItems.addAll(DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, 0));
                 mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -78,6 +79,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mDashboardItems.add(DashboardItem.currentGame(getContext()));
 
         mDashboardItems.addAll(DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, 0));
     }
