@@ -54,9 +54,14 @@ public class DashboardFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new DashboardAdapter(getContext(), mRecyclerView, mDashboardItems);
+        mAdapter = new DashboardAdapter(getContext(), mRecyclerView, mDashboardItems, new DashboardAdapter.DashboardOnItemClickListener() {
+            @Override
+            public void onClick(DashboardItem dashboardItem) {
 
-        mAdapter.setOnEndReachListener(new DashboardAdapter.onEndReachListener() {
+            }
+        });
+
+        mAdapter.setOnEndReachListener(new DashboardAdapter.DashboardOnEndReachListener() {
             @Override
             public void onEndReached() {
                 mRecyclerView.post(new Runnable() {

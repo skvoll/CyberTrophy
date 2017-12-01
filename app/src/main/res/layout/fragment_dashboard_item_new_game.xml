@@ -10,6 +10,9 @@
         android:id="@+id/cv_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardUseCompatPadding="true"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="4dp">

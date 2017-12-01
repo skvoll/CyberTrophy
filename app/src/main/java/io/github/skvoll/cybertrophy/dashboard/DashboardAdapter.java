@@ -1,6 +1,7 @@
 package io.github.skvoll.cybertrophy.dashboard;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -20,15 +21,22 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final String TAG = DashboardAdapter.class.getSimpleName();
 
     private static int VISIBLE_THRESHOLD = 10;
+
     private Context mContext;
-    private DashboardAdapter.onEndReachListener mOnEndReachListener;
+    private DashboardOnEndReachListener mDashboardOnEndReachListener;
     private ArrayList<DashboardItem> mDashboardItems;
+    private DashboardOnItemClickListener mDashboardOnItemClickListener;
 
     private boolean mIsLoading = false;
 
-    DashboardAdapter(Context context, RecyclerView recyclerView, ArrayList<DashboardItem> dashboardItems) {
+    DashboardAdapter(
+            Context context,
+            RecyclerView recyclerView,
+            ArrayList<DashboardItem> dashboardItems,
+            DashboardOnItemClickListener dashboardOnItemClickListener) {
         mContext = context;
         mDashboardItems = dashboardItems;
+        mDashboardOnItemClickListener = dashboardOnItemClickListener;
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -40,8 +48,8 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 int itemsCount = linearLayoutManager.getItemCount();
                 int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                 if (!mIsLoading && itemsCount <= (lastVisibleItem + VISIBLE_THRESHOLD)) {
-                    if (mOnEndReachListener != null) {
-                        mOnEndReachListener.onEndReached();
+                    if (mDashboardOnEndReachListener != null) {
+                        mDashboardOnEndReachListener.onEndReached();
                     }
 
                     mIsLoading = true;
@@ -54,8 +62,8 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mIsLoading = false;
     }
 
-    void setOnEndReachListener(DashboardAdapter.onEndReachListener onEndReachListener) {
-        mOnEndReachListener = onEndReachListener;
+    void setOnEndReachListener(DashboardOnEndReachListener dashboardOnEndReachListener) {
+        mDashboardOnEndReachListener = dashboardOnEndReachListener;
     }
 
     @Override
@@ -88,11 +96,19 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        DashboardItem dashboardItem = mDashboardItems.get(position);
+        final DashboardItem dashboardItem = mDashboardItems.get(position);
 
         switch (viewHolder.getItemViewType()) {
             case DashboardItem.TYPE_CURRENT_GAME:
                 CurrentGameViewHolder currentGameViewHolder = (CurrentGameViewHolder) viewHolder;
+
+                currentGameViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDashboardOnItemClickListener.onClick(dashboardItem);
+                    }
+                });
+
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
                         .placeholder(R.drawable.no_game_logo)
                         .into(currentGameViewHolder.gameLogo);
@@ -108,6 +124,14 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 break;
             case DashboardItem.TYPE_NEW_GAME:
                 NewGameViewHolder newGameViewHolder = (NewGameViewHolder) viewHolder;
+
+                newGameViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDashboardOnItemClickListener.onClick(dashboardItem);
+                    }
+                });
+
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
                         .placeholder(R.drawable.no_game_logo)
                         .into(newGameViewHolder.gameLogo);
@@ -118,6 +142,14 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 break;
             case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
                 AchievementUnlockedViewHolder achievementUnlockedViewHolder = (AchievementUnlockedViewHolder) viewHolder;
+
+                achievementUnlockedViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDashboardOnItemClickListener.onClick(dashboardItem);
+                    }
+                });
+
                 GlideApp.with(mContext).load(dashboardItem.getAchievementIconUrl())
                         .placeholder(R.drawable.no_achievement_icon)
                         .into(achievementUnlockedViewHolder.achievementIcon);
@@ -134,11 +166,16 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return mDashboardItems.size();
     }
 
-    interface onEndReachListener {
+    interface DashboardOnEndReachListener {
         void onEndReached();
     }
 
+    interface DashboardOnItemClickListener {
+        void onClick(DashboardItem dashboardItem);
+    }
+
     private static class CurrentGameViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
         ImageView gameLogo;
         TextView gameName;
         TextView gameProgress;
@@ -146,6 +183,8 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         CurrentGameViewHolder(View itemView) {
             super(itemView);
+
+            cardView = itemView.findViewById(R.id.cv_item);
 
             gameLogo = itemView.findViewById(R.id.iv_game_logo);
             gameName = itemView.findViewById(R.id.tv_game_name);
@@ -155,12 +194,15 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private static class NewGameViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
         ImageView gameLogo;
         TextView gameName;
         TextView time;
 
         NewGameViewHolder(View itemView) {
             super(itemView);
+
+            cardView = itemView.findViewById(R.id.cv_item);
 
             gameLogo = itemView.findViewById(R.id.iv_game_logo);
             gameName = itemView.findViewById(R.id.tv_game_name);
@@ -169,12 +211,15 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private static class AchievementUnlockedViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
         ImageView achievementIcon;
         TextView achievementName;
         TextView achievementTime;
 
         AchievementUnlockedViewHolder(View itemView) {
             super(itemView);
+
+            cardView = itemView.findViewById(R.id.cv_item);
 
             achievementIcon = itemView.findViewById(R.id.iv_achievement_icon);
             achievementName = itemView.findViewById(R.id.tv_achievement_name);
