@@ -91,6 +91,9 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         .placeholder(R.drawable.no_game_logo)
                         .into(newGameViewHolder.gameLogo);
                 newGameViewHolder.gameName.setText(dashboardItem.getAppName());
+                newGameViewHolder.time.setText(
+                        DateUtils.getRelativeTimeSpanString(dashboardItem.getTime() * 1000L)
+                );
                 break;
             case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
                 AchievementUnlockedViewHolder achievementUnlockedViewHolder = (AchievementUnlockedViewHolder) viewHolder;
@@ -117,12 +120,14 @@ public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private static class NewGameViewHolder extends RecyclerView.ViewHolder {
         ImageView gameLogo;
         TextView gameName;
+        TextView time;
 
         NewGameViewHolder(View itemView) {
             super(itemView);
 
             gameLogo = itemView.findViewById(R.id.iv_game_logo);
             gameName = itemView.findViewById(R.id.tv_game_name);
+            time = itemView.findViewById(R.id.tv_time);
         }
     }
 
