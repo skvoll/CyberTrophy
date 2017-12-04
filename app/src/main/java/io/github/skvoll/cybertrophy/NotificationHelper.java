@@ -229,4 +229,24 @@ public class NotificationHelper {
             mNotificationHelper.notify(ID, builder);
         }
     }
+
+    public static class GameCompleteNotification {
+        public static final int ID = 1022;
+
+        private NotificationHelper mNotificationHelper;
+
+        public GameCompleteNotification(NotificationHelper notificationHelper) {
+            mNotificationHelper = notificationHelper;
+        }
+
+        public void show(GameModel gameModel) {
+            NotificationCompat.Builder builder = mNotificationHelper.getBuilder(NotificationHelper.PRIMARY_CHANNEL);
+            builder.setSmallIcon(android.R.drawable.ic_menu_add);
+
+            builder.setContentTitle(gameModel.getName());
+            builder.setContentText("Game complete");
+
+            mNotificationHelper.notify(ID, builder);
+        }
+    }
 }

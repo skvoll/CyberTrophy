@@ -205,6 +205,10 @@ public final class GameModel extends Model {
         mAchievementsUnlockedCount = achievementsUnlockedCount;
     }
 
+    public Boolean isComplete() {
+        return getAchievementsTotalCount().equals(getAchievementsUnlockedCount());
+    }
+
     @Override
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();

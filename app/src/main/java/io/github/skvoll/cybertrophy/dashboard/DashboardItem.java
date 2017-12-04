@@ -73,7 +73,7 @@ public final class DashboardItem {
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
                 "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " IN (" + TextUtils.join(", ", types) + ") " +
-                "ORDER BY " + LogEntry.TABLE_NAME + "." + LogEntry._ID + " DESC, " + AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_UNLOCK_TIME + " DESC " +
+                "ORDER BY " + LogEntry.TABLE_NAME + "." + LogEntry._ID + " DESC " +
                 "LIMIT " + limit + " OFFSET " + offset;
 
         Cursor cursor = database.rawQuery(query, null);

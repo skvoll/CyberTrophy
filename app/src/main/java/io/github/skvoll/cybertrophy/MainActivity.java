@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setFragment(selectedItem);
     }
 
+    @NonNull
     private Boolean setFragment(int menuId) {
         Fragment fragment;
 

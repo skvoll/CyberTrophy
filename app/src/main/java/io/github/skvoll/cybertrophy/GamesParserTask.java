@@ -38,6 +38,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
     private NotificationHelper.NewAchievementNotification mNewAchievementNotification;
     private NotificationHelper.AchievementRemovedNotification mAchievementRemovedNotification;
     private NotificationHelper.AchievementUnlockedNotification mAchievementUnlockedNotification;
+    private NotificationHelper.GameCompleteNotification mGameCompleteNotification;
 
     public GamesParserTask(Context context, ProfileModel profileModel, int action) {
         mProfileModel = profileModel;
@@ -52,6 +53,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
         mNewAchievementNotification = new NotificationHelper.NewAchievementNotification(notificationHelper);
         mAchievementRemovedNotification = new NotificationHelper.AchievementRemovedNotification(notificationHelper);
         mAchievementUnlockedNotification = new NotificationHelper.AchievementUnlockedNotification(notificationHelper);
+        mGameCompleteNotification = new NotificationHelper.GameCompleteNotification(notificationHelper);
     }
 
     @Override
@@ -188,6 +190,10 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
 
                             achievementModel.delete(mContentResolver);
                         }
+                    }
+
+                    if (gameModel.isComplete()) {
+                        mGameCompleteNotification.show(gameModel);
                     }
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
