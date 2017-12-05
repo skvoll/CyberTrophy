@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
     private Fragment mDashboardFragment;
+    private Fragment mGamesFragment;
     private Fragment mProfileFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mDashboardFragment = new DashboardFragment();
+        mGamesFragment = new GamesFragment();
         mProfileFragment = new ProfileFragment();
 
         int selectedItem = FRAGMENT_DASHBOARD;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = mDashboardFragment;
                 break;
             case R.id.menu_games:
-                fragment = mDashboardFragment;
+                fragment = mGamesFragment;
                 break;
             case R.id.menu_profile:
                 fragment = mProfileFragment;
