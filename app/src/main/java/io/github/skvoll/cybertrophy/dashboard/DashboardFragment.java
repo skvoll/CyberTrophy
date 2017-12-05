@@ -65,6 +65,13 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        loadDashboardItems(0);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
@@ -75,12 +82,7 @@ public class DashboardFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mDashboardItems.clear();
-                DashboardItem currentGame = DashboardItem.currentGame(getContext());
-                if (currentGame != null) {
-                    mDashboardItems.add(currentGame);
-                }
-                mDashboardItems.addAll(DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, 0));
+                loadDashboardItems(0);
                 mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -98,8 +100,7 @@ public class DashboardFragment extends Fragment {
                 mRecyclerView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mDashboardItems.addAll(
-                                DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, mDashboardItems.size()));
+                        loadDashboardItems(mDashboardItems.size());
                         mAdapter.notifyDataSetChanged();
                         mAdapter.setLoaded();
                     }
@@ -112,16 +113,16 @@ public class DashboardFragment extends Fragment {
         return mRootView;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        DashboardItem currentGame = DashboardItem.currentGame(getContext());
-        if (currentGame != null) {
-            mDashboardItems.add(currentGame);
+    private void loadDashboardItems(int offset) {
+        if (offset == 0) {
+            mDashboardItems.clear();
+            DashboardItem currentGame = DashboardItem.currentGame(getContext());
+            if (currentGame != null) {
+                mDashboardItems.add(currentGame);
+            }
         }
 
-        mDashboardItems.addAll(DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, 0));
+        mDashboardItems.addAll(DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, offset));
     }
 
     private Integer[] getItemsTypes() {
