@@ -2,7 +2,6 @@ package io.github.skvoll.cybertrophy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,10 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.games_list.GamesListFragment;
+
 public class GamesFragment extends Fragment {
     private static final String TAG = GamesFragment.class.getSimpleName();
 
-    private ViewGroup mRootView;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
@@ -25,11 +29,34 @@ public class GamesFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_games, container, false);
+        if (getContext() == null) {
+            return null;
+        }
+
+        ProfileModel profileModel = ProfileModel.getActive(getContext().getContentResolver());
+
+        if (profileModel == null) {
+            return null;
+        }
+
+        ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_games, container, false);
 
         mTabLayout = mRootView.findViewById(R.id.tl_tabs);
         mViewPager = mRootView.findViewById(R.id.vp_container);
+
         mPagerAdapter = new PagerAdapter(getChildFragmentManager());
+        mPagerAdapter.addFragment(
+                GamesListFragment.newInstance(profileModel.getSteamId(), GamesListFragment.TYPE_IN_PROGRESS),
+                getString(R.string.games_list_tab_in_progress)
+        );
+        mPagerAdapter.addFragment(
+                GamesListFragment.newInstance(profileModel.getSteamId(), GamesListFragment.TYPE_INCOMPLETE),
+                getString(R.string.games_list_tab_incomplete)
+        );
+        mPagerAdapter.addFragment(
+                GamesListFragment.newInstance(profileModel.getSteamId(), GamesListFragment.TYPE_COMPLETE),
+                getString(R.string.games_list_tab_complete)
+        );
 
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -38,42 +65,31 @@ public class GamesFragment extends Fragment {
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {
-        PagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
+        private final List<Fragment> mFragmentsList = new ArrayList<>();
+        private final List<String> mFragmentTitlesList = new ArrayList<>();
 
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "In progress";
-                case 1:
-                    return "Complete";
-                case 2:
-                    return "Incomplete";
-                default:
-                    return null;
-            }
+        PagerAdapter(FragmentManager manager) {
+            super(manager);
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new Fragment();
-                case 1:
-                    return new Fragment();
-                case 2:
-                    return new Fragment();
-                default:
-                    return null;
-            }
+            return mFragmentsList.get(position);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitlesList.get(position);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return mFragmentsList.size();
+        }
+
+        void addFragment(Fragment fragment, String title) {
+            mFragmentsList.add(fragment);
+            mFragmentTitlesList.add(title);
         }
     }
 }

@@ -20,44 +20,17 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.LogModel;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener,
+        DashboardAdapter.DashboardOnItemClickListener,
+        DashboardAdapter.DashboardOnEndReachListener {
     private static final String TAG = DashboardFragment.class.getSimpleName();
 
     private static final int ITEMS_LIMIT = 100;
 
-    private ViewGroup mRootView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private DashboardAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private DashboardAdapter.DashboardOnItemClickListener mDashboardOnItemClickListener =
-            new DashboardAdapter.DashboardOnItemClickListener() {
-                @Override
-                public void onClick(DashboardItem dashboardItem) {
-                    if (getContext() == null) {
-                        return;
-                    }
-
-                    ContentResolver contentResolver = getContext().getContentResolver();
-
-                    switch (dashboardItem.getType()) {
-                        case DashboardItem.TYPE_CURRENT_GAME:
-                            break;
-                        case DashboardItem.TYPE_NEW_GAME:
-                            break;
-                        case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
-                            AchievementModel achievementModel = AchievementModel.getByCode(
-                                    contentResolver, dashboardItem.getAchievementCode());
-
-                            if (achievementModel == null) {
-                                return;
-                            }
-
-                            showAchievementDialog(achievementModel);
-                            break;
-                    }
-                }
-            };
 
     private ArrayList<DashboardItem> mDashboardItems = new ArrayList<>(0);
 
@@ -73,44 +46,69 @@ public class DashboardFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
+        ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
         mRecyclerView = mRootView.findViewById(R.id.rv_list);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadDashboardItems(0);
-                mAdapter.notifyDataSetChanged();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new DashboardAdapter(getContext(),
-                mRecyclerView, mDashboardItems, mDashboardOnItemClickListener);
+                mRecyclerView, mDashboardItems, this);
 
-        mAdapter.setOnEndReachListener(new DashboardAdapter.DashboardOnEndReachListener() {
-            @Override
-            public void onEndReached() {
-                mRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadDashboardItems(mDashboardItems.size());
-                        mAdapter.notifyDataSetChanged();
-                        mAdapter.setLoaded();
-                    }
-                });
-            }
-        });
+        mAdapter.setOnEndReachListener(this);
 
         mRecyclerView.setAdapter(mAdapter);
 
         return mRootView;
+    }
+
+    @Override
+    public void onRefresh() {
+        loadDashboardItems(0);
+        mAdapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onEndReached() {
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                loadDashboardItems(mDashboardItems.size());
+                mAdapter.notifyDataSetChanged();
+                mAdapter.setLoaded();
+            }
+        });
+    }
+
+    @Override
+    public void onClick(DashboardItem dashboardItem) {
+        if (getContext() == null) {
+            return;
+        }
+
+        ContentResolver contentResolver = getContext().getContentResolver();
+
+        switch (dashboardItem.getType()) {
+            case DashboardItem.TYPE_CURRENT_GAME:
+                break;
+            case DashboardItem.TYPE_NEW_GAME:
+                break;
+            case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
+                AchievementModel achievementModel = AchievementModel.getByCode(
+                        contentResolver, dashboardItem.getAchievementCode());
+
+                if (achievementModel == null) {
+                    return;
+                }
+
+                showAchievementDialog(achievementModel);
+                break;
+        }
     }
 
     private void loadDashboardItems(int offset) {

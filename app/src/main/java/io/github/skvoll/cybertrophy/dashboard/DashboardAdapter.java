@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import io.github.skvoll.cybertrophy.GlideApp;
 import io.github.skvoll.cybertrophy.R;
 
-public final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public static final String TAG = DashboardAdapter.class.getSimpleName();
+final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = DashboardAdapter.class.getSimpleName();
 
     private static int VISIBLE_THRESHOLD = 10;
 

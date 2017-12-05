@@ -1,0 +1,146 @@
+package io.github.skvoll.cybertrophy.games_list;
+
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import io.github.skvoll.cybertrophy.R;
+import io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
+
+public class GamesListFragment extends ListFragment implements
+        SwipeRefreshLayout.OnRefreshListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+    public static final int LOADER_ID = 0;
+    public static final int TYPE_ALL = 0;
+    public static final int TYPE_IN_PROGRESS = 1;
+    public static final int TYPE_INCOMPLETE = 2;
+    public static final int TYPE_COMPLETE = 3;
+    public static final int TYPE_NO_ACHIEVEMENTS = 4;
+
+    private static final String TAG = GamesListFragment.class.getSimpleName();
+    private static final String ARGUMENT_STEAM_ID = "STEAM_ID";
+    private static final String ARGUMENT_TYPE = "TYPE";
+
+    private Long mSteamId;
+    private int mType;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private GamesListAdapter mGamesListAdapter;
+
+    public GamesListFragment() {
+    }
+
+    public static GamesListFragment newInstance(Long steamId, int type) {
+        GamesListFragment fragment = new GamesListFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(ARGUMENT_STEAM_ID, steamId);
+        bundle.putInt(ARGUMENT_TYPE, type);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() == null) {
+            throw new IllegalArgumentException();
+        }
+
+        mSteamId = getArguments().getLong(ARGUMENT_STEAM_ID, -1);
+        mType = getArguments().getInt(ARGUMENT_TYPE, -1);
+
+        if (mSteamId == -1 || mType == -1) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_games_list, container, false);
+
+        mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
+
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mGamesListAdapter = new GamesListAdapter(getContext(), null, 0);
+
+        return mRootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setListAdapter(mGamesListAdapter);
+
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (getContext() == null) {
+            return null;
+        }
+
+        String select;
+        String sortOrder = null;
+
+        if (mType == TYPE_NO_ACHIEVEMENTS) {
+            select = GameEntry.COLUMN_STEAM_ID + " == " + mSteamId
+                    + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " == 0";
+            sortOrder = GameEntry.COLUMN_NAME + " ASC";
+        } else {
+            select = GameEntry.COLUMN_STEAM_ID + " == " + mSteamId
+                    + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " != 0 AND ";
+
+            switch (mType) {
+                case TYPE_IN_PROGRESS:
+                    select += GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
+                            + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
+                            + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+                    sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC";
+                    break;
+                case TYPE_INCOMPLETE:
+                    select += GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == 0";
+                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
+                    break;
+                case TYPE_COMPLETE:
+                    select += GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == "
+                            + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
+                    break;
+            }
+        }
+
+        return new CursorLoader(getContext(), GameEntry.URI,
+                null, select, null, sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mGamesListAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mGamesListAdapter.swapCursor(null);
+    }
+}

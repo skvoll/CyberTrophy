@@ -13,16 +13,16 @@ import io.github.skvoll.cybertrophy.data.DataContract.LogEntry;
 import io.github.skvoll.cybertrophy.data.DatabaseHelper;
 import io.github.skvoll.cybertrophy.data.LogModel;
 
-public final class DashboardItem {
-    public static final int TYPE_DEBUG = LogModel.TYPE_DEBUG;
-    public static final int TYPE_MESSAGE = LogModel.TYPE_MESSAGE;
-    public static final int TYPE_NEW_GAME = LogModel.TYPE_NEW_GAME;
-    public static final int TYPE_GAME_REMOVED = LogModel.TYPE_GAME_REMOVED;
-    public static final int TYPE_NEW_ACHIEVEMENT = LogModel.TYPE_NEW_ACHIEVEMENT;
-    public static final int TYPE_ACHIEVEMENT_REMOVED = LogModel.TYPE_ACHIEVEMENT_REMOVED;
-    public static final int TYPE_ACHIEVEMENT_UNLOCKED = LogModel.TYPE_ACHIEVEMENT_UNLOCKED;
+final class DashboardItem {
+    static final int TYPE_DEBUG = LogModel.TYPE_DEBUG;
+    static final int TYPE_MESSAGE = LogModel.TYPE_MESSAGE;
+    static final int TYPE_NEW_GAME = LogModel.TYPE_NEW_GAME;
+    static final int TYPE_GAME_REMOVED = LogModel.TYPE_GAME_REMOVED;
+    static final int TYPE_NEW_ACHIEVEMENT = LogModel.TYPE_NEW_ACHIEVEMENT;
+    static final int TYPE_ACHIEVEMENT_REMOVED = LogModel.TYPE_ACHIEVEMENT_REMOVED;
+    static final int TYPE_ACHIEVEMENT_UNLOCKED = LogModel.TYPE_ACHIEVEMENT_UNLOCKED;
 
-    public static final int TYPE_CURRENT_GAME = 1001;
+    static final int TYPE_CURRENT_GAME = 1001;
 
     private static final String TAG = DashboardItem.class.getSimpleName();
 
@@ -60,7 +60,7 @@ public final class DashboardItem {
         mAchievementUnlockTime = cursor.getInt(cursor.getColumnIndex(AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME));
     }
 
-    public static ArrayList<DashboardItem> getItems(Context context, Integer[] types, Integer limit, Integer offset) {
+    static ArrayList<DashboardItem> getItems(Context context, Integer[] types, Integer limit, Integer offset) {
         SQLiteDatabase database = (new DatabaseHelper(context)).getReadableDatabase();
 
         String query = "" +
@@ -107,7 +107,7 @@ public final class DashboardItem {
         return dashboardItems;
     }
 
-    public static DashboardItem currentGame(Context context) {
+    static DashboardItem currentGame(Context context) {
         SQLiteDatabase database = (new DatabaseHelper(context)).getReadableDatabase();
 
         String query = "" +
@@ -169,63 +169,63 @@ public final class DashboardItem {
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_UNLOCK_TIME + " AS " + AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME;
     }
 
-    public Integer getTime() {
+    Integer getTime() {
         return mTime;
     }
 
-    public Integer getType() {
+    Integer getType() {
         return mType;
     }
 
-    public void setType(int type) {
+    void setType(int type) {
         mType = type;
     }
 
-    public String getMessage() {
+    String getMessage() {
         return mMessage;
     }
 
-    public Long getSteamId() {
+    Long getSteamId() {
         return mSteamId;
     }
 
-    public Long getAppId() {
+    Long getAppId() {
         return mAppId;
     }
 
-    public String getAchievementCode() {
+    String getAchievementCode() {
         return mAchievementCode;
     }
 
-    public String getAppName() {
+    String getAppName() {
         return mAppName;
     }
 
-    public String getAppIconUrl() {
+    String getAppIconUrl() {
         return mAppIconUrl;
     }
 
-    public String getAppLogoUrl() {
+    String getAppLogoUrl() {
         return mAppLogoUrl;
     }
 
-    public Integer getAppAchievementsTotalTount() {
+    Integer getAppAchievementsTotalTount() {
         return mAppAchievementsTotalCount;
     }
 
-    public Integer getAppAchievementsUnlockedCount() {
+    Integer getAppAchievementsUnlockedCount() {
         return mAppAchievementsUnlockedCount;
     }
 
-    public String getAchievementName() {
+    String getAchievementName() {
         return mAchievementName;
     }
 
-    public String getAchievementIconUrl() {
+    String getAchievementIconUrl() {
         return mAchievementIconUrl;
     }
 
-    public Integer getAchievementUnlockTime() {
+    Integer getAchievementUnlockTime() {
         return mAchievementUnlockTime;
     }
 }

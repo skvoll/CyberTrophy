@@ -14,16 +14,22 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 public class ProfileFragment extends Fragment {
     private static final String TAG = ProfileFragment.class.getSimpleName();
 
-    private View mRootView;
-
     public ProfileFragment() {
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        if (getContext() == null) {
+            return null;
+        }
 
         ProfileModel profileModel = ProfileModel.getActive(getContext().getContentResolver());
+
+        if (profileModel == null) {
+            return null;
+        }
+
+        View mRootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         ImageView ivProfileAvatar = mRootView.findViewById(R.id.iv_profile_avatar);
         ImageView ivProfileBackground = mRootView.findViewById(R.id.iv_profile_background);
