@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private BottomNavigationView mBottomNavigationView;
     private FragmentManager mFragmentManager;
     private Fragment mDashboardFragment;
     private Fragment mGamesFragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
         mFragmentManager = getSupportFragmentManager();
+        mBottomNavigationView = findViewById(R.id.bnv_navigation);
         mDashboardFragment = new DashboardFragment();
         mGamesFragment = new GamesFragment();
         mProfileFragment = new ProfileFragment();
@@ -49,15 +51,25 @@ public class MainActivity extends AppCompatActivity {
         int selectedItem = FRAGMENT_DASHBOARD;
 
         Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            bundle = savedInstanceState;
+        }
+
         if (bundle != null) {
             selectedItem = bundle.getInt(PARAMS_FRAGMENT, FRAGMENT_DASHBOARD);
         }
 
-        BottomNavigationView navigation = findViewById(R.id.bnv_navigation);
-        navigation.setSelectedItemId(selectedItem);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mBottomNavigationView.setSelectedItemId(selectedItem);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         setFragment(selectedItem);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(PARAMS_FRAGMENT, mBottomNavigationView.getSelectedItemId());
     }
 
     @NonNull

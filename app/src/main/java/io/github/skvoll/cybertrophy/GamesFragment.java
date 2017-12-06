@@ -2,6 +2,7 @@ package io.github.skvoll.cybertrophy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,8 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.games_list.GamesListFragment;
 
 public class GamesFragment extends Fragment {
+    public static final String PARAMS_TAB = "PARAMS_TAB";
+
     private static final String TAG = GamesFragment.class.getSimpleName();
 
     private TabLayout mTabLayout;
@@ -62,6 +65,26 @@ public class GamesFragment extends Fragment {
         mViewPager.setAdapter(mPagerAdapter);
 
         return mRootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        int currentItem = 0;
+
+        if (savedInstanceState != null) {
+            currentItem = savedInstanceState.getInt(PARAMS_TAB, 0);
+        }
+
+        mViewPager.setCurrentItem(currentItem);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(PARAMS_TAB, mViewPager.getCurrentItem());
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {
