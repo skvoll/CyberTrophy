@@ -62,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigationView.setSelectedItemId(selectedItem);
         mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        setFragment(selectedItem);
+        if (savedInstanceState == null) {
+            setFragment(selectedItem);
+        }
     }
 
     @Override
