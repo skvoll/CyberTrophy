@@ -18,12 +18,8 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 final class GamesListAdapter extends CursorAdapter {
     private static final String TAG = GamesListAdapter.class.getSimpleName();
 
-    private Context mContext;
-
     GamesListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-
-        mContext = context;
     }
 
     @Override
@@ -42,29 +38,52 @@ final class GamesListAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        GlideApp.with(mContext).load(gameModel.getLogoUrl())
+        GlideApp.with(context).load(gameModel.getLogoUrl())
                 .placeholder(R.drawable.no_game_logo)
-                .into(viewHolder.mGameLogo);
+                .into(viewHolder.gameLogo);
 
-        viewHolder.mGameName.setText(gameModel.getName());
-        viewHolder.mGameProgress.setText(gameModel.getAchievementsUnlockedCount() + "/" + gameModel.getAchievementsTotalCount());
-        viewHolder.mGameProgressBar.setMax(gameModel.getAchievementsTotalCount());
-        viewHolder.mGameProgressBar.setProgress(gameModel.getAchievementsUnlockedCount());
+        viewHolder.gameName.setText(gameModel.getName());
+
+        switch (gameModel.getStatus()) {
+            case GameModel.STATUS_INCOMPLETE:
+                viewHolder.gameInfo.setText(context.getString(
+                        R.string.games_list_item_achievements_count,
+                        gameModel.getAchievementsTotalCount()
+                ));
+                viewHolder.gameInfo.setVisibility(View.VISIBLE);
+                break;
+            case GameModel.STATUS_IN_PROGRESS:
+                viewHolder.gameProgress.setText(context.getString(
+                        R.string.games_list_item_achievements_progress,
+                        gameModel.getAchievementsUnlockedCount(),
+                        gameModel.getAchievementsTotalCount()
+                ));
+                viewHolder.gameProgress.setVisibility(View.VISIBLE);
+
+                viewHolder.gameProgressBar.setMax(gameModel.getAchievementsTotalCount());
+                viewHolder.gameProgressBar.setProgress(gameModel.getAchievementsUnlockedCount());
+                viewHolder.gameProgressBar.setVisibility(View.VISIBLE);
+                break;
+            case GameModel.STATUS_COMPLETE:
+                break;
+        }
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mGameLogo;
-        TextView mGameName;
-        TextView mGameProgress;
-        ProgressBar mGameProgressBar;
+        ImageView gameLogo;
+        TextView gameName;
+        TextView gameInfo;
+        TextView gameProgress;
+        ProgressBar gameProgressBar;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            mGameLogo = itemView.findViewById(R.id.iv_game_logo);
-            mGameName = itemView.findViewById(R.id.tv_game_name);
-            mGameProgress = itemView.findViewById(R.id.tv_game_progress);
-            mGameProgressBar = itemView.findViewById(R.id.pb_game_progress);
+            gameLogo = itemView.findViewById(R.id.iv_game_logo);
+            gameName = itemView.findViewById(R.id.tv_game_name);
+            gameInfo = itemView.findViewById(R.id.tv_game_info);
+            gameProgress = itemView.findViewById(R.id.tv_game_progress);
+            gameProgressBar = itemView.findViewById(R.id.pb_game_progress);
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 import io.github.skvoll.cybertrophy.data.DataContract.LogEntry;
 import io.github.skvoll.cybertrophy.data.DatabaseHelper;
 import io.github.skvoll.cybertrophy.data.LogModel;
+import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 final class DashboardItem {
     static final int TYPE_DEBUG = LogModel.TYPE_DEBUG;
@@ -21,6 +23,7 @@ final class DashboardItem {
     static final int TYPE_NEW_ACHIEVEMENT = LogModel.TYPE_NEW_ACHIEVEMENT;
     static final int TYPE_ACHIEVEMENT_REMOVED = LogModel.TYPE_ACHIEVEMENT_REMOVED;
     static final int TYPE_ACHIEVEMENT_UNLOCKED = LogModel.TYPE_ACHIEVEMENT_UNLOCKED;
+    static final int TYPE_GAME_COMPLETE = LogModel.TYPE_GAME_COMPLETE;
 
     static final int TYPE_CURRENT_GAME = 1001;
 
@@ -60,7 +63,7 @@ final class DashboardItem {
         mAchievementUnlockTime = cursor.getInt(cursor.getColumnIndex(AchievementEntry.TABLE_NAME + "_" + AchievementEntry.COLUMN_UNLOCK_TIME));
     }
 
-    static ArrayList<DashboardItem> getItems(Context context, Integer[] types, Integer limit, Integer offset) {
+    static ArrayList<DashboardItem> getItems(Context context, ProfileModel profileModel, Integer[] types, Integer limit, Integer offset) {
         SQLiteDatabase database = (new DatabaseHelper(context)).getReadableDatabase();
 
         String query = "" +
@@ -72,7 +75,8 @@ final class DashboardItem {
                 "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
-                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " IN (" + TextUtils.join(", ", types) + ") " +
+                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_STEAM_ID + " = " + profileModel.getSteamId() + " " +
+                "AND " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " IN (" + TextUtils.join(", ", types) + ") " +
                 "ORDER BY " + LogEntry.TABLE_NAME + "." + LogEntry._ID + " DESC " +
                 "LIMIT " + limit + " OFFSET " + offset;
 
@@ -107,7 +111,7 @@ final class DashboardItem {
         return dashboardItems;
     }
 
-    static DashboardItem currentGame(Context context) {
+    static DashboardItem currentGame(Context context, ProfileModel profileModel) {
         SQLiteDatabase database = (new DatabaseHelper(context)).getReadableDatabase();
 
         String query = "" +
@@ -119,7 +123,8 @@ final class DashboardItem {
                 "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
                 AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
-                "WHERE " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " > 0 " +
+                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_STEAM_ID + " = " + profileModel.getSteamId() + " " +
+                "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " > 0 " +
                 "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0 " +
                 "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " < " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " " +
                 "ORDER BY " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_LAST_PLAY + " DESC " +

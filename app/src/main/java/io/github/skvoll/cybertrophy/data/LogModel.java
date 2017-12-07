@@ -13,6 +13,7 @@ public final class LogModel extends Model {
     public static final int TYPE_NEW_ACHIEVEMENT = 4;
     public static final int TYPE_ACHIEVEMENT_REMOVED = 5;
     public static final int TYPE_ACHIEVEMENT_UNLOCKED = 6;
+    public static final int TYPE_GAME_COMPLETE = 7;
 
     private Long mId;
     private Long mTime;
@@ -22,8 +23,9 @@ public final class LogModel extends Model {
     private Long mAppId;
     private String mAchievementCode;
 
-    private LogModel() {
+    private LogModel(int type) {
         mTime = System.currentTimeMillis() / 1000;
+        mType = type;
     }
 
     public LogModel(Cursor cursor) {
@@ -38,9 +40,8 @@ public final class LogModel extends Model {
     }
 
     public static LogModel debug(ProfileModel profileModel, String message) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_DEBUG);
 
-        logModel.setType(TYPE_DEBUG);
         logModel.setMessage(message);
         logModel.setSteamId(profileModel.getSteamId());
 
@@ -48,9 +49,8 @@ public final class LogModel extends Model {
     }
 
     public static LogModel log(ProfileModel profileModel, String message) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_MESSAGE);
 
-        logModel.setType(TYPE_MESSAGE);
         logModel.setMessage(message);
         logModel.setSteamId(profileModel.getSteamId());
 
@@ -58,9 +58,8 @@ public final class LogModel extends Model {
     }
 
     public static LogModel newGame(GameModel gameModel) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_NEW_GAME);
 
-        logModel.setType(TYPE_NEW_GAME);
         logModel.setSteamId(gameModel.getSteamId());
         logModel.setAppId(gameModel.getAppId());
 
@@ -68,9 +67,8 @@ public final class LogModel extends Model {
     }
 
     public static LogModel gameRemoved(GameModel gameModel) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_GAME_REMOVED);
 
-        logModel.setType(TYPE_GAME_REMOVED);
         logModel.setSteamId(gameModel.getSteamId());
         logModel.setAppId(gameModel.getAppId());
 
@@ -78,9 +76,8 @@ public final class LogModel extends Model {
     }
 
     public static LogModel newAchievement(AchievementModel achievementModel) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_NEW_ACHIEVEMENT);
 
-        logModel.setType(TYPE_NEW_ACHIEVEMENT);
         logModel.setSteamId(achievementModel.getSteamId());
         logModel.setAppId(achievementModel.getAppId());
         logModel.setAchievementCode(achievementModel.getCode());
@@ -89,9 +86,8 @@ public final class LogModel extends Model {
     }
 
     public static LogModel achievementRemoved(AchievementModel achievementModel) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_ACHIEVEMENT_REMOVED);
 
-        logModel.setType(TYPE_ACHIEVEMENT_REMOVED);
         logModel.setSteamId(achievementModel.getSteamId());
         logModel.setAppId(achievementModel.getAppId());
         logModel.setAchievementCode(achievementModel.getCode());
@@ -100,12 +96,20 @@ public final class LogModel extends Model {
     }
 
     public static LogModel achievementUnlocked(AchievementModel achievementModel) {
-        LogModel logModel = new LogModel();
+        LogModel logModel = new LogModel(TYPE_ACHIEVEMENT_UNLOCKED);
 
-        logModel.setType(TYPE_ACHIEVEMENT_UNLOCKED);
         logModel.setSteamId(achievementModel.getSteamId());
         logModel.setAppId(achievementModel.getAppId());
         logModel.setAchievementCode(achievementModel.getCode());
+
+        return logModel;
+    }
+
+    public static LogModel gameComplete(GameModel gameModel) {
+        LogModel logModel = new LogModel(TYPE_GAME_COMPLETE);
+
+        logModel.setSteamId(gameModel.getSteamId());
+        logModel.setAppId(gameModel.getAppId());
 
         return logModel;
     }

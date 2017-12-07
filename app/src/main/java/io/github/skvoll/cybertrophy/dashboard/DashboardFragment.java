@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.LogModel;
+import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class DashboardFragment extends Fragment implements
         SwipeRefreshLayout.OnRefreshListener,
@@ -32,20 +34,26 @@ public class DashboardFragment extends Fragment implements
     private RecyclerView mRecyclerView;
     private DashboardAdapter mAdapter;
 
+    private ProfileModel mProfileModel;
     private ArrayList<DashboardItem> mDashboardItems = new ArrayList<>(0);
 
     public DashboardFragment() {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (getContext() == null) {
+            return null;
+        }
+
+        mProfileModel = ProfileModel.getActive(getContext().getContentResolver());
+
+        if (mProfileModel == null) {
+            return null;
+        }
 
         loadDashboardItems(0);
-    }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
@@ -114,13 +122,13 @@ public class DashboardFragment extends Fragment implements
     private void loadDashboardItems(int offset) {
         if (offset == 0) {
             mDashboardItems.clear();
-            DashboardItem currentGame = DashboardItem.currentGame(getContext());
+            DashboardItem currentGame = DashboardItem.currentGame(getContext(), mProfileModel);
             if (currentGame != null) {
                 mDashboardItems.add(currentGame);
             }
         }
 
-        mDashboardItems.addAll(DashboardItem.getItems(getContext(), getItemsTypes(), ITEMS_LIMIT, offset));
+        mDashboardItems.addAll(DashboardItem.getItems(getContext(), mProfileModel, getItemsTypes(), ITEMS_LIMIT, offset));
     }
 
     private Integer[] getItemsTypes() {
@@ -128,7 +136,8 @@ public class DashboardFragment extends Fragment implements
                 LogModel.TYPE_MESSAGE,
                 LogModel.TYPE_NEW_GAME,
                 LogModel.TYPE_NEW_ACHIEVEMENT,
-                LogModel.TYPE_ACHIEVEMENT_UNLOCKED
+                LogModel.TYPE_ACHIEVEMENT_UNLOCKED,
+                LogModel.TYPE_GAME_COMPLETE
         };
     }
 

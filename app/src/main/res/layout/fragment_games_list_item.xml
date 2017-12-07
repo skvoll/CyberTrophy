@@ -32,10 +32,24 @@
             tools:text="Game name" />
 
         <TextView
+            android:id="@+id/tv_game_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_game_name"
+            tools:text="Achievements: 100" />
+
+        <TextView
             android:id="@+id/tv_game_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/pb_game_progress"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="75/100" />
@@ -48,6 +62,7 @@
             android:max="100"
             android:progress="75"
             android:progressTint="@color/accentColor"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

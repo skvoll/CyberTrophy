@@ -193,7 +193,15 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                     }
 
                     if (gameModel.isComplete()) {
-                        mGameCompleteNotification.show(gameModel);
+                        Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is complete.");
+
+                        if (mAction != ACTION_FIRST) {
+                            if (mProfileModel.isInitialized()) {
+                                mGameCompleteNotification.show(gameModel);
+
+                                LogModel.gameComplete(gameModel).save(mContentResolver);
+                            }
+                        }
                     }
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
@@ -205,9 +213,13 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
 
                         if (mProfileModel.isInitialized()) {
                             mNewGameNotification.show(gameModel);
+
+                            // TODO: uncomment
+//                            LogModel.newGame(gameModel).save(mContentResolver);
                         }
                     }
 
+                    // TODO: remove
                     LogModel.newGame(gameModel).save(mContentResolver);
 
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {

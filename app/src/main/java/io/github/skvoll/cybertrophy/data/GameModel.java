@@ -12,6 +12,10 @@ import io.github.skvoll.cybertrophy.steam.SteamGame;
 import static io.github.skvoll.cybertrophy.data.DataContract.*;
 
 public final class GameModel extends Model {
+    public static final int STATUS_INCOMPLETE = 0;
+    public static final int STATUS_IN_PROGRESS = 1;
+    public static final int STATUS_COMPLETE = 2;
+
     private static String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
     private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
 
@@ -205,8 +209,26 @@ public final class GameModel extends Model {
         mAchievementsUnlockedCount = achievementsUnlockedCount;
     }
 
+    public Boolean isIncomplete() {
+        return getAchievementsUnlockedCount().equals(0);
+    }
+
+    public Boolean isInProgress() {
+        return getAchievementsUnlockedCount() > 0;
+    }
+
     public Boolean isComplete() {
         return getAchievementsTotalCount().equals(getAchievementsUnlockedCount());
+    }
+
+    public int getStatus() {
+        if (isComplete()) {
+            return STATUS_COMPLETE;
+        } else if (isInProgress()) {
+            return STATUS_IN_PROGRESS;
+        } else {
+            return STATUS_INCOMPLETE;
+        }
     }
 
     @Override
