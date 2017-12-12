@@ -89,6 +89,11 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         LayoutInflater.from(parent.getContext())
                                 .inflate(R.layout.fragment_dashboard_item_achievement_unlocked, parent, false)
                 );
+            case DashboardItem.TYPE_GAME_COMPLETE:
+                return new GameCompleteViewHolder(
+                        LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.fragment_dashboard_item_game_complete, parent, false)
+                );
             default:
                 return null;
         }
@@ -158,6 +163,24 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         DateUtils.getRelativeTimeSpanString(dashboardItem.getAchievementUnlockTime() * 1000L)
                 );
                 break;
+            case DashboardItem.TYPE_GAME_COMPLETE:
+                GameCompleteViewHolder gameCompleteViewHolder = (GameCompleteViewHolder) viewHolder;
+
+                gameCompleteViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDashboardOnItemClickListener.onClick(dashboardItem);
+                    }
+                });
+
+                GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
+                        .placeholder(R.drawable.no_game_logo)
+                        .into(gameCompleteViewHolder.gameLogo);
+                gameCompleteViewHolder.gameName.setText(dashboardItem.getAppName());
+                gameCompleteViewHolder.time.setText(
+                        DateUtils.getRelativeTimeSpanString(dashboardItem.getTime() * 1000L)
+                );
+                break;
         }
     }
 
@@ -224,6 +247,23 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             achievementIcon = itemView.findViewById(R.id.iv_achievement_icon);
             achievementName = itemView.findViewById(R.id.tv_achievement_name);
             achievementTime = itemView.findViewById(R.id.tv_achievement_time);
+        }
+    }
+
+    private static class GameCompleteViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
+        ImageView gameLogo;
+        TextView gameName;
+        TextView time;
+
+        GameCompleteViewHolder(View itemView) {
+            super(itemView);
+
+            cardView = itemView.findViewById(R.id.cv_item);
+
+            gameLogo = itemView.findViewById(R.id.iv_game_logo);
+            gameName = itemView.findViewById(R.id.tv_game_name);
+            time = itemView.findViewById(R.id.tv_time);
         }
     }
 }

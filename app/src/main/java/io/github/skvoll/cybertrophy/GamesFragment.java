@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,8 +62,8 @@ public class GamesFragment extends Fragment {
                 getString(R.string.games_list_tab_complete)
         );
 
-        mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(mPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         return mRootView;
     }
@@ -77,6 +78,7 @@ public class GamesFragment extends Fragment {
             currentItem = savedInstanceState.getInt(PARAMS_TAB, 0);
         }
 
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(currentItem);
     }
 
@@ -87,7 +89,7 @@ public class GamesFragment extends Fragment {
         outState.putInt(PARAMS_TAB, mViewPager.getCurrentItem());
     }
 
-    private class PagerAdapter extends FragmentPagerAdapter {
+    private class PagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentsList = new ArrayList<>();
         private final List<String> mFragmentTitlesList = new ArrayList<>();
 
