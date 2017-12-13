@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.games_list.GamesListFragment;
 
 public class GamesFragment extends Fragment {
-    public static final String PARAMS_TAB = "PARAMS_TAB";
+    public static final String KEY_TAB = "TAB";
 
     private static final String TAG = GamesFragment.class.getSimpleName();
 
@@ -75,10 +74,10 @@ public class GamesFragment extends Fragment {
         int currentItem = 0;
 
         if (savedInstanceState != null) {
-            currentItem = savedInstanceState.getInt(PARAMS_TAB, 0);
+            currentItem = savedInstanceState.getInt(KEY_TAB, currentItem);
         }
 
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(currentItem);
     }
 
@@ -86,7 +85,7 @@ public class GamesFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(PARAMS_TAB, mViewPager.getCurrentItem());
+        outState.putInt(KEY_TAB, mViewPager.getCurrentItem());
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {

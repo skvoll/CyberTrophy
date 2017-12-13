@@ -3,16 +3,16 @@
 
     <item
         android:id="@+id/menu_dashboard"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="Dashboard" />
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/main_menu_dashboard" />
 
     <item
         android:id="@+id/menu_games"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="Games" />
+        android:icon="@drawable/ic_videogame_asset_black_24dp"
+        android:title="@string/main_menu_games" />
 
     <item
         android:id="@+id/menu_profile"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="Profile" />
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="@string/main_menu_profile" />
 </menu>

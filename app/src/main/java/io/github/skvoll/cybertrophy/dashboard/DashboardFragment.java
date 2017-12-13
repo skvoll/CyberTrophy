@@ -2,6 +2,7 @@ package io.github.skvoll.cybertrophy.dashboard;
 
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import io.github.skvoll.cybertrophy.GameActivity;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.LogModel;
@@ -101,8 +103,13 @@ public class DashboardFragment extends Fragment implements
 
         switch (dashboardItem.getType()) {
             case DashboardItem.TYPE_CURRENT_GAME:
-                break;
             case DashboardItem.TYPE_NEW_GAME:
+            case DashboardItem.TYPE_GAME_COMPLETE:
+                Intent intent = new Intent(getContext(), GameActivity.class);
+                intent.putExtra(GameActivity.KEY_STEAM_ID, mProfileModel.getSteamId());
+                intent.putExtra(GameActivity.KEY_APP_ID, dashboardItem.getAppId());
+
+                startActivity(intent);
                 break;
             case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
                 AchievementModel achievementModel = AchievementModel.getByCode(

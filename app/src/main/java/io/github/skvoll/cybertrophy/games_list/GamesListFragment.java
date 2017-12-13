@@ -1,5 +1,6 @@
 package io.github.skvoll.cybertrophy.games_list;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,9 +13,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import io.github.skvoll.cybertrophy.GameActivity;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
+import io.github.skvoll.cybertrophy.data.GameModel;
 
 public class GamesListFragment extends ListFragment implements
         SwipeRefreshLayout.OnRefreshListener,
@@ -27,8 +31,8 @@ public class GamesListFragment extends ListFragment implements
     public static final int TYPE_NO_ACHIEVEMENTS = 4;
 
     private static final String TAG = GamesListFragment.class.getSimpleName();
-    private static final String ARGUMENT_STEAM_ID = "STEAM_ID";
-    private static final String ARGUMENT_TYPE = "TYPE";
+    private static final String KEY_STEAM_ID = "STEAM_ID";
+    private static final String KEY_TYPE = "TYPE";
 
     private Long mSteamId;
     private int mType;
@@ -43,8 +47,8 @@ public class GamesListFragment extends ListFragment implements
         GamesListFragment fragment = new GamesListFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putLong(ARGUMENT_STEAM_ID, steamId);
-        bundle.putInt(ARGUMENT_TYPE, type);
+        bundle.putLong(KEY_STEAM_ID, steamId);
+        bundle.putInt(KEY_TYPE, type);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -58,8 +62,8 @@ public class GamesListFragment extends ListFragment implements
             throw new IllegalArgumentException();
         }
 
-        mSteamId = getArguments().getLong(ARGUMENT_STEAM_ID, -1);
-        mType = getArguments().getInt(ARGUMENT_TYPE, -1);
+        mSteamId = getArguments().getLong(KEY_STEAM_ID, -1);
+        mType = getArguments().getInt(KEY_TYPE, -1);
 
         if (mSteamId == -1 || mType == -1) {
             throw new IllegalArgumentException();
@@ -92,6 +96,27 @@ public class GamesListFragment extends ListFragment implements
     @Override
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        if (getContext() == null) {
+            return;
+        }
+
+        GameModel gameModel = GameModel.getById(getContext().getContentResolver(), id);
+
+        if (gameModel == null) {
+            return;
+        }
+
+        Intent intent = new Intent(getContext(), GameActivity.class);
+        intent.putExtra(GameActivity.KEY_STEAM_ID, mSteamId);
+        intent.putExtra(GameActivity.KEY_APP_ID, gameModel.getAppId());
+
+        startActivity(intent);
     }
 
     @Override

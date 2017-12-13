@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.SplashScreen">
@@ -22,13 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AuthActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GameActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
@@ -39,12 +39,10 @@
         <service
             android:name=".services.FirstGamesParserService"
             android:exported="false" />
-
         <service
             android:name=".services.AllGamesParserJob"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.RecentGamesParserJob"
             android:exported="false"

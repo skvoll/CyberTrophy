@@ -13,7 +13,7 @@ import io.github.skvoll.cybertrophy.dashboard.DashboardFragment;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String PARAMS_FRAGMENT = "PARAMS_FRAGMENT";
+    public static final String KEY_FRAGMENT = "FRAGMENT";
     public static final int FRAGMENT_DASHBOARD = R.id.menu_dashboard;
     public static final int FRAGMENT_GAMES = R.id.menu_games;
     public static final int FRAGMENT_PROFILE = R.id.menu_profile;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (bundle != null) {
-            selectedItem = bundle.getInt(PARAMS_FRAGMENT, FRAGMENT_DASHBOARD);
+            selectedItem = bundle.getInt(KEY_FRAGMENT, FRAGMENT_DASHBOARD);
         }
 
         mBottomNavigationView.setSelectedItemId(selectedItem);
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(PARAMS_FRAGMENT, mBottomNavigationView.getSelectedItemId());
+        outState.putInt(KEY_FRAGMENT, mBottomNavigationView.getSelectedItemId());
     }
 
     @NonNull

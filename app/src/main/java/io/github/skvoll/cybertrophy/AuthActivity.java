@@ -127,11 +127,7 @@ public class AuthActivity extends AppCompatActivity {
             mActivity.startService(new Intent(mActivity, FirstGamesParserService.class));
 
             Intent intent = new Intent(mActivity, MainActivity.class);
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(MainActivity.PARAMS_FRAGMENT, MainActivity.FRAGMENT_PROFILE);
-
-            intent.putExtras(bundle);
+            intent.putExtra(MainActivity.KEY_FRAGMENT, MainActivity.FRAGMENT_PROFILE);
 
             mActivity.startActivity(intent);
 
