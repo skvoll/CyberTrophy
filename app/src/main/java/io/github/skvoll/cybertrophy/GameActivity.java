@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
     private ProfileModel mProfileModel;
     private GameModel mGameModel;
 
+    private ImageView mHeaderBackground;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -40,10 +43,15 @@ public class GameActivity extends AppCompatActivity {
 
         getParams(savedInstanceState);
 
+        mHeaderBackground = findViewById(R.id.iv_header_background);
         mToolbar = findViewById(R.id.tb_toolbar);
         mTabLayout = findViewById(R.id.tl_tabs);
         mViewPager = findViewById(R.id.vp_container);
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+
+        GlideApp.with(this).load(mGameModel.getLogoUrl())
+                .placeholder(R.drawable.no_game_logo)
+                .into(mHeaderBackground);
 
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();

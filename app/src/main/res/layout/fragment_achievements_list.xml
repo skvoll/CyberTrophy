@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:drawSelectorOnTop="true"
+        android:nestedScrollingEnabled="true"
         tools:listitem="@layout/fragment_achievements_list_item" />
 
     <TextView

@@ -60,6 +60,7 @@ public class DashboardFragment extends Fragment implements
         mRecyclerView = mRootView.findViewById(R.id.rv_list);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

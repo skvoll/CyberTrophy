@@ -75,6 +75,7 @@ public class AchievementsListFragment extends ListFragment implements
         mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mAchievementsListAdapter = new AchievementsListAdapter(getContext(), null, 0);

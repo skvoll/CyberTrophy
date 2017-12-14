@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Blue Grey 800 -->
     <color name="primaryColor">#37474F</color>
+    <!-- Blue Grey 700 -->
     <color name="primaryLightColor">#455A64</color>
+    <!-- Blue Grey 900 -->
     <color name="primaryDarkColor">#263238</color>
+    <!-- White -->
     <color name="primaryTextColor">#FFFFFF</color>
 
-    <color name="secondaryColor">#81D4FA</color>
-    <color name="secondaryLightColor">#B3E5FC</color>
-    <color name="secondaryDarkColor">#4FC3F7</color>
+    <!-- Teal 200 -->
+    <color name="secondaryColor">#80CBC4</color>
+    <!-- Teal 100 -->
+    <color name="secondaryLightColor">#B2DFDB</color>
+    <!-- Teal 300 -->
+    <color name="secondaryDarkColor">#4DB6AC</color>
+    <!-- Black -->
     <color name="secondaryTextColor">#000000</color>
 
+    <!-- Green A700 -->
     <color name="accentColor">#00C853</color>
+    <!-- Black -->
     <color name="accentTextColor">#000000</color>
 
     <color name="grayTextColor">#C0C0C0</color>

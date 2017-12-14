@@ -77,6 +77,7 @@ public class GamesListFragment extends ListFragment implements
         mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mGamesListAdapter = new GamesListAdapter(getContext(), null, 0);
