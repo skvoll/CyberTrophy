@@ -56,6 +56,28 @@ public final class AchievementModel extends Model {
         mUnlockTime = steamAchievement.getUnlockTime();
     }
 
+    public static AchievementModel getById(ContentResolver contentResolver, Long id) {
+        Uri uri = ContentUris.withAppendedId(DataContract.AchievementEntry.URI, id);
+        Cursor cursor = contentResolver.query(uri,
+                null, null, null, null);
+
+        if (cursor == null) {
+            return null;
+        }
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            return null;
+        }
+
+        AchievementModel achievementModel = new AchievementModel(cursor);
+
+        cursor.close();
+
+        return achievementModel;
+    }
+
     public static AchievementModel getByCode(ContentResolver contentResolver, String code) {
         String selection = AchievementEntry.COLUMN_CODE + "=?";
         String[] selectionArgs = new String[]{code};

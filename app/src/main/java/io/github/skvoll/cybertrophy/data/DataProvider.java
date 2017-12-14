@@ -74,6 +74,8 @@ public final class DataProvider extends ContentProvider {
                 selection = DataContract.AchievementEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
+                return database.query(DataContract.AchievementEntry.TABLE_NAME,
+                        columns, selection, selectionArgs, null, null, null);
             case LOG:
                 return database.query(DataContract.LogEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, orderBy);

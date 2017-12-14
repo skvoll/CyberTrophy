@@ -12,8 +12,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import io.github.skvoll.cybertrophy.R;
+import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 
 public class AchievementsListFragment extends ListFragment implements
@@ -32,6 +34,7 @@ public class AchievementsListFragment extends ListFragment implements
     private Long mSteamId;
     private Long mAppId;
     private int mType;
+    private OnItemClickListener mOnItemClickListener;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AchievementsListAdapter mAchievementsListAdapter;
@@ -39,8 +42,9 @@ public class AchievementsListFragment extends ListFragment implements
     public AchievementsListFragment() {
     }
 
-    public static AchievementsListFragment newInstance(Long steamId, Long appId, int type) {
+    public static AchievementsListFragment newInstance(Long steamId, Long appId, int type, OnItemClickListener onItemClickListener) {
         AchievementsListFragment fragment = new AchievementsListFragment();
+        fragment.setOnItemClickListener(onItemClickListener);
 
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_STEAM_ID, steamId);
@@ -49,6 +53,10 @@ public class AchievementsListFragment extends ListFragment implements
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -98,6 +106,27 @@ public class AchievementsListFragment extends ListFragment implements
     }
 
     @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        if (mOnItemClickListener == null) {
+            return;
+        }
+
+        if (getContext() == null) {
+            return;
+        }
+
+        AchievementModel achievementModel = AchievementModel.getById(getContext().getContentResolver(), id);
+
+        if (achievementModel == null) {
+            return;
+        }
+
+        mOnItemClickListener.onClick(achievementModel);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (getContext() == null) {
             return null;
@@ -132,5 +161,9 @@ public class AchievementsListFragment extends ListFragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAchievementsListAdapter.swapCursor(null);
+    }
+
+    public interface OnItemClickListener {
+        void onClick(AchievementModel achievementModel);
     }
 }
