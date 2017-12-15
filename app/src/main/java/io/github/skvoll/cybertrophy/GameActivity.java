@@ -14,9 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,14 +161,11 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
 
     @Override
     public void onClick(AchievementModel achievementModel) {
-        LinearLayout linearLayout = findViewById(R.id.ll_drawer);
+        FrameLayout frameLayout = findViewById(R.id.fl_drawer);
+        Fragment fragment = AchievementFragment.newInstance(achievementModel);
 
-        TextView textView = new TextView(this);
-        textView.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-        textView.setText(achievementModel.getName());
-
-        linearLayout.addView(textView);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fl_drawer, fragment).commit();
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         mDrawerLayout.openDrawer(Gravity.END);

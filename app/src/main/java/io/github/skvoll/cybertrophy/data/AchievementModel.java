@@ -145,7 +145,7 @@ public final class AchievementModel extends Model {
     }
 
     @Override
-    Long getId() {
+    public Long getId() {
         return mId;
     }
 

@@ -66,13 +66,9 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.design.widget.CoordinatorLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_drawer"
+    <FrameLayout
+        android:id="@+id/fl_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@android:color/white"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical" />
+        android:layout_gravity="end" />
 </android.support.v4.widget.DrawerLayout>
