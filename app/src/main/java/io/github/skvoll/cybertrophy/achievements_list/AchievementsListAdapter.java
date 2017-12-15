@@ -52,8 +52,10 @@ final class AchievementsListAdapter extends CursorAdapter {
         }
 
         if (achievementModel.isUnlocked()) {
-            viewHolder.unlockTime.setText(
+            viewHolder.info.setText(
                     DateUtils.getRelativeTimeSpanString(achievementModel.getUnlockTime() * 1000L));
+        } else {
+            viewHolder.info.setText(achievementModel.getPercent() + "%");
         }
     }
 
@@ -61,7 +63,7 @@ final class AchievementsListAdapter extends CursorAdapter {
         ImageView icon;
         TextView name;
         TextView description;
-        TextView unlockTime;
+        TextView info;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -69,7 +71,7 @@ final class AchievementsListAdapter extends CursorAdapter {
             icon = itemView.findViewById(R.id.iv_icon);
             name = itemView.findViewById(R.id.tv_name);
             description = itemView.findViewById(R.id.tv_description);
-            unlockTime = itemView.findViewById(R.id.tv_unlock_time);
+            info = itemView.findViewById(R.id.tv_info);
         }
     }
 }

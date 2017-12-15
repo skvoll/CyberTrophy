@@ -133,7 +133,7 @@ public class AchievementsListFragment extends ListFragment implements
         }
 
         String select;
-        String sortOrder = null;
+        String sortOrder;
 
         select = AchievementEntry.COLUMN_STEAM_ID + " == " + mSteamId + " AND " +
                 AchievementEntry.COLUMN_APP_ID + " == " + mAppId;
@@ -145,6 +145,9 @@ public class AchievementsListFragment extends ListFragment implements
                 break;
             case TYPE_UNLOCKED:
                 select += " AND " + AchievementEntry.COLUMN_IS_UNLOCKED + " == 1";
+                sortOrder = AchievementEntry.COLUMN_UNLOCK_TIME + " DESC";
+                break;
+            default:
                 sortOrder = AchievementEntry.COLUMN_UNLOCK_TIME + " DESC";
                 break;
         }

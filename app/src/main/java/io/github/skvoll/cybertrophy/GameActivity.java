@@ -84,37 +84,53 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        if (mGameModel.getStatus() == GameModel.STATUS_IN_PROGRESS) {
-            mPagerAdapter.addFragment(
-                    AchievementsListFragment.newInstance(
-                            mProfileModel.getSteamId(),
-                            mGameModel.getAppId(),
-                            AchievementsListFragment.TYPE_LOCKED,
-                            this
-                    ),
-                    getString(R.string.achievements_list_locked)
-            );
-            mPagerAdapter.addFragment(
-                    AchievementsListFragment.newInstance(
-                            mProfileModel.getSteamId(),
-                            mGameModel.getAppId(),
-                            AchievementsListFragment.TYPE_UNLOCKED,
-                            this
-                    ),
-                    getString(R.string.achievements_list_unlocked)
-            );
-        } else {
-            mPagerAdapter.addFragment(
-                    AchievementsListFragment.newInstance(
-                            mProfileModel.getSteamId(),
-                            mGameModel.getAppId(),
-                            AchievementsListFragment.TYPE_ALL,
-                            this
-                    ),
-                    null
-            );
+        switch (mGameModel.getStatus()) {
+            case GameModel.STATUS_INCOMPLETE:
+                mPagerAdapter.addFragment(
+                        AchievementsListFragment.newInstance(
+                                mProfileModel.getSteamId(),
+                                mGameModel.getAppId(),
+                                AchievementsListFragment.TYPE_LOCKED,
+                                this
+                        ),
+                        null
+                );
 
-            mTabLayout.setVisibility(View.GONE);
+                mTabLayout.setVisibility(View.GONE);
+                break;
+            case GameModel.STATUS_IN_PROGRESS:
+                mPagerAdapter.addFragment(
+                        AchievementsListFragment.newInstance(
+                                mProfileModel.getSteamId(),
+                                mGameModel.getAppId(),
+                                AchievementsListFragment.TYPE_LOCKED,
+                                this
+                        ),
+                        getString(R.string.achievements_list_locked)
+                );
+                mPagerAdapter.addFragment(
+                        AchievementsListFragment.newInstance(
+                                mProfileModel.getSteamId(),
+                                mGameModel.getAppId(),
+                                AchievementsListFragment.TYPE_UNLOCKED,
+                                this
+                        ),
+                        getString(R.string.achievements_list_unlocked)
+                );
+                break;
+            case GameModel.STATUS_COMPLETE:
+                mPagerAdapter.addFragment(
+                        AchievementsListFragment.newInstance(
+                                mProfileModel.getSteamId(),
+                                mGameModel.getAppId(),
+                                AchievementsListFragment.TYPE_UNLOCKED,
+                                this
+                        ),
+                        null
+                );
+
+                mTabLayout.setVisibility(View.GONE);
+                break;
         }
 
         mViewPager.setAdapter(mPagerAdapter);
