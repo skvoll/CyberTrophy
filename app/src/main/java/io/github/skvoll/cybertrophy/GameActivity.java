@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -56,6 +57,21 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(
+                this, mDrawerLayout, null, R.string.empty, R.string.empty) {
+
+            @Override
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        });
 
         GlideApp.with(this).load(mGameModel.getLogoUrl())
                 .placeholder(R.drawable.no_game_logo)
@@ -155,6 +171,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
 
         linearLayout.addView(textView);
 
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         mDrawerLayout.openDrawer(Gravity.END);
     }
 

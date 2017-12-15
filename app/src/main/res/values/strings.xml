@@ -3,6 +3,8 @@
     <string name="company_name">skvoll.github.io</string>
     <string name="app_name">CyberTrophy</string>
 
+    <string name="empty" />
+
     <string name="sign_in_through_steam">Sign in through STEAM©</string>
 
     <string name="title_games">Games</string>
