@@ -96,9 +96,9 @@ final class GamesListAdapter extends CursorAdapter {
                     viewHolder.gameLastPLay.setVisibility(View.GONE);
                     viewHolder.gamePlaytime.setVisibility(View.GONE);
                 }
-                viewHolder.gameAchievements.setVisibility(View.GONE);
-                viewHolder.gameProgress.setVisibility(View.VISIBLE);
-                viewHolder.gameProgressBar.setVisibility(View.VISIBLE);
+                viewHolder.gameAchievements.setVisibility(View.VISIBLE);
+                viewHolder.gameProgress.setVisibility(View.GONE);
+                viewHolder.gameProgressBar.setVisibility(View.GONE);
                 break;
             case GameModel.STATUS_IN_PROGRESS:
                 viewHolder.gameLastPLay.setVisibility(View.VISIBLE);
