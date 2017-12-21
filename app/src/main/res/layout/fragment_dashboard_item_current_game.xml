@@ -26,9 +26,10 @@
                 android:id="@+id/iv_game_logo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:contentDescription="@string/game_logo_description"
                 android:scaleType="centerCrop"
-                android:src="@drawable/no_game_logo" />
+                android:src="@drawable/game_logo_empty" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"

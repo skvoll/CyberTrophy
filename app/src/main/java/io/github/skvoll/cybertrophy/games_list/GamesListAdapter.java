@@ -41,7 +41,7 @@ final class GamesListAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         GlideApp.with(context).load(gameModel.getLogoUrl())
-                .placeholder(R.drawable.no_game_logo)
+                .placeholder(R.drawable.game_logo_empty)
                 .into(viewHolder.gameLogo);
 
         viewHolder.gameName.setText(gameModel.getName());

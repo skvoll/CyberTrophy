@@ -26,7 +26,7 @@
                 android:layout_width="154dp"
                 android:layout_height="72dp"
                 android:contentDescription="@string/game_logo_description"
-                android:src="@drawable/no_game_logo" />
+                android:src="@drawable/game_logo_empty" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"

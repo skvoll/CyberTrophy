@@ -73,7 +73,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
         });
 
         GlideApp.with(this).load(mGameModel.getLogoUrl())
-                .placeholder(R.drawable.no_game_logo)
+                .placeholder(R.drawable.game_logo_empty)
                 .into(mHeaderBackground);
 
         setSupportActionBar(mToolbar);

@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
 
         GlideApp.with(getContext()).load(profileModel.getAvatarFull())
                 .fitCenter()
-                .placeholder(R.drawable.no_avatar_image).into(ivProfileAvatar);
+                .placeholder(R.drawable.profile_avatar_empty).into(ivProfileAvatar);
         GlideApp.with(getContext()).load(profileModel.getBackgroundImage())
                 .centerCrop()
                 .placeholder(R.color.primaryColor).into(ivProfileBackground);

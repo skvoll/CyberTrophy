@@ -115,7 +115,7 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
-                        .placeholder(R.drawable.no_game_logo)
+                        .placeholder(R.drawable.game_logo_empty)
                         .into(currentGameViewHolder.gameLogo);
                 currentGameViewHolder.gameName.setText(dashboardItem.getAppName());
                 currentGameViewHolder.gameProgress.setText(
@@ -138,7 +138,7 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
-                        .placeholder(R.drawable.no_game_logo)
+                        .placeholder(R.drawable.game_logo_empty)
                         .into(newGameViewHolder.gameLogo);
                 newGameViewHolder.gameName.setText(dashboardItem.getAppName());
                 newGameViewHolder.time.setText(
@@ -156,7 +156,7 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
                 GlideApp.with(mContext).load(dashboardItem.getAchievementIconUrl())
-                        .placeholder(R.drawable.no_achievement_icon)
+                        .placeholder(R.drawable.achievement_icon_empty)
                         .into(achievementUnlockedViewHolder.achievementIcon);
                 achievementUnlockedViewHolder.achievementName.setText(dashboardItem.getAchievementName());
                 achievementUnlockedViewHolder.achievementTime.setText(
@@ -174,7 +174,7 @@ final class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
 
                 GlideApp.with(mContext).load(dashboardItem.getAppLogoUrl())
-                        .placeholder(R.drawable.no_game_logo)
+                        .placeholder(R.drawable.game_logo_empty)
                         .into(gameCompleteViewHolder.gameLogo);
                 gameCompleteViewHolder.gameName.setText(dashboardItem.getAppName());
                 gameCompleteViewHolder.time.setText(

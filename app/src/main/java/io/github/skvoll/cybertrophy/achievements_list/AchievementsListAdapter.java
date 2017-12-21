@@ -38,21 +38,23 @@ final class AchievementsListAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        String icon = achievementModel.isUnlocked() ?
-                achievementModel.getIconUrl() : achievementModel.getIconGrayUrl();
-
         String description = achievementModel.getDescription() != null
                 ? achievementModel.getDescription()
                 : mContext.getResources().getString(R.string.empty_achievement_description);
 
-        GlideApp.with(context).load(icon)
-                .placeholder(R.drawable.no_achievement_icon)
-                .into(viewHolder.icon);
-
         if (achievementModel.isUnlocked() || !achievementModel.isHidden()) {
+            String icon = achievementModel.isUnlocked() ?
+                    achievementModel.getIconUrl() : achievementModel.getIconGrayUrl();
+
+            GlideApp.with(context).load(icon)
+                    .placeholder(R.drawable.achievement_icon_empty)
+                    .into(viewHolder.icon);
             viewHolder.name.setText(achievementModel.getName());
             viewHolder.description.setText(description);
         } else {
+            GlideApp.with(context).load(R.drawable.achievement_icon_hidden)
+                    .placeholder(R.drawable.achievement_icon_empty)
+                    .into(viewHolder.icon);
             viewHolder.name.setText("Hidden");
             viewHolder.description.setText(mContext.getResources().getString(R.string.empty));
         }

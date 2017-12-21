@@ -15,6 +15,8 @@
     <string name="game_achievements_progress">%d/%d achievements</string>
     <string name="game_logo_description">Game logo</string>
     <string name="achievement_icon_description">Achievement icon</string>
+    <string name="profile_avatar_description">Profile avatar</string>
+    <string name="profile_background_description">Profile background</string>
 
     <string name="empty_achievement_description">No description</string>
 

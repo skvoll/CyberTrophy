@@ -69,7 +69,7 @@ public class AchievementFragment extends Fragment {
                 mAchievementModel.getIconUrl() : mAchievementModel.getIconGrayUrl();
 
         GlideApp.with(getContext()).load(icon)
-                .placeholder(R.drawable.no_achievement_icon)
+                .placeholder(R.drawable.achievement_icon_empty)
                 .into(ivIcon);
 
         tvName.setText(mAchievementModel.getName());

@@ -17,7 +17,7 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:contentDescription="@string/achievement_icon_description"
-            android:src="@drawable/no_achievement_icon"
+            android:src="@drawable/achievement_icon_empty"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
