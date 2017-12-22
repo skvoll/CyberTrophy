@@ -18,6 +18,8 @@
     <string name="profile_avatar_description">Profile avatar</string>
     <string name="profile_background_description">Profile background</string>
 
+    <string name="achievement_title_hidden">Hidden</string>
+    <string name="achievement_show_info_button">Show info</string>
     <string name="empty_achievement_description">No description</string>
 
     <string name="main_menu_dashboard">Dashboard</string>

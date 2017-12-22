@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryLightColor"
-    android:padding="8dp"
+    android:orientation="vertical"
     tools:context="io.github.skvoll.cybertrophy.AchievementFragment">
 
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:contentDescription="@string/achievement_icon_description"
-        android:src="@drawable/achievement_icon_empty" />
-
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@color/primaryTextColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Achievement name" />
-
-    <TextView
-        android:id="@+id/tv_description"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/empty_achievement_description"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@string/achievement_icon_description"
+            android:src="@drawable/achievement_icon_empty" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/primaryTextColor"
+            tools:text="Achievement name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_achievement_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_achievement_description"
+            android:textColor="@color/primaryTextColor" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_show_info"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/achievement_show_info_button"
         android:textColor="@color/primaryTextColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_icon" />
-</android.support.constraint.ConstraintLayout>
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>
