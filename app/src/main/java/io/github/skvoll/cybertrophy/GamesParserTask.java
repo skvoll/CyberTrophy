@@ -148,6 +148,8 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                 Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" has " + steamGame.getAchievementsTotalCount() + " achievement(s). Parsing.");
 
                 if (gameModel != null) {
+                    boolean wasComplete = gameModel.isComplete();
+
                     updateGame(gameModel, steamGame);
 
                     HashMap<String, AchievementModel> achievementModels = AchievementModel.getByGame(mContentResolver, gameModel);
@@ -192,7 +194,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                         }
                     }
 
-                    if (gameModel.isComplete()) {
+                    if (!wasComplete && gameModel.isComplete()) {
                         Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is complete.");
 
                         if (mAction != ACTION_FIRST) {
