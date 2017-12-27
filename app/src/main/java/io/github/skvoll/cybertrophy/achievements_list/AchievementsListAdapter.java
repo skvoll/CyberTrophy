@@ -1,15 +1,20 @@
 package io.github.skvoll.cybertrophy.achievements_list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.math.BigDecimal;
 
 import io.github.skvoll.cybertrophy.GlideApp;
 import io.github.skvoll.cybertrophy.R;
@@ -18,8 +23,16 @@ import io.github.skvoll.cybertrophy.data.AchievementModel;
 final class AchievementsListAdapter extends CursorAdapter {
     private static final String TAG = AchievementsListAdapter.class.getSimpleName();
 
+    private final BigDecimal mOneHundred = new BigDecimal("100");
+    private int mMaxWidth;
+
     AchievementsListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        mMaxWidth = displayMetrics.widthPixels;
     }
 
     @Override
@@ -55,19 +68,23 @@ final class AchievementsListAdapter extends CursorAdapter {
             GlideApp.with(context).load(R.drawable.achievement_icon_hidden)
                     .placeholder(R.drawable.achievement_icon_empty)
                     .into(viewHolder.icon);
-            viewHolder.name.setText("Hidden");
+            viewHolder.name.setText(R.string.achievement_title_hidden);
             viewHolder.description.setText(mContext.getResources().getString(R.string.empty));
         }
 
         if (achievementModel.isUnlocked()) {
-            viewHolder.info.setText(
-                    DateUtils.getRelativeTimeSpanString(achievementModel.getUnlockTime() * 1000L));
+            viewHolder.info.setText(DateUtils.getRelativeTimeSpanString(
+                    achievementModel.getUnlockTime() * 1000L));
+            viewHolder.progress.getLayoutParams().width = 0;
         } else {
-            viewHolder.info.setText(achievementModel.getPercent() + "%");
+            viewHolder.info.setText(String.format("%s%%", achievementModel.getPercent()));
+
+            viewHolder.progress.getLayoutParams().width = Math.round(mMaxWidth * (achievementModel.getPercent().floatValue() / 100f));
         }
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
+        View progress;
         ImageView icon;
         TextView name;
         TextView description;
@@ -76,6 +93,7 @@ final class AchievementsListAdapter extends CursorAdapter {
         ViewHolder(View itemView) {
             super(itemView);
 
+            progress = itemView.findViewById(R.id.v_progress);
             icon = itemView.findViewById(R.id.iv_icon);
             name = itemView.findViewById(R.id.tv_name);
             description = itemView.findViewById(R.id.tv_description);
