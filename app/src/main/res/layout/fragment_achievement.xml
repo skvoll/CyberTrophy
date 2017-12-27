@@ -45,6 +45,54 @@
             android:layout_height="wrap_content"
             android:text="@string/empty_achievement_description"
             android:textColor="@color/primaryTextColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guides_search_guides"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/primaryTextColor" />
+
+            <Button
+                android:id="@+id/btn_guides_steam"
+                style="@style/AppTheme.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_steam_black_24"
+                android:paddingEnd="24dp"
+                android:text="@string/guides_search_button_steam"
+                tools:ignore="RtlSymmetry" />
+
+            <Button
+                android:id="@+id/btn_guides_youtube"
+                style="@style/AppTheme.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_youtube_black_24dp"
+                android:paddingEnd="24dp"
+                android:text="@string/guides_search_button_youtube"
+                tools:ignore="RtlSymmetry" />
+
+            <Button
+                android:id="@+id/btn_guides_google"
+                style="@style/AppTheme.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_google_black_24dp"
+                android:paddingEnd="24dp"
+                android:text="@string/guides_search_button_google"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button
