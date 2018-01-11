@@ -42,56 +42,127 @@
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/empty_achievement_description"
             android:textColor="@color/primaryTextColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:id="@+id/ll_unlock_date_wrapper"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/achievement_unlock_date_icon"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_today_black_24dp"
+                    android:tint="@color/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/tv_unlock_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/primaryTextColor"
+                    tools:text="01.01.1970\n00:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/achievement_percentage_icon"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_insert_chart_black_24dp"
+                    android:tint="@color/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/tv_percentage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/primaryTextColor"
+                    tools:text="75%" />
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+            <Space
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/guides_search_guides"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textColor="@color/primaryTextColor" />
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_guides_steam"
-                style="@style/AppTheme.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_steam_black_24"
-                android:paddingEnd="24dp"
-                android:text="@string/guides_search_button_steam"
-                tools:ignore="RtlSymmetry" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:contentDescription="@string/achievement_guides_steam_btn"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_steam_black_24"
+                android:tint="@color/primaryTextColor" />
 
-            <Button
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
                 android:id="@+id/btn_guides_youtube"
-                style="@style/AppTheme.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_youtube_black_24dp"
-                android:paddingEnd="24dp"
-                android:text="@string/guides_search_button_youtube"
-                tools:ignore="RtlSymmetry" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:contentDescription="@string/achievement_guides_youtube_btn"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_youtube_black_24dp"
+                android:tint="@color/primaryTextColor" />
 
-            <Button
-                android:id="@+id/btn_guides_google"
-                style="@style/AppTheme.Button.Colored"
-                android:layout_width="match_parent"
+            <Space
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_google_black_24dp"
-                android:paddingEnd="24dp"
-                android:text="@string/guides_search_button_google"
-                tools:ignore="RtlSymmetry" />
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/btn_guides_google"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:contentDescription="@string/achievement_guides_google_btn"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_google_black_24dp"
+                android:tint="@color/primaryTextColor" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 
@@ -102,6 +173,5 @@
         android:layout_height="match_parent"
         android:text="@string/achievement_show_info_button"
         android:textColor="@color/primaryTextColor"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:visibility="gone" />
 </LinearLayout>

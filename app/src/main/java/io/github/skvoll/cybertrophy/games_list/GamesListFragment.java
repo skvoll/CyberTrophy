@@ -96,7 +96,7 @@ public class GamesListFragment extends ListFragment implements
 
     @Override
     public void onRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -163,6 +163,8 @@ public class GamesListFragment extends ListFragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mGamesListAdapter.swapCursor(cursor);
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

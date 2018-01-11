@@ -12,14 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
 public class AchievementFragment extends Fragment {
+    private static final String TAG = AchievementFragment.class.getSimpleName();
     private static final String KEY_ID = "ID";
 
     private Context mContext;
@@ -77,18 +83,28 @@ public class AchievementFragment extends Fragment {
 
         final ImageView ivIcon = mRootView.findViewById(R.id.iv_icon);
         final TextView tvName = mRootView.findViewById(R.id.tv_name);
+        final LinearLayout llUnlockDate = mRootView.findViewById(R.id.ll_unlock_date_wrapper);
+        final TextView tvUnlockDate = mRootView.findViewById(R.id.tv_unlock_date);
+        final TextView tvPercentage = mRootView.findViewById(R.id.tv_percentage);
         final Button btnShowInfo = mRootView.findViewById(R.id.btn_show_info);
 
-        final Button btnGuidesSteam = mRootView.findViewById(R.id.btn_guides_steam);
-        final Button btnGuidesYoutube = mRootView.findViewById(R.id.btn_guides_youtube);
-        final Button btnGuidesGoogle = mRootView.findViewById(R.id.btn_guides_google);
+        final ImageButton btnGuidesSteam = mRootView.findViewById(R.id.btn_guides_steam);
+        final ImageButton btnGuidesYoutube = mRootView.findViewById(R.id.btn_guides_youtube);
+        final ImageButton btnGuidesGoogle = mRootView.findViewById(R.id.btn_guides_google);
 
-        final LinearLayout mAchievementInfo = mRootView.findViewById(R.id.ll_achievement_info);
+        final LinearLayout llAchievementInfo = mRootView.findViewById(R.id.ll_achievement_info);
         final TextView tvDescription = mRootView.findViewById(R.id.tv_description);
 
         final String description = mAchievementModel.getDescription() != null
                 ? mAchievementModel.getDescription()
                 : mContext.getResources().getString(R.string.empty_achievement_description);
+
+        Date date = new Date();
+        date.setTime(mAchievementModel.getUnlockTime() * 1000L);
+        DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT,
+                DateFormat.SHORT, getResources().getConfiguration().locale);
+
+        final String unlockDate = dateFormat.format(date);
 
         if (mAchievementModel.isUnlocked() || !mAchievementModel.isHidden()) {
             String icon = mAchievementModel.isUnlocked() ?
@@ -99,34 +115,13 @@ public class AchievementFragment extends Fragment {
                     .into(ivIcon);
             tvName.setText(mAchievementModel.getName());
             tvDescription.setText(description);
-
-            btnGuidesSteam.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    guidesSearchSteam(mGameModel.getAppId(), mAchievementModel.getName());
-                }
-            });
-
-            btnGuidesYoutube.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    guidesSearchYoutube(mGameModel.getName(), mAchievementModel.getName());
-                }
-            });
-
-            btnGuidesGoogle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    guidesSearchGoogle(mGameModel.getName(), mAchievementModel.getName());
-                }
-            });
         } else {
             GlideApp.with(mContext).load(R.drawable.achievement_icon_hidden)
                     .placeholder(R.drawable.achievement_icon_empty)
                     .into(ivIcon);
             tvName.setText(R.string.achievement_title_hidden);
 
-            mAchievementInfo.setVisibility(View.GONE);
+            llAchievementInfo.setVisibility(View.GONE);
             btnShowInfo.setVisibility(View.VISIBLE);
 
             btnShowInfo.setOnClickListener(new View.OnClickListener() {
@@ -138,11 +133,39 @@ public class AchievementFragment extends Fragment {
                     tvName.setText(mAchievementModel.getName());
                     tvDescription.setText(description);
 
-                    mAchievementInfo.setVisibility(View.VISIBLE);
+                    llAchievementInfo.setVisibility(View.VISIBLE);
                     btnShowInfo.setVisibility(View.GONE);
                 }
             });
         }
+
+        if (!mAchievementModel.isUnlocked()) {
+            llUnlockDate.setVisibility(View.GONE);
+        }
+
+        tvUnlockDate.setText(unlockDate);
+        tvPercentage.setText(String.format("%s%%", mAchievementModel.getPercent()));
+
+        btnGuidesSteam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guidesSearchSteam(mGameModel.getAppId(), mAchievementModel.getName());
+            }
+        });
+
+        btnGuidesYoutube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guidesSearchYoutube(mGameModel.getName(), mAchievementModel.getName());
+            }
+        });
+
+        btnGuidesGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guidesSearchGoogle(mGameModel.getName(), mAchievementModel.getName());
+            }
+        });
 
         return mRootView;
     }

@@ -102,7 +102,7 @@ public class AchievementsListFragment extends ListFragment implements
 
     @Override
     public void onRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -159,6 +159,8 @@ public class AchievementsListFragment extends ListFragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mAchievementsListAdapter.swapCursor(cursor);
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
