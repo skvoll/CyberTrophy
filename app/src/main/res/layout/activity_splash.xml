@@ -7,9 +7,10 @@
     android:padding="8dp"
     tools:context="io.github.skvoll.cybertrophy.SplashActivity">
 
-    <io.github.skvoll.cybertrophy.views.CompanyNameTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_mono"
         android:textColor="@color/primaryLightColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
