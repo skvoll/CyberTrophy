@@ -31,7 +31,8 @@ public class DashboardFragment extends Fragment implements
     private static final int ITEMS_LIMIT = 100;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mList;
+    private View mListEmpty;
     private DashboardAdapter mAdapter;
 
     private ProfileModel mProfileModel;
@@ -52,39 +53,45 @@ public class DashboardFragment extends Fragment implements
             return null;
         }
 
-        loadDashboardItems(0);
-
         ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
-        mRecyclerView = mRootView.findViewById(R.id.rv_list);
+        mList = mRootView.findViewById(android.R.id.list);
+        mListEmpty = mRootView.findViewById(android.R.id.empty);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new DashboardAdapter(getContext(),
-                mRecyclerView, mDashboardItems, this);
+                mList, mDashboardItems, this);
 
         mAdapter.setOnEndReachListener(this);
 
-        mRecyclerView.setAdapter(mAdapter);
+        mList.setAdapter(mAdapter);
+
+        loadDashboardItems(0);
 
         return mRootView;
     }
 
     @Override
     public void onRefresh() {
-        loadDashboardItems(0);
-        mAdapter.notifyDataSetChanged();
-        mSwipeRefreshLayout.setRefreshing(false);
+        mList.post(new Runnable() {
+            @Override
+            public void run() {
+                loadDashboardItems(0);
+                mAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
     public void onEndReached() {
-        mRecyclerView.post(new Runnable() {
+        mList.post(new Runnable() {
             @Override
             public void run() {
                 loadDashboardItems(mDashboardItems.size());
@@ -135,6 +142,14 @@ public class DashboardFragment extends Fragment implements
         }
 
         mDashboardItems.addAll(DashboardItem.getItems(getContext(), mProfileModel, getItemsTypes(), ITEMS_LIMIT, offset));
+
+        if (mDashboardItems.size() > 0) {
+            mList.setVisibility(View.VISIBLE);
+            mListEmpty.setVisibility(View.GONE);
+        } else {
+            mList.setVisibility(View.GONE);
+            mListEmpty.setVisibility(View.VISIBLE);
+        }
     }
 
     private Integer[] getItemsTypes() {

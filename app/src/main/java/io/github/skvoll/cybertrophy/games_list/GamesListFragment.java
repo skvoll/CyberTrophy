@@ -96,7 +96,14 @@ public class GamesListFragment extends ListFragment implements
 
     @Override
     public void onRefresh() {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
+        final LoaderManager.LoaderCallbacks<Cursor> listFragment = this;
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getLoaderManager().restartLoader(LOADER_ID, null, listFragment);
+            }
+        });
     }
 
     @Override

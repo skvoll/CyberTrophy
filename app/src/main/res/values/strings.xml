@@ -5,6 +5,11 @@
 
     <string name="empty" />
 
+    <string name="first_games_parser_service_notification_title">Collecting games</string>
+    <string name="first_games_parser_service_notification_text">Downloading…</string>
+    <string name="first_games_parser_service_notification_text_complete">Complete</string>
+    <string name="first_games_parser_service_notification_action_postpone">Postpone</string>
+
     <string name="sign_in_through_steam">Sign in through STEAM©</string>
 
     <string name="title_games">Games</string>
