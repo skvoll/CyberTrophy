@@ -239,6 +239,8 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                 } else {
                     gameModel = new GameModel(mProfileModel, steamGame);
 
+                    gameModel.save(mContentResolver);
+
                     if (mAction != ACTION_FIRST) {
                         Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" is new. Saving.");
 
@@ -251,8 +253,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
                         AchievementModel achievementModel = new AchievementModel(gameModel, steamAchievement);
                         achievementModel.save(mContentResolver);
                     }
-
-                    gameModel.save(mContentResolver);
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
 
@@ -418,8 +418,8 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
     }
 
     private void deleteGameAchievement(GameModel gameModel) {
-        String where = "steam_id = ? AND app_id = ?";
-        String[] selectionArgs = {gameModel.getSteamId().toString(), gameModel.getAppId().toString()};
+        String where = DataContract.AchievementEntry.COLUMN_GAME_ID + " = ?";
+        String[] selectionArgs = {gameModel.getId().toString()};
         mContentResolver.delete(DataContract.AchievementEntry.URI, where, selectionArgs);
     }
 }

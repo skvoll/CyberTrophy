@@ -6,9 +6,9 @@ import android.content.ContentValues;
 import android.net.Uri;
 
 abstract class Model {
-    abstract Uri getUri(Long id);
+    public abstract Uri getUri(Long id);
 
-    abstract Long getId();
+    public abstract Long getId();
 
     abstract void setId(Long id);
 

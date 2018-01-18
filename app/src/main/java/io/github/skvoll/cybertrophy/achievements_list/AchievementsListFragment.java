@@ -27,12 +27,10 @@ public class AchievementsListFragment extends ListFragment implements
     public static final int TYPE_UNLOCKED = 2;
 
     private static final String TAG = AchievementsListFragment.class.getSimpleName();
-    private static final String KEY_STEAM_ID = "STEAM_ID";
-    private static final String KEY_APP_ID = "APP_ID";
+    private static final String KEY_GAME_ID = "GAME_ID";
     private static final String KEY_TYPE = "TYPE";
 
-    private Long mSteamId;
-    private Long mAppId;
+    private Long mGameId;
     private int mType;
     private OnItemClickListener mOnItemClickListener;
 
@@ -42,13 +40,12 @@ public class AchievementsListFragment extends ListFragment implements
     public AchievementsListFragment() {
     }
 
-    public static AchievementsListFragment newInstance(Long steamId, Long appId, int type, OnItemClickListener onItemClickListener) {
+    public static AchievementsListFragment newInstance(Long gameId, int type, OnItemClickListener onItemClickListener) {
         AchievementsListFragment fragment = new AchievementsListFragment();
         fragment.setOnItemClickListener(onItemClickListener);
 
         Bundle bundle = new Bundle();
-        bundle.putLong(KEY_STEAM_ID, steamId);
-        bundle.putLong(KEY_APP_ID, appId);
+        bundle.putLong(KEY_GAME_ID, gameId);
         bundle.putInt(KEY_TYPE, type);
         fragment.setArguments(bundle);
 
@@ -67,11 +64,10 @@ public class AchievementsListFragment extends ListFragment implements
             throw new IllegalArgumentException();
         }
 
-        mSteamId = getArguments().getLong(KEY_STEAM_ID, -1);
-        mAppId = getArguments().getLong(KEY_APP_ID, -1);
+        mGameId = getArguments().getLong(KEY_GAME_ID, -1);
         mType = getArguments().getInt(KEY_TYPE, -1);
 
-        if (mSteamId == -1 || mAppId == -1 || mType == -1) {
+        if (mGameId == -1 || mType == -1) {
             throw new IllegalArgumentException();
         }
     }
@@ -142,8 +138,7 @@ public class AchievementsListFragment extends ListFragment implements
         String select;
         String sortOrder;
 
-        select = AchievementEntry.COLUMN_STEAM_ID + " == " + mSteamId + " AND " +
-                AchievementEntry.COLUMN_APP_ID + " == " + mAppId;
+        select = AchievementEntry.COLUMN_GAME_ID + " == " + mGameId;
 
         switch (mType) {
             case TYPE_LOCKED:

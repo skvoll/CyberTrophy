@@ -14,7 +14,8 @@ import io.github.skvoll.cybertrophy.steam.SteamAchievement;
 
 public final class AchievementModel extends Model {
     private Long mId;
-    private Long mSteamId;
+    private Long mProfileId;
+    private Long mGameId;
     private Long mAppId;
     private String mCode;
     private String mName;
@@ -27,9 +28,10 @@ public final class AchievementModel extends Model {
     private Integer mUnlockTime;
 
     public AchievementModel(Cursor cursor) {
-        mId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry._ID));
+        mId = cursor.getLong(cursor.getColumnIndex(AchievementEntry._ID));
 
-        mSteamId = cursor.getLong(cursor.getColumnIndex(DataContract.ProfileEntry.COLUMN_STEAM_ID));
+        mProfileId = cursor.getLong(cursor.getColumnIndex(AchievementEntry.COLUMN_PROFILE_ID));
+        mGameId = cursor.getLong(cursor.getColumnIndex(AchievementEntry.COLUMN_GAME_ID));
         mAppId = cursor.getLong(cursor.getColumnIndex(AchievementEntry.COLUMN_APP_ID));
         mCode = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_CODE));
         mName = cursor.getString(cursor.getColumnIndex(AchievementEntry.COLUMN_NAME));
@@ -43,7 +45,8 @@ public final class AchievementModel extends Model {
     }
 
     public AchievementModel(GameModel gameModel, SteamAchievement steamAchievement) {
-        mSteamId = gameModel.getSteamId();
+        mProfileId = gameModel.getProfileId();
+        mGameId = gameModel.getId();
         mAppId = gameModel.getAppId();
         mCode = steamAchievement.name;
         mName = steamAchievement.displayName;
@@ -78,33 +81,9 @@ public final class AchievementModel extends Model {
         return achievementModel;
     }
 
-    public static AchievementModel getByCode(ContentResolver contentResolver, String code) {
-        String selection = AchievementEntry.COLUMN_CODE + "=?";
-        String[] selectionArgs = new String[]{code};
-
-        Cursor cursor = contentResolver.query(AchievementEntry.URI, null,
-                selection, selectionArgs, null);
-
-        if (cursor == null) {
-            return null;
-        }
-
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-
-            return null;
-        }
-
-        AchievementModel achievementEntry = new AchievementModel(cursor);
-
-        cursor.close();
-
-        return achievementEntry;
-    }
-
     public static HashMap<String, AchievementModel> getByGame(ContentResolver contentResolver, GameModel gameModel) {
-        String selection = AchievementEntry.COLUMN_STEAM_ID + "=? AND " + AchievementEntry.COLUMN_APP_ID + "=?";
-        String[] selectionArgs = new String[]{gameModel.getSteamId().toString(), gameModel.getAppId().toString()};
+        String selection = AchievementEntry.COLUMN_GAME_ID + " = ?";
+        String[] selectionArgs = new String[]{gameModel.getId().toString()};
 
         Cursor cursor = contentResolver.query(AchievementEntry.URI, null,
                 selection, selectionArgs, null);
@@ -135,7 +114,7 @@ public final class AchievementModel extends Model {
     }
 
     @Override
-    Uri getUri(Long id) {
+    public Uri getUri(Long id) {
         // TODO: check with null id
         if (id == null) {
             return AchievementEntry.URI;
@@ -154,12 +133,12 @@ public final class AchievementModel extends Model {
         mId = id;
     }
 
-    public Long getSteamId() {
-        return mSteamId;
+    public Long getProfileId() {
+        return mProfileId;
     }
 
-    public void setSteamId(Long steamId) {
-        mSteamId = steamId;
+    public Long getGameId() {
+        return mGameId;
     }
 
     public Long getAppId() {
@@ -230,7 +209,8 @@ public final class AchievementModel extends Model {
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(DataContract.ProfileEntry.COLUMN_STEAM_ID, mSteamId);
+        contentValues.put(AchievementEntry.COLUMN_PROFILE_ID, mProfileId);
+        contentValues.put(AchievementEntry.COLUMN_GAME_ID, mGameId);
         contentValues.put(AchievementEntry.COLUMN_APP_ID, mAppId);
         contentValues.put(AchievementEntry.COLUMN_CODE, mCode);
         contentValues.put(AchievementEntry.COLUMN_NAME, mName);

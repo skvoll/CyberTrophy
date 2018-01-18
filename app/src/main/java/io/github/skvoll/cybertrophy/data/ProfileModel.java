@@ -69,7 +69,7 @@ public final class ProfileModel extends Model {
     }
 
     public static ProfileModel getActive(ContentResolver contentResolver) {
-        String selection = ProfileEntry.COLUMN_IS_ACTIVE + "=?";
+        String selection = ProfileEntry.COLUMN_IS_ACTIVE + " = ?";
         String[] selectionArgs = new String[]{"1"};
 
         Cursor cursor = contentResolver.query(ProfileEntry.URI, null,
@@ -92,9 +92,9 @@ public final class ProfileModel extends Model {
         return profileModel;
     }
 
-    public static ProfileModel getBySteamId(ContentResolver contentResolver, Long steamId) {
-        String selection = ProfileEntry.COLUMN_STEAM_ID + "=?";
-        String[] selectionArgs = new String[]{steamId.toString()};
+    public static ProfileModel getById(ContentResolver contentResolver, Long id) {
+        String selection = ProfileEntry._ID + " = ?";
+        String[] selectionArgs = new String[]{id.toString()};
 
         Cursor cursor = contentResolver.query(ProfileEntry.URI, null,
                 selection, selectionArgs, null);
@@ -117,7 +117,7 @@ public final class ProfileModel extends Model {
     }
 
     @Override
-    Uri getUri(Long id) {
+    public Uri getUri(Long id) {
         if (id == null) {
             return ProfileEntry.URI;
         }
@@ -126,7 +126,7 @@ public final class ProfileModel extends Model {
     }
 
     @Override
-    Long getId() {
+    public Long getId() {
         return mId;
     }
 

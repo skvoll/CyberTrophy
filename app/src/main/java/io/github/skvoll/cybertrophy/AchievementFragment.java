@@ -73,7 +73,7 @@ public class AchievementFragment extends Fragment {
             throw new IllegalArgumentException("Achievement id is missing");
         }
 
-        mGameModel = GameModel.getByAppId(mContext.getContentResolver(), mAchievementModel.getAppId());
+        mGameModel = GameModel.getById(mContext.getContentResolver(), mAchievementModel.getGameId());
     }
 
     @Override

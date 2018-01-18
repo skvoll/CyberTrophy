@@ -53,7 +53,7 @@ public final class DataProvider extends ContentProvider {
                 return database.query(DataContract.ProfileEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, orderBy);
             case PROFILES_ID:
-                selection = DataContract.ProfileEntry._ID + "=?";
+                selection = DataContract.ProfileEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.query(DataContract.ProfileEntry.TABLE_NAME,
@@ -62,7 +62,7 @@ public final class DataProvider extends ContentProvider {
                 return database.query(DataContract.GameEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, orderBy);
             case GAMES_ID:
-                selection = DataContract.GameEntry._ID + "=?";
+                selection = DataContract.GameEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.query(DataContract.GameEntry.TABLE_NAME,
@@ -71,7 +71,7 @@ public final class DataProvider extends ContentProvider {
                 return database.query(DataContract.AchievementEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, orderBy);
             case ACHIEVEMENTS_ID:
-                selection = DataContract.AchievementEntry._ID + "=?";
+                selection = DataContract.AchievementEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.query(DataContract.AchievementEntry.TABLE_NAME,
@@ -80,7 +80,7 @@ public final class DataProvider extends ContentProvider {
                 return database.query(DataContract.LogEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, orderBy);
             case LOG_ID:
-                selection = DataContract.LogEntry._ID + "=?";
+                selection = DataContract.LogEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.query(DataContract.LogEntry.TABLE_NAME,
@@ -126,7 +126,7 @@ public final class DataProvider extends ContentProvider {
                 return database.update(DataContract.ProfileEntry.TABLE_NAME,
                         contentValues, whereClause, whereArgs);
             case PROFILES_ID:
-                whereClause = DataContract.ProfileEntry._ID + "=?";
+                whereClause = DataContract.ProfileEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.update(DataContract.ProfileEntry.TABLE_NAME,
@@ -135,7 +135,7 @@ public final class DataProvider extends ContentProvider {
                 return database.update(DataContract.GameEntry.TABLE_NAME,
                         contentValues, whereClause, whereArgs);
             case GAMES_ID:
-                whereClause = DataContract.GameEntry._ID + "=?";
+                whereClause = DataContract.GameEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.update(DataContract.GameEntry.TABLE_NAME,
@@ -144,7 +144,7 @@ public final class DataProvider extends ContentProvider {
                 return database.update(DataContract.AchievementEntry.TABLE_NAME,
                         contentValues, whereClause, whereArgs);
             case ACHIEVEMENTS_ID:
-                whereClause = DataContract.AchievementEntry._ID + "=?";
+                whereClause = DataContract.AchievementEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.update(DataContract.AchievementEntry.TABLE_NAME,
@@ -154,7 +154,7 @@ public final class DataProvider extends ContentProvider {
                 return database.update(DataContract.LogEntry.TABLE_NAME,
                         contentValues, whereClause, whereArgs);
             case LOG_ID:
-                whereClause = DataContract.LogEntry._ID + "=?";
+                whereClause = DataContract.LogEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.update(DataContract.LogEntry.TABLE_NAME,
@@ -172,21 +172,21 @@ public final class DataProvider extends ContentProvider {
             case PROFILES:
                 return database.delete(DataContract.ProfileEntry.TABLE_NAME, whereClause, whereArgs);
             case PROFILES_ID:
-                whereClause = DataContract.ProfileEntry._ID + "=?";
+                whereClause = DataContract.ProfileEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.delete(DataContract.ProfileEntry.TABLE_NAME, whereClause, whereArgs);
             case GAMES:
                 return database.delete(DataContract.GameEntry.TABLE_NAME, whereClause, whereArgs);
             case GAMES_ID:
-                whereClause = DataContract.GameEntry._ID + "=?";
+                whereClause = DataContract.GameEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.delete(DataContract.GameEntry.TABLE_NAME, whereClause, whereArgs);
             case ACHIEVEMENTS:
                 return database.delete(DataContract.AchievementEntry.TABLE_NAME, whereClause, whereArgs);
             case ACHIEVEMENTS_ID:
-                whereClause = DataContract.AchievementEntry._ID + "=?";
+                whereClause = DataContract.AchievementEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.delete(DataContract.AchievementEntry.TABLE_NAME, whereClause, whereArgs);
@@ -194,7 +194,7 @@ public final class DataProvider extends ContentProvider {
             case LOG:
                 return database.delete(DataContract.LogEntry.TABLE_NAME, whereClause, whereArgs);
             case LOG_ID:
-                whereClause = DataContract.LogEntry._ID + "=?";
+                whereClause = DataContract.LogEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 return database.delete(DataContract.LogEntry.TABLE_NAME, whereClause, whereArgs);

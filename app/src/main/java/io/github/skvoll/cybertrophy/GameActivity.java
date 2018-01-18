@@ -26,8 +26,8 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class GameActivity extends AppCompatActivity implements AchievementsListFragment.OnItemClickListener {
-    public static final String KEY_APP_ID = "APP_ID";
-    public static final String KEY_STEAM_ID = "STEAM_ID";
+    public static final String KEY_PROFILE_ID = "PROFILE_ID";
+    public static final String KEY_GAME_ID = "GAME_ID";
 
     private static final String TAG = GameActivity.class.getSimpleName();
 
@@ -88,8 +88,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
             case GameModel.STATUS_INCOMPLETE:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
-                                mProfileModel.getSteamId(),
-                                mGameModel.getAppId(),
+                                mGameModel.getId(),
                                 AchievementsListFragment.TYPE_LOCKED,
                                 this
                         ),
@@ -101,8 +100,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
             case GameModel.STATUS_IN_PROGRESS:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
-                                mProfileModel.getSteamId(),
-                                mGameModel.getAppId(),
+                                mGameModel.getId(),
                                 AchievementsListFragment.TYPE_LOCKED,
                                 this
                         ),
@@ -110,8 +108,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
                 );
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
-                                mProfileModel.getSteamId(),
-                                mGameModel.getAppId(),
+                                mGameModel.getId(),
                                 AchievementsListFragment.TYPE_UNLOCKED,
                                 this
                         ),
@@ -121,8 +118,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
             case GameModel.STATUS_COMPLETE:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
-                                mProfileModel.getSteamId(),
-                                mGameModel.getAppId(),
+                                mGameModel.getId(),
                                 AchievementsListFragment.TYPE_UNLOCKED,
                                 this
                         ),
@@ -160,18 +156,18 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
             throw new IllegalArgumentException("Params are missing");
         }
 
-        Long steamId = bundle.getLong(KEY_STEAM_ID);
-        mProfileModel = ProfileModel.getBySteamId(getContentResolver(), steamId);
+        Long profileId = bundle.getLong(KEY_PROFILE_ID);
+        mProfileModel = ProfileModel.getById(getContentResolver(), profileId);
 
         if (mProfileModel == null) {
-            throw new IllegalArgumentException("Steam id is missing");
+            throw new IllegalArgumentException("Profile id is missing");
         }
 
-        Long appId = bundle.getLong(KEY_APP_ID);
-        mGameModel = GameModel.getByAppId(getContentResolver(), appId);
+        Long gameId = bundle.getLong(KEY_GAME_ID);
+        mGameModel = GameModel.getById(getContentResolver(), gameId);
 
         if (mGameModel == null) {
-            throw new IllegalArgumentException("App id is missing");
+            throw new IllegalArgumentException("Game id is missing");
         }
     }
 

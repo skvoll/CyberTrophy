@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import io.github.skvoll.cybertrophy.data.DataContract.LogEntry;
+
 public final class LogModel extends Model {
     public static final int TYPE_DEBUG = 0;
     public static final int TYPE_MESSAGE = 1;
@@ -19,9 +21,9 @@ public final class LogModel extends Model {
     private Long mTime;
     private Integer mType;
     private String mMessage;
-    private Long mSteamId;
-    private Long mAppId;
-    private String mAchievementCode;
+    private Long mProfileId;
+    private Long mGameId;
+    private Long mAchievementId;
 
     private LogModel(int type) {
         mTime = System.currentTimeMillis() / 1000;
@@ -29,21 +31,21 @@ public final class LogModel extends Model {
     }
 
     public LogModel(Cursor cursor) {
-        mId = cursor.getLong(cursor.getColumnIndex(DataContract.LogEntry._ID));
+        mId = cursor.getLong(cursor.getColumnIndex(LogEntry._ID));
 
-        mTime = cursor.getLong(cursor.getColumnIndex(DataContract.LogEntry.COLUMN_TIME));
-        mType = cursor.getInt(cursor.getColumnIndex(DataContract.LogEntry.COLUMN_TYPE));
-        mMessage = cursor.getString(cursor.getColumnIndex(DataContract.LogEntry.COLUMN_MESSAGE));
-        mSteamId = cursor.getLong(cursor.getColumnIndex(DataContract.LogEntry.COLUMN_STEAM_ID));
-        mAppId = cursor.getLong(cursor.getColumnIndex(DataContract.LogEntry.COLUMN_APP_ID));
-        mAchievementCode = cursor.getString(cursor.getColumnIndex(DataContract.LogEntry.COLUMN_ACHIEVEMENT_CODE));
+        mTime = cursor.getLong(cursor.getColumnIndex(LogEntry.COLUMN_TIME));
+        mType = cursor.getInt(cursor.getColumnIndex(LogEntry.COLUMN_TYPE));
+        mMessage = cursor.getString(cursor.getColumnIndex(LogEntry.COLUMN_MESSAGE));
+        mProfileId = cursor.getLong(cursor.getColumnIndex(LogEntry.COLUMN_PROFILE_ID));
+        mGameId = cursor.getLong(cursor.getColumnIndex(LogEntry.COLUMN_GAME_ID));
+        mAchievementId = cursor.getLong(cursor.getColumnIndex(LogEntry.COLUMN_ACHIEVEMENT_ID));
     }
 
     public static LogModel debug(ProfileModel profileModel, String message) {
         LogModel logModel = new LogModel(TYPE_DEBUG);
 
         logModel.setMessage(message);
-        logModel.setSteamId(profileModel.getSteamId());
+        logModel.setProfileId(profileModel.getId());
 
         return logModel;
     }
@@ -52,7 +54,7 @@ public final class LogModel extends Model {
         LogModel logModel = new LogModel(TYPE_MESSAGE);
 
         logModel.setMessage(message);
-        logModel.setSteamId(profileModel.getSteamId());
+        logModel.setProfileId(profileModel.getId());
 
         return logModel;
     }
@@ -60,8 +62,8 @@ public final class LogModel extends Model {
     public static LogModel newGame(GameModel gameModel) {
         LogModel logModel = new LogModel(TYPE_NEW_GAME);
 
-        logModel.setSteamId(gameModel.getSteamId());
-        logModel.setAppId(gameModel.getAppId());
+        logModel.setProfileId(gameModel.getProfileId());
+        logModel.setGameId(gameModel.getId());
 
         return logModel;
     }
@@ -69,8 +71,8 @@ public final class LogModel extends Model {
     public static LogModel gameRemoved(GameModel gameModel) {
         LogModel logModel = new LogModel(TYPE_GAME_REMOVED);
 
-        logModel.setSteamId(gameModel.getSteamId());
-        logModel.setAppId(gameModel.getAppId());
+        logModel.setProfileId(gameModel.getProfileId());
+        logModel.setGameId(gameModel.getId());
 
         return logModel;
     }
@@ -78,9 +80,9 @@ public final class LogModel extends Model {
     public static LogModel newAchievement(AchievementModel achievementModel) {
         LogModel logModel = new LogModel(TYPE_NEW_ACHIEVEMENT);
 
-        logModel.setSteamId(achievementModel.getSteamId());
-        logModel.setAppId(achievementModel.getAppId());
-        logModel.setAchievementCode(achievementModel.getCode());
+        logModel.setProfileId(achievementModel.getProfileId());
+        logModel.setGameId(achievementModel.getGameId());
+        logModel.setAchievementId(achievementModel.getId());
 
         return logModel;
     }
@@ -88,9 +90,9 @@ public final class LogModel extends Model {
     public static LogModel achievementRemoved(AchievementModel achievementModel) {
         LogModel logModel = new LogModel(TYPE_ACHIEVEMENT_REMOVED);
 
-        logModel.setSteamId(achievementModel.getSteamId());
-        logModel.setAppId(achievementModel.getAppId());
-        logModel.setAchievementCode(achievementModel.getCode());
+        logModel.setProfileId(achievementModel.getProfileId());
+        logModel.setGameId(achievementModel.getGameId());
+        logModel.setAchievementId(achievementModel.getId());
 
         return logModel;
     }
@@ -98,9 +100,9 @@ public final class LogModel extends Model {
     public static LogModel achievementUnlocked(AchievementModel achievementModel) {
         LogModel logModel = new LogModel(TYPE_ACHIEVEMENT_UNLOCKED);
 
-        logModel.setSteamId(achievementModel.getSteamId());
-        logModel.setAppId(achievementModel.getAppId());
-        logModel.setAchievementCode(achievementModel.getCode());
+        logModel.setProfileId(achievementModel.getProfileId());
+        logModel.setGameId(achievementModel.getGameId());
+        logModel.setAchievementId(achievementModel.getId());
 
         return logModel;
     }
@@ -108,19 +110,19 @@ public final class LogModel extends Model {
     public static LogModel gameComplete(GameModel gameModel) {
         LogModel logModel = new LogModel(TYPE_GAME_COMPLETE);
 
-        logModel.setSteamId(gameModel.getSteamId());
-        logModel.setAppId(gameModel.getAppId());
+        logModel.setProfileId(gameModel.getProfileId());
+        logModel.setGameId(gameModel.getId());
 
         return logModel;
     }
 
     @Override
-    Uri getUri(Long id) {
+    public Uri getUri(Long id) {
         if (id == null) {
-            return DataContract.LogEntry.URI;
+            return LogEntry.URI;
         }
 
-        return ContentUris.withAppendedId(DataContract.LogEntry.URI, id);
+        return ContentUris.withAppendedId(LogEntry.URI, id);
     }
 
     @Override
@@ -157,40 +159,40 @@ public final class LogModel extends Model {
         mMessage = message;
     }
 
-    public Long getSteamId() {
-        return mSteamId;
+    public Long getProfileId() {
+        return mProfileId;
     }
 
-    public void setSteamId(Long profileId) {
-        mSteamId = profileId;
+    public void setProfileId(Long profileId) {
+        mProfileId = profileId;
     }
 
-    public Long getAppId() {
-        return mAppId;
+    public Long getGameId() {
+        return mGameId;
     }
 
-    public void setAppId(Long appId) {
-        mAppId = appId;
+    public void setGameId(Long gameId) {
+        mGameId = gameId;
     }
 
-    public String getAchievementCode() {
-        return mAchievementCode;
+    public Long getAchievementId() {
+        return mAchievementId;
     }
 
-    public void setAchievementCode(String achievement) {
-        mAchievementCode = achievement;
+    public void setAchievementId(Long achievementId) {
+        mAchievementId = achievementId;
     }
 
     @Override
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(DataContract.LogEntry.COLUMN_TIME, mTime);
-        contentValues.put(DataContract.LogEntry.COLUMN_TYPE, mType);
-        contentValues.put(DataContract.LogEntry.COLUMN_MESSAGE, mMessage);
-        contentValues.put(DataContract.LogEntry.COLUMN_STEAM_ID, mSteamId);
-        contentValues.put(DataContract.LogEntry.COLUMN_APP_ID, mAppId);
-        contentValues.put(DataContract.LogEntry.COLUMN_ACHIEVEMENT_CODE, mAchievementCode);
+        contentValues.put(LogEntry.COLUMN_TIME, mTime);
+        contentValues.put(LogEntry.COLUMN_TYPE, mType);
+        contentValues.put(LogEntry.COLUMN_MESSAGE, mMessage);
+        contentValues.put(LogEntry.COLUMN_PROFILE_ID, mProfileId);
+        contentValues.put(LogEntry.COLUMN_GAME_ID, mGameId);
+        contentValues.put(LogEntry.COLUMN_ACHIEVEMENT_ID, mAchievementId);
 
         return contentValues;
     }

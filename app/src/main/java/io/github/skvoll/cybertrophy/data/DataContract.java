@@ -46,7 +46,7 @@ public abstract class DataContract {
 
         public static final Uri URI = Uri.withAppendedPath(CONTENT_URI, TABLE_NAME);
 
-        public static final String COLUMN_STEAM_ID = "steam_id";
+        public static final String COLUMN_PROFILE_ID = "_profile_id";
         public static final String COLUMN_APP_ID = "app_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PLAYTIME_FOREVER = "playtime_forever";
@@ -58,7 +58,7 @@ public abstract class DataContract {
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_STEAM_ID + " INTEGER NOT NULL,"
+                + COLUMN_PROFILE_ID + " INTEGER NOT NULL,"
                 + COLUMN_APP_ID + " INTEGER NOT NULL,"
                 + COLUMN_NAME + " TEXT NOT NULL,"
                 + COLUMN_PLAYTIME_FOREVER + " INTEGER NOT NULL DEFAULT 0,"
@@ -76,7 +76,8 @@ public abstract class DataContract {
 
         public static final Uri URI = Uri.withAppendedPath(CONTENT_URI, TABLE_NAME);
 
-        public static final String COLUMN_STEAM_ID = "steam_id";
+        public static final String COLUMN_PROFILE_ID = "_profile_id";
+        public static final String COLUMN_GAME_ID = "_game_id";
         public static final String COLUMN_APP_ID = "app_id";
         public static final String COLUMN_CODE = "code";
         public static final String COLUMN_NAME = "name";
@@ -90,7 +91,8 @@ public abstract class DataContract {
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_STEAM_ID + " INTEGER NOT NULL,"
+                + COLUMN_PROFILE_ID + " INTEGER NOT NULL,"
+                + COLUMN_GAME_ID + " INTEGER NOT NULL,"
                 + COLUMN_APP_ID + " INTEGER NOT NULL,"
                 + COLUMN_CODE + " TEXT NOT NULL,"
                 + COLUMN_NAME + " TEXT NOT NULL,"
@@ -113,18 +115,18 @@ public abstract class DataContract {
         public static final String COLUMN_TIME = "time";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_MESSAGE = "message";
-        public static final String COLUMN_STEAM_ID = "steam_id";
-        public static final String COLUMN_APP_ID = "app_id";
-        public static final String COLUMN_ACHIEVEMENT_CODE = "achievement_code";
+        public static final String COLUMN_PROFILE_ID = "_profile_id";
+        public static final String COLUMN_GAME_ID = "_game_id";
+        public static final String COLUMN_ACHIEVEMENT_ID = "_achievement_id";
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_TIME + " INTEGER NOT NULL,"
                 + COLUMN_TYPE + " INTEGER NOT NULL,"
                 + COLUMN_MESSAGE + " TEXT DEFAULT NULL,"
-                + COLUMN_STEAM_ID + " INTEGER DEFAULT NULL,"
-                + COLUMN_APP_ID + " INTEGER DEFAULT NULL,"
-                + COLUMN_ACHIEVEMENT_CODE + " TEXT DEFAULT NULL)";
+                + COLUMN_PROFILE_ID + " INTEGER DEFAULT NULL,"
+                + COLUMN_GAME_ID + " INTEGER DEFAULT NULL,"
+                + COLUMN_ACHIEVEMENT_ID + " INTEGER DEFAULT NULL)";
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

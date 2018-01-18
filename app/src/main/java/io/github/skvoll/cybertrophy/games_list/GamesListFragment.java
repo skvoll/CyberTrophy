@@ -31,10 +31,10 @@ public class GamesListFragment extends ListFragment implements
     public static final int TYPE_NO_ACHIEVEMENTS = 4;
 
     private static final String TAG = GamesListFragment.class.getSimpleName();
-    private static final String KEY_STEAM_ID = "STEAM_ID";
+    private static final String KEY_PROFILE_ID = "PROFILE_ID";
     private static final String KEY_TYPE = "TYPE";
 
-    private Long mSteamId;
+    private Long mProfileId;
     private int mType;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -43,11 +43,11 @@ public class GamesListFragment extends ListFragment implements
     public GamesListFragment() {
     }
 
-    public static GamesListFragment newInstance(Long steamId, int type) {
+    public static GamesListFragment newInstance(Long profileId, int type) {
         GamesListFragment fragment = new GamesListFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putLong(KEY_STEAM_ID, steamId);
+        bundle.putLong(KEY_PROFILE_ID, profileId);
         bundle.putInt(KEY_TYPE, type);
         fragment.setArguments(bundle);
 
@@ -62,10 +62,10 @@ public class GamesListFragment extends ListFragment implements
             throw new IllegalArgumentException();
         }
 
-        mSteamId = getArguments().getLong(KEY_STEAM_ID, -1);
+        mProfileId = getArguments().getLong(KEY_PROFILE_ID, -1);
         mType = getArguments().getInt(KEY_TYPE, -1);
 
-        if (mSteamId == -1 || mType == -1) {
+        if (mProfileId == -1 || mType == -1) {
             throw new IllegalArgumentException();
         }
     }
@@ -121,8 +121,8 @@ public class GamesListFragment extends ListFragment implements
         }
 
         Intent intent = new Intent(getContext(), GameActivity.class);
-        intent.putExtra(GameActivity.KEY_STEAM_ID, mSteamId);
-        intent.putExtra(GameActivity.KEY_APP_ID, gameModel.getAppId());
+        intent.putExtra(GameActivity.KEY_PROFILE_ID, gameModel.getProfileId());
+        intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
 
         startActivity(intent);
     }
@@ -137,11 +137,11 @@ public class GamesListFragment extends ListFragment implements
         String sortOrder = null;
 
         if (mType == TYPE_NO_ACHIEVEMENTS) {
-            select = GameEntry.COLUMN_STEAM_ID + " == " + mSteamId
+            select = GameEntry.COLUMN_PROFILE_ID + " == " + mProfileId
                     + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " == 0";
             sortOrder = GameEntry.COLUMN_NAME + " ASC";
         } else {
-            select = GameEntry.COLUMN_STEAM_ID + " == " + mSteamId
+            select = GameEntry.COLUMN_PROFILE_ID + " == " + mProfileId
                     + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " != 0 AND ";
 
             switch (mType) {

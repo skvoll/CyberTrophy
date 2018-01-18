@@ -9,7 +9,8 @@ import android.support.v4.util.LongSparseArray;
 
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
-import static io.github.skvoll.cybertrophy.data.DataContract.*;
+import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
+import static io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 
 public final class GameModel extends Model {
     public static final int STATUS_INCOMPLETE = 0;
@@ -20,7 +21,7 @@ public final class GameModel extends Model {
     private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
 
     private Long mId;
-    private Long mSteamId;
+    private Long mProfileId;
     private Long mAppId;
     private String mName;
     private Integer mPlaytimeForever;
@@ -33,7 +34,7 @@ public final class GameModel extends Model {
     public GameModel(Cursor cursor) {
         mId = cursor.getLong(cursor.getColumnIndex(ProfileEntry._ID));
 
-        mSteamId = cursor.getLong(cursor.getColumnIndex(ProfileEntry.COLUMN_STEAM_ID));
+        mProfileId = cursor.getLong(cursor.getColumnIndex(GameEntry.COLUMN_PROFILE_ID));
         mAppId = cursor.getLong(cursor.getColumnIndex(GameEntry.COLUMN_APP_ID));
         mName = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_NAME));
         mPlaytimeForever = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_PLAYTIME_FOREVER));
@@ -45,7 +46,7 @@ public final class GameModel extends Model {
     }
 
     public GameModel(ProfileModel profileModel, SteamGame steamGame) {
-        mSteamId = profileModel.getSteamId();
+        mProfileId = profileModel.getId();
         mAppId = steamGame.appId;
         mName = steamGame.name;
         mPlaytimeForever = steamGame.playtimeForever;
@@ -78,33 +79,9 @@ public final class GameModel extends Model {
         return gameModel;
     }
 
-    public static GameModel getByAppId(ContentResolver contentResolver, Long appId) {
-        String selection = GameEntry.COLUMN_APP_ID + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(appId)};
-
-        Cursor cursor = contentResolver.query(GameEntry.URI, null,
-                selection, selectionArgs, null);
-
-        if (cursor == null) {
-            return null;
-        }
-
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-
-            return null;
-        }
-
-        GameModel gameModel = new GameModel(cursor);
-
-        cursor.close();
-
-        return gameModel;
-    }
-
     public static LongSparseArray<GameModel> getByProfile(ContentResolver contentResolver, ProfileModel profileModel) {
-        String selection = GameEntry.COLUMN_STEAM_ID + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(profileModel.getSteamId())};
+        String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
 
         Cursor cursor = contentResolver.query(GameEntry.URI, null,
                 selection, selectionArgs, null);
@@ -135,7 +112,7 @@ public final class GameModel extends Model {
     }
 
     @Override
-    Uri getUri(Long id) {
+    public Uri getUri(Long id) {
         if (id == null) {
             return GameEntry.URI;
         }
@@ -144,7 +121,7 @@ public final class GameModel extends Model {
     }
 
     @Override
-    Long getId() {
+    public Long getId() {
         return mId;
     }
 
@@ -153,8 +130,8 @@ public final class GameModel extends Model {
         mId = id;
     }
 
-    public Long getSteamId() {
-        return mSteamId;
+    public Long getProfileId() {
+        return mProfileId;
     }
 
     public Long getAppId() {
@@ -235,7 +212,7 @@ public final class GameModel extends Model {
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(ProfileEntry.COLUMN_STEAM_ID, mSteamId);
+        contentValues.put(GameEntry.COLUMN_PROFILE_ID, mProfileId);
         contentValues.put(GameEntry.COLUMN_APP_ID, mAppId);
         contentValues.put(GameEntry.COLUMN_NAME, mName);
         contentValues.put(GameEntry.COLUMN_PLAYTIME_FOREVER, mPlaytimeForever);

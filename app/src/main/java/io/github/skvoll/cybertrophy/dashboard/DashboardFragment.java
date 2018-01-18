@@ -114,14 +114,14 @@ public class DashboardFragment extends Fragment implements
             case DashboardItem.TYPE_NEW_GAME:
             case DashboardItem.TYPE_GAME_COMPLETE:
                 Intent intent = new Intent(getContext(), GameActivity.class);
-                intent.putExtra(GameActivity.KEY_STEAM_ID, mProfileModel.getSteamId());
-                intent.putExtra(GameActivity.KEY_APP_ID, dashboardItem.getAppId());
+                intent.putExtra(GameActivity.KEY_PROFILE_ID, dashboardItem.getProfileId());
+                intent.putExtra(GameActivity.KEY_GAME_ID, dashboardItem.getGameId());
 
                 startActivity(intent);
                 break;
             case DashboardItem.TYPE_ACHIEVEMENT_UNLOCKED:
-                AchievementModel achievementModel = AchievementModel.getByCode(
-                        contentResolver, dashboardItem.getAchievementCode());
+                AchievementModel achievementModel = AchievementModel.getById(
+                        contentResolver, dashboardItem.getAchievementId());
 
                 if (achievementModel == null) {
                     return;

@@ -31,9 +31,9 @@ final class DashboardItem {
     private Integer mTime;
     private Integer mType;
     private String mMessage;
-    private Long mSteamId;
-    private Long mAppId;
-    private String mAchievementCode;
+    private Long mProfileId;
+    private Long mGameId;
+    private Long mAchievementId;
 
     private String mAppName;
     private String mAppIconUrl;
@@ -49,9 +49,9 @@ final class DashboardItem {
         mTime = cursor.getInt(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TIME));
         mType = cursor.getInt(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TYPE));
         mMessage = cursor.getString(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_MESSAGE));
-        mSteamId = cursor.getLong(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_STEAM_ID));
-        mAppId = cursor.getLong(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_APP_ID));
-        mAchievementCode = cursor.getString(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_ACHIEVEMENT_CODE));
+        mProfileId = cursor.getLong(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_PROFILE_ID));
+        mGameId = cursor.getLong(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_GAME_ID));
+        mAchievementId = cursor.getLong(cursor.getColumnIndex(LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_ACHIEVEMENT_ID));
         mAppName = cursor.getString(cursor.getColumnIndex(GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_NAME));
         mAppIconUrl = cursor.getString(cursor.getColumnIndex(GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ICON_URL));
         mAppLogoUrl = cursor.getString(cursor.getColumnIndex(GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_LOGO_URL));
@@ -70,11 +70,10 @@ final class DashboardItem {
                 getSelectFields() + " " +
                 "FROM " + LogEntry.TABLE_NAME + " " +
                 "LEFT JOIN " + GameEntry.TABLE_NAME + " " +
-                "ON " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " " +
+                "ON " + GameEntry.TABLE_NAME + "." + GameEntry._ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_GAME_ID + " " +
                 "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
-                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_STEAM_ID + " = " + profileModel.getSteamId() + " " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry._ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_ID + " " +
+                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_PROFILE_ID + " = " + profileModel.getId() + " " +
                 "AND " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " IN (" + TextUtils.join(", ", types) + ") " +
                 "ORDER BY " + LogEntry.TABLE_NAME + "." + LogEntry._ID + " DESC " +
                 "LIMIT " + limit + " OFFSET " + offset;
@@ -118,11 +117,10 @@ final class DashboardItem {
                 getSelectFields() + " " +
                 "FROM " + GameEntry.TABLE_NAME + " " +
                 "LEFT JOIN " + LogEntry.TABLE_NAME + " " +
-                "ON " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " = " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_APP_ID + " " +
+                "ON " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_GAME_ID + " = " + GameEntry.TABLE_NAME + "." + GameEntry._ID + " " +
                 "LEFT JOIN " + AchievementEntry.TABLE_NAME + " ON " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_APP_ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AND " +
-                AchievementEntry.TABLE_NAME + "." + AchievementEntry.COLUMN_CODE + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " " +
-                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_STEAM_ID + " = " + profileModel.getSteamId() + " " +
+                AchievementEntry.TABLE_NAME + "." + AchievementEntry._ID + " = " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_ID + " " +
+                "WHERE " + LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_PROFILE_ID + " = " + profileModel.getId() + " " +
                 "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " > 0 " +
                 "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0 " +
                 "AND " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " < " + GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " " +
@@ -160,9 +158,9 @@ final class DashboardItem {
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TIME + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TIME + ", " +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_TYPE + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_TYPE + ", " +
                 LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_MESSAGE + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_MESSAGE + ", " +
-                LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_STEAM_ID + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_STEAM_ID + ", " +
-                LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_APP_ID + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_APP_ID + ", " +
-                LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_CODE + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_ACHIEVEMENT_CODE + ", " +
+                LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_PROFILE_ID + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_PROFILE_ID + ", " +
+                LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_GAME_ID + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_GAME_ID + ", " +
+                LogEntry.TABLE_NAME + "." + LogEntry.COLUMN_ACHIEVEMENT_ID + " AS " + LogEntry.TABLE_NAME + "_" + LogEntry.COLUMN_ACHIEVEMENT_ID + ", " +
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_NAME + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_NAME + ", " +
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_ICON_URL + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_ICON_URL + ", " +
                 GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_LOGO_URL + " AS " + GameEntry.TABLE_NAME + "_" + GameEntry.COLUMN_LOGO_URL + ", " +
@@ -189,16 +187,16 @@ final class DashboardItem {
         return mMessage;
     }
 
-    Long getSteamId() {
-        return mSteamId;
+    Long getProfileId() {
+        return mProfileId;
     }
 
-    Long getAppId() {
-        return mAppId;
+    Long getGameId() {
+        return mGameId;
     }
 
-    String getAchievementCode() {
-        return mAchievementCode;
+    Long getAchievementId() {
+        return mAchievementId;
     }
 
     String getAppName() {
