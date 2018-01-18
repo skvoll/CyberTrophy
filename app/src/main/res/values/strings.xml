@@ -41,6 +41,7 @@
     <string name="notification_game_complete">Game complete</string>
     <string name="notification_games_parser_collecting_games">Collecting games</string>
     <string name="notification_games_parser_downloading">Downloading…</string>
+    <string name="notification_games_parser_downloading_failed">Downloading failed</string>
     <string name="notification_games_parser_complete">Complete</string>
     <string name="notification_games_parser_postpone">Postpone</string>
     <string name="notification_games_parser_retry">Retry</string>

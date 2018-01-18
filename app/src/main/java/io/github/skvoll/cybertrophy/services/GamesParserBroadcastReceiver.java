@@ -30,6 +30,7 @@ public final class GamesParserBroadcastReceiver extends BroadcastReceiver {
             case ACTION_RETRY:
                 context.startService(new Intent(context, FirstGamesParserService.class));
                 (new GamesParserRetryNotification(context)).cancel();
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported action: " + action);
         }
