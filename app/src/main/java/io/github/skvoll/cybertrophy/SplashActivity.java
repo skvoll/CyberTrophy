@@ -24,18 +24,17 @@ public class SplashActivity extends AppCompatActivity {
 
         final ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
-        final SplashActivity splashActivity = this;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (profileModel == null) {
-                    startActivity(new Intent(splashActivity, AuthActivity.class));
+                    startActivity(new Intent(SplashActivity.this, AuthActivity.class));
                 } else {
                     if (!profileModel.isInitialized()) {
-                        startService(new Intent(splashActivity, FirstGamesParserService.class));
+                        startService(new Intent(SplashActivity.this, FirstGamesParserService.class));
                     }
 
-                    startActivity(new Intent(splashActivity, MainActivity.class));
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }
 
                 finish();

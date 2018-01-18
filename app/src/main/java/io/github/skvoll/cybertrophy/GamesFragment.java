@@ -50,16 +50,13 @@ public class GamesFragment extends Fragment {
         mPagerAdapter = new PagerAdapter(getChildFragmentManager());
         mPagerAdapter.addFragment(
                 GamesListFragment.newInstance(profileModel.getSteamId(), GamesListFragment.TYPE_IN_PROGRESS),
-                getString(R.string.games_list_tab_in_progress)
-        );
+                getString(R.string.games_list_tab_in_progress));
         mPagerAdapter.addFragment(
                 GamesListFragment.newInstance(profileModel.getSteamId(), GamesListFragment.TYPE_INCOMPLETE),
-                getString(R.string.games_list_tab_incomplete)
-        );
+                getString(R.string.games_list_tab_incomplete));
         mPagerAdapter.addFragment(
                 GamesListFragment.newInstance(profileModel.getSteamId(), GamesListFragment.TYPE_COMPLETE),
-                getString(R.string.games_list_tab_complete)
-        );
+                getString(R.string.games_list_tab_complete));
 
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
