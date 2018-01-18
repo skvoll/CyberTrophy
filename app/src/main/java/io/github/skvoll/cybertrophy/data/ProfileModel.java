@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+import android.util.Patterns;
 
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
@@ -182,11 +183,11 @@ public final class ProfileModel extends Model {
         return mIsActive == 1;
     }
 
-    public String loadBackgroundImage(Context context) {
+    public void loadBackgroundImage(Context context) {
         RequestFuture<String> requestFuture = RequestFuture.newFuture();
         StringRequest stringRequest = new StringRequest(mUrl, requestFuture, requestFuture);
         VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
-        String response = null;
+        String response;
 
         try {
             response = requestFuture.get();
@@ -196,13 +197,13 @@ public final class ProfileModel extends Model {
             if (matcher.find()) {
                 response = matcher.group(1);
             }
+
+            if (Patterns.WEB_URL.matcher(response).matches()) {
+                mBackgroundImage = response;
+            }
         } catch (InterruptedException | ExecutionException e) {
             Log.e(TAG, "Error loading profile background image", e);
         }
-
-        mBackgroundImage = response;
-
-        return mBackgroundImage;
     }
 
     @Override

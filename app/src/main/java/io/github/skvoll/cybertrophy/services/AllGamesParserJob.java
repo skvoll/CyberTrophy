@@ -58,15 +58,13 @@ public final class AllGamesParserJob extends JobService {
 
         sIsRunning = true;
 
-        Log.d(TAG, "started");
+        Log.d(TAG, "Started.");
 
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        Log.d(TAG, "stopped");
-
         Boolean needsReschedule = false;
 
         if (mJobTask != null) {
@@ -79,7 +77,7 @@ public final class AllGamesParserJob extends JobService {
 
         sIsRunning = false;
 
-        Log.d(TAG, "stopped");
+        Log.d(TAG, "Stopped.");
 
         return needsReschedule;
     }

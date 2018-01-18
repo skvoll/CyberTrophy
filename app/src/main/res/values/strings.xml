@@ -4,11 +4,46 @@
     <string name="app_name">CyberTrophy</string>
 
     <string name="empty" />
+    <string name="ok">OK</string>
 
-    <string name="first_games_parser_service_notification_title">Collecting games</string>
-    <string name="first_games_parser_service_notification_text">Downloading…</string>
-    <string name="first_games_parser_service_notification_text_complete">Complete</string>
-    <string name="first_games_parser_service_notification_action_postpone">Postpone</string>
+    <plurals name="notification_new_games_in_library">
+        <item quantity="one">New game in library %d</item>
+        <item quantity="other">%d new game in library</item>
+    </plurals>
+    <plurals name="notification_games_removed_from_library">
+        <item quantity="one">Game removed from library</item>
+        <item quantity="other">%d games removed from library</item>
+    </plurals>
+    <plurals name="notification_new_achievements">
+        <item quantity="one">New achievement</item>
+        <item quantity="other">New achievements</item>
+    </plurals>
+    <plurals name="notification_new_achievements_in_game">
+        <item quantity="one">%d new achievement in %s</item>
+        <item quantity="other">%d new achievements in %s</item>
+    </plurals>
+    <string name="notification_new_achievements_in_games">%d new achievements in %d games</string>
+    <plurals name="notification_achievements_removed">
+        <item quantity="one">Achievement removed</item>
+        <item quantity="other">Achievements removed</item>
+    </plurals>
+    <plurals name="notification_achievements_removed_in_game">
+        <item quantity="one">%d achievement removed in %s</item>
+        <item quantity="other">%d achievements removed in %s</item>
+    </plurals>
+    <string name="notification_achievements_removed_in_games">%d achievements removed in %d games</string>
+    <string name="notification_achievement_unlocked">Achievement unlocked</string>
+    <plurals name="notification_achievements_unlocked">
+        <item quantity="one">Achievement unlocked</item>
+        <item quantity="other">%d achievements unlocked</item>
+    </plurals>
+    <string name="notification_achievements_unlocked_in_games">%d achievements unlocked in %d games</string>
+    <string name="notification_game_complete">Game complete</string>
+    <string name="notification_games_parser_collecting_games">Collecting games</string>
+    <string name="notification_games_parser_downloading">Downloading…</string>
+    <string name="notification_games_parser_complete">Complete</string>
+    <string name="notification_games_parser_postpone">Postpone</string>
+    <string name="notification_games_parser_retry">Retry</string>
 
     <string name="sign_in_through_steam">Sign in through STEAM©</string>
 

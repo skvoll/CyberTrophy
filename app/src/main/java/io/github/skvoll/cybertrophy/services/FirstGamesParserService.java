@@ -9,11 +9,15 @@ import android.util.Log;
 
 import io.github.skvoll.cybertrophy.GamesParserTask;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
+import io.github.skvoll.cybertrophy.notifications.GamesParserNotification;
+import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 public final class FirstGamesParserService extends Service {
-    public static boolean sIsRunning = false;
     private static final String TAG = FirstGamesParserService.class.getSimpleName();
+    public static boolean sIsRunning = false;
     private ServiceTask mServiceTask;
+    private GamesParserNotification mNotification;
 
     @Override
     public void onCreate() {
@@ -24,8 +28,9 @@ public final class FirstGamesParserService extends Service {
         }
 
         mServiceTask = new ServiceTask(this, profileModel, GamesParserTask.ACTION_FIRST);
+        mNotification = new GamesParserNotification(this);
 
-        Log.d(TAG, "created");
+        Log.d(TAG, "Created.");
     }
 
     @Override
@@ -39,11 +44,13 @@ public final class FirstGamesParserService extends Service {
             return START_STICKY;
         }
 
+        startForeground(mNotification.getId(), mNotification.build());
+
         mServiceTask.execute();
 
         sIsRunning = true;
 
-        Log.d(TAG, "started");
+        Log.d(TAG, "Started.");
 
         return START_STICKY;
     }
@@ -54,9 +61,11 @@ public final class FirstGamesParserService extends Service {
             mServiceTask.cancel(true);
         }
 
+        stopForeground(true);
+
         sIsRunning = false;
 
-        Log.d(TAG, "destroyed");
+        Log.d(TAG, "Destroyed.");
     }
 
     @Nullable
@@ -66,14 +75,23 @@ public final class FirstGamesParserService extends Service {
     }
 
     private static class ServiceTask extends GamesParserTask {
-        private Service mService;
+        private FirstGamesParserService mService;
+        private GamesParserNotification mNotification;
         private ProfileModel mProfileModel;
 
-        ServiceTask(Service service, ProfileModel profileModel, int action) {
+        ServiceTask(FirstGamesParserService service, ProfileModel profileModel, int action) {
             super(service, profileModel, action);
 
             mService = service;
+            mNotification = new GamesParserNotification(mService);
             mProfileModel = profileModel;
+        }
+
+        @Override
+        protected void onProgressUpdate(SteamGame... values) {
+            SteamGame steamGame = values[0];
+
+            mService.startForeground(mNotification.getId(), mNotification.setGame(steamGame).build());
         }
 
         @Override
@@ -81,6 +99,8 @@ public final class FirstGamesParserService extends Service {
             if (success) {
                 mProfileModel.setInitialized(true);
                 mProfileModel.save(mService.getContentResolver());
+
+                (new GamesParserCompleteNotification(mService)).show();
             }
 
             mService.stopSelf();

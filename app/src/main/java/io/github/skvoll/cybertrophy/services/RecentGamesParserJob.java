@@ -57,7 +57,7 @@ public final class RecentGamesParserJob extends JobService {
 
         sIsRunning = true;
 
-        Log.d(TAG, "started");
+        Log.d(TAG, "Started.");
 
         return true;
     }
@@ -76,7 +76,7 @@ public final class RecentGamesParserJob extends JobService {
 
         sIsRunning = false;
 
-        Log.d(TAG, "stopped");
+        Log.d(TAG, "Stopped.");
 
         return needsReschedule;
     }

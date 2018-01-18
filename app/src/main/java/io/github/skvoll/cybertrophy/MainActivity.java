@@ -1,5 +1,6 @@
 package io.github.skvoll.cybertrophy;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +14,8 @@ import io.github.skvoll.cybertrophy.dashboard.DashboardFragment;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String ACTION_CLOSE_NOTIFICATION = "CLOSE_NOTIFICATION";
+    public static final String KEY_NOTIFICATION_ID = "NOTIFICATION_ID";
     public static final String KEY_FRAGMENT = "FRAGMENT";
     public static final int FRAGMENT_DASHBOARD = R.id.menu_dashboard;
     public static final int FRAGMENT_GAMES = R.id.menu_games;
@@ -49,6 +52,26 @@ public class MainActivity extends AppCompatActivity {
         mProfileFragment = new ProfileFragment();
 
         int selectedItem = FRAGMENT_DASHBOARD;
+
+        if (getIntent().getAction() != null) {
+            switch (getIntent().getAction()) {
+                case ACTION_CLOSE_NOTIFICATION:
+                    Bundle actionExtras = getIntent().getExtras();
+                    if (actionExtras == null) {
+                        break;
+                    }
+
+                    NotificationManager notificationManager
+                            = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                    if (notificationManager == null) {
+                        break;
+                    }
+
+                    notificationManager.cancel(actionExtras.getInt(KEY_NOTIFICATION_ID));
+                    break;
+            }
+        }
 
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
