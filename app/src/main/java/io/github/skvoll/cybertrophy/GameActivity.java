@@ -23,6 +23,7 @@ import java.util.List;
 import io.github.skvoll.cybertrophy.achievements_list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 
 public class GameActivity extends AppCompatActivity implements AchievementsListFragment.OnItemClickListener {
     public static final String KEY_GAME_ID = "GAME_ID";
@@ -42,6 +43,8 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        BaseNotification.cancelNotifications(this);
 
         getParams(savedInstanceState);
 

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int FRAGMENT_PROFILE = R.id.menu_profile;
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    
+
     private int devToolsCounter = 0;
 
     private BottomNavigationView mBottomNavigationView;
@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BaseNotification.cancelNotifications(this);
 
         setup();
 
@@ -138,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return false;
         }
-        
+
         if (devToolsCounter > 3) {
             devToolsCounter = 0;
 

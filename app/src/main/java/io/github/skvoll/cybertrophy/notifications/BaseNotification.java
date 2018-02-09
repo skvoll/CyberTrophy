@@ -18,7 +18,6 @@ import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 public abstract class BaseNotification {
     public static final String CHANNEL_DEFAULT = "default";
     public static final String CHANNEL_SERVICES = "services";
-    public static final int ID = 1;
 
     private static final String TAG = BaseNotification.class.getSimpleName();
 
@@ -62,6 +61,19 @@ public abstract class BaseNotification {
                 Log.d(TAG, "Notification channel " + notificationChannel.getName() + " created.");
             }
         }
+    }
+
+    public static void cancelNotifications(Context context) {
+        (new AchievementRemovedNotification(context)).cancel();
+        (new AchievementUnlockedNotification(context)).cancel();
+        (new GameCompleteNotification(context)).cancel();
+        (new GameRemovedNotification(context)).cancel();
+        (new NewAchievementNotification(context)).cancel();
+        (new NewGameNotification(context)).cancel();
+
+        // services
+        (new GamesParserRetryNotification(context)).cancel();
+        (new GamesParserCompleteNotification(context)).cancel();
     }
 
     public abstract int getId();

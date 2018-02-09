@@ -36,11 +36,12 @@ public class DevToolsActivity extends AppCompatActivity {
         sNotificationsList.add("AchievementUnlocked");
         sNotificationsList.add("GameComplete");
         sNotificationsList.add("GameRemoved");
+        sNotificationsList.add("NewAchievement");
+        sNotificationsList.add("NewGame");
+        sNotificationsList.add("-");
         sNotificationsList.add("GamesParserComplete");
         sNotificationsList.add("GamesParser");
         sNotificationsList.add("GamesParserRetry");
-        sNotificationsList.add("NewAchievement");
-        sNotificationsList.add("NewGame");
     }
 
     private AchievementRemovedNotification mAchievementRemovedNotification;
@@ -109,10 +110,10 @@ public class DevToolsActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                GameModel gameModelFirst = GameModel.getById(getContentResolver(), 1L);
-                GameModel gameModelSecond = GameModel.getById(getContentResolver(), 2L);
                 AchievementModel achievementModelFirst = AchievementModel.getById(getContentResolver(), 1L);
                 AchievementModel achievementModelSecond = AchievementModel.getById(getContentResolver(), 2L);
+                GameModel gameModelFirst = GameModel.getById(getContentResolver(), 1L);
+                GameModel gameModelSecond = GameModel.getById(getContentResolver(), 2L);
                 boolean isFirst = Math.random() < 0.5;
                 switch (notificationName) {
                     case "AchievementRemoved":
@@ -130,6 +131,14 @@ public class DevToolsActivity extends AppCompatActivity {
                     case "GameRemoved":
                         mGameRemovedNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
                         break;
+                    case "NewAchievement":
+                        mNewAchievementNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        break;
+                    case "NewGame":
+                        mNewGameNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        break;
+
+                    // services
                     case "GamesParserComplete":
                         mGamesParserCompleteNotification.show();
                         break;
@@ -146,23 +155,18 @@ public class DevToolsActivity extends AppCompatActivity {
                     case "GamesParserRetry":
                         mGamesParserRetryNotification.show();
                         break;
-                    case "NewAchievement":
-                        mNewAchievementNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
-                        break;
-                    case "NewGame":
-                        mNewGameNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
-                        break;
+
                     default:
                         (Toast.makeText(DevToolsActivity.this,
                                 "Unknown notification type", Toast.LENGTH_SHORT)).show();
                         break;
                 }
             }
-        }, delay ? 3000 : 1);
+        }, delay ? 5000 : 1);
 
         if (delay) {
             (Toast.makeText(this,
-                    "Notification will be shown after 3 seconds", Toast.LENGTH_SHORT)).show();
+                    "Notification will be shown after 5 seconds", Toast.LENGTH_SHORT)).show();
         }
     }
 }
