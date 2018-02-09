@@ -5,20 +5,26 @@
     android:viewportHeight="108"
     android:viewportWidth="108">
 
-    <group android:name="background">
+    <group android:name="fill">
         <path
             android:name="background_fill"
             android:fillColor="@color/primaryColor"
             android:pathData="M0,0 L108,0 L108,108 L0,108 z" />
+    </group>
+
+    <group
+        android:name="background"
+        android:translateY="-25">
+
         <path
             android:name="shadow"
-            android:pathData="M13,-9 L55,59 L93,-9 z"
+            android:pathData="M13,16 L55,84 L93,16 z"
             android:strokeColor="#44000000"
             android:strokeLineJoin="round"
             android:strokeWidth="8" />
         <path
             android:name="ribbon"
-            android:pathData="M12,-10 L54,58 L92,-10 z"
+            android:pathData="M12,15 L54,83 L92,15 z"
             android:strokeColor="@color/secondaryColor"
             android:strokeLineJoin="round"
             android:strokeWidth="8" />

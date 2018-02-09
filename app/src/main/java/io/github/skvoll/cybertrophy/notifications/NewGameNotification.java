@@ -18,8 +18,7 @@ public final class NewGameNotification extends BaseNotification {
         super(context);
 
         mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_new_games_in_library, 1))
-                .setContentText(mResources.getString(R.string.empty))
-                .setSmallIcon(android.R.drawable.sym_def_app_icon);
+                .setContentText(mResources.getString(R.string.empty));
     }
 
     public NewGameNotification addGame(GameModel gameModel) {

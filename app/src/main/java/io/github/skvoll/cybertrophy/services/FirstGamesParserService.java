@@ -11,7 +11,6 @@ import io.github.skvoll.cybertrophy.GamesParserTask;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
 import io.github.skvoll.cybertrophy.notifications.GamesParserNotification;
-import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 public final class FirstGamesParserService extends Service {
     private static final String TAG = FirstGamesParserService.class.getSimpleName();
@@ -88,10 +87,11 @@ public final class FirstGamesParserService extends Service {
         }
 
         @Override
-        protected void onProgressUpdate(SteamGame... values) {
-            SteamGame steamGame = values[0];
+        protected void onProgressUpdate(ProgressParams... values) {
+            ProgressParams progressParams = values[0];
 
-            mService.startForeground(mNotification.getId(), mNotification.setGame(steamGame).build());
+            mService.startForeground(mNotification.getId(), mNotification.setProgress(progressParams.getMax(),
+                    progressParams.getMin(), progressParams.getSteamGame()).build());
         }
 
         @Override

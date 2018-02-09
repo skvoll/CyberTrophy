@@ -23,5 +23,8 @@
     <!-- Black -->
     <color name="accentTextColor">#000000</color>
 
+    <!-- Amber 500 -->
+    <color name="amber500">#FFC107</color>
+
     <color name="grayTextColor">#C0C0C0</color>
 </resources>

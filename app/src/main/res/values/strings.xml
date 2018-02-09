@@ -7,8 +7,8 @@
     <string name="ok">OK</string>
 
     <plurals name="notification_new_games_in_library">
-        <item quantity="one">New game in library %d</item>
-        <item quantity="other">%d new game in library</item>
+        <item quantity="one">New game in library</item>
+        <item quantity="other">%d new games in library</item>
     </plurals>
     <plurals name="notification_games_removed_from_library">
         <item quantity="one">Game removed from library</item>
@@ -27,21 +27,24 @@
         <item quantity="one">Achievement removed</item>
         <item quantity="other">Achievements removed</item>
     </plurals>
-    <plurals name="notification_achievements_removed_in_game">
-        <item quantity="one">%d achievement removed in %s</item>
-        <item quantity="other">%d achievements removed in %s</item>
+    <plurals name="notification_achievements_removed_from_game">
+        <item quantity="one">%d achievement removed from %s</item>
+        <item quantity="other">%d achievements removed from %s</item>
     </plurals>
-    <string name="notification_achievements_removed_in_games">%d achievements removed in %d games</string>
+    <string name="notification_achievements_removed_from_games">%d achievements removed from %d games</string>
     <string name="notification_achievement_unlocked">Achievement unlocked</string>
     <plurals name="notification_achievements_unlocked">
         <item quantity="one">Achievement unlocked</item>
         <item quantity="other">%d achievements unlocked</item>
     </plurals>
     <string name="notification_achievements_unlocked_in_games">%d achievements unlocked in %d games</string>
-    <string name="notification_game_complete">Game complete</string>
+    <plurals name="notification_games_complete">
+        <item quantity="one">Game complete</item>
+        <item quantity="other">%d games complete</item>
+    </plurals>
     <string name="notification_games_parser_collecting_games">Collecting games</string>
     <string name="notification_games_parser_downloading">Downloading…</string>
-    <string name="notification_games_parser_downloading_failed">Downloading failed</string>
+    <string name="notification_games_parser_download_failed">Download failed</string>
     <string name="notification_games_parser_complete">Complete</string>
     <string name="notification_games_parser_postpone">Postpone</string>
     <string name="notification_games_parser_retry">Retry</string>

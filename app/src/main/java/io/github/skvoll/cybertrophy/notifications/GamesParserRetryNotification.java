@@ -19,10 +19,10 @@ public final class GamesParserRetryNotification extends BaseNotification {
                 mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentTitle(mResources.getString(R.string.notification_games_parser_collecting_games))
-                .setContentText(mResources.getString(R.string.notification_games_parser_downloading_failed))
-                .setSmallIcon(android.R.drawable.stat_sys_warning);
+                .setContentText(mResources.getString(R.string.notification_games_parser_download_failed))
+                .setSmallIcon(android.R.drawable.stat_notify_error);
 
-        mBuilder.addAction(android.R.drawable.stat_sys_warning,
+        mBuilder.addAction(android.R.drawable.stat_notify_error,
                 mContext.getResources().getString(R.string.notification_games_parser_retry),
                 pendingIntent);
     }

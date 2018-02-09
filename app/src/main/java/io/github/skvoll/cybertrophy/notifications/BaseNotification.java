@@ -32,11 +32,12 @@ public abstract class BaseNotification {
         mContext = context;
         mManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(mContext, getChannel());
+        mBuilder.setSmallIcon(R.drawable.ic_notification);
         mResources = mContext.getResources();
     }
 
     public static void createChannels(Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             ArrayList<NotificationChannel> notificationChannels = new ArrayList<>();
 

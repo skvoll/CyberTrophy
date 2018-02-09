@@ -24,7 +24,8 @@ public final class GamesParserNotification extends BaseNotification {
         PendingIntent postponePendingIntent = PendingIntent.getBroadcast(
                 mContext, 0, postponeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mBuilder.setContentTitle(mResources.getString(R.string.notification_games_parser_collecting_games))
+        mBuilder.setProgress(1, 0, true)
+                .setContentTitle(mResources.getString(R.string.notification_games_parser_collecting_games))
                 .setContentText(mResources.getString(R.string.notification_games_parser_downloading))
                 .setSmallIcon(android.R.drawable.stat_sys_download);
 
@@ -44,8 +45,11 @@ public final class GamesParserNotification extends BaseNotification {
         return ID;
     }
 
-    public GamesParserNotification setGame(SteamGame steamGame) {
-        mBuilder.setContentText(steamGame.name);
+    public GamesParserNotification setProgress(Integer max, Integer min, SteamGame steamGame) {
+        Double progress = min.doubleValue() / max.doubleValue() * 100;
+        mBuilder.setSubText(progress.intValue() + "%")
+                .setProgress(max, min, false)
+                .setContentText(steamGame.name);
 
         return this;
     }

@@ -23,15 +23,12 @@ import java.util.List;
 import io.github.skvoll.cybertrophy.achievements_list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
-import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public class GameActivity extends AppCompatActivity implements AchievementsListFragment.OnItemClickListener {
-    public static final String KEY_PROFILE_ID = "PROFILE_ID";
     public static final String KEY_GAME_ID = "GAME_ID";
 
     private static final String TAG = GameActivity.class.getSimpleName();
 
-    private ProfileModel mProfileModel;
     private GameModel mGameModel;
 
     private DrawerLayout mDrawerLayout;
@@ -154,13 +151,6 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
 
         if (bundle == null) {
             throw new IllegalArgumentException("Params are missing");
-        }
-
-        Long profileId = bundle.getLong(KEY_PROFILE_ID);
-        mProfileModel = ProfileModel.getById(getContentResolver(), profileId);
-
-        if (mProfileModel == null) {
-            throw new IllegalArgumentException("Profile id is missing");
         }
 
         Long gameId = bundle.getLong(KEY_GAME_ID);

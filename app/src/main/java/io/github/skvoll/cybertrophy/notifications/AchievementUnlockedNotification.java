@@ -18,8 +18,7 @@ public final class AchievementUnlockedNotification extends BaseNotification {
         super(context);
 
         mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_achievements_unlocked, 1))
-                .setContentText(mResources.getString(R.string.empty))
-                .setSmallIcon(android.R.drawable.ic_menu_add);
+                .setContentText(mResources.getString(R.string.empty));
     }
 
     public AchievementUnlockedNotification addAchievement(GameModel gameModel, AchievementModel achievementModel) {
@@ -36,12 +35,12 @@ public final class AchievementUnlockedNotification extends BaseNotification {
                     mAchievements.size(), mGames.size()));
         } else {
             if (mAchievements.size() > 1) {
-                mBuilder.setContentTitle(mGames.get(0));
-                mBuilder.setContentText(mResources.getQuantityString(
+                mBuilder.setContentText(mGames.get(0));
+                mBuilder.setContentTitle(mResources.getQuantityString(
                         R.plurals.notification_achievements_unlocked, mAchievements.size(), mAchievements.size()));
             } else {
-                mBuilder.setContentTitle(mAchievements.get(0));
-                mBuilder.setContentText(mResources.getQuantityString(
+                mBuilder.setContentText(mAchievements.get(0));
+                mBuilder.setContentTitle(mResources.getQuantityString(
                         R.plurals.notification_achievements_unlocked, 1));
             }
         }
@@ -51,6 +50,6 @@ public final class AchievementUnlockedNotification extends BaseNotification {
 
     @Override
     public int getId() {
-        return 0;
+        return ID;
     }
 }

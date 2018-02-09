@@ -6,10 +6,22 @@
     android:viewportHeight="108"
     android:viewportWidth="108">
 
-    <group
-        android:name="foreground"
-        android:translateY="-25">
+    <group android:name="background">
+        <path
+            android:name="shadow"
+            android:pathData="M13,16 L55,84 L93,16 z"
+            android:strokeColor="#44000000"
+            android:strokeLineJoin="round"
+            android:strokeWidth="8" />
+        <path
+            android:name="ribbon"
+            android:pathData="M12,15 L54,83 L92,15 z"
+            android:strokeColor="@color/secondaryColor"
+            android:strokeLineJoin="round"
+            android:strokeWidth="8" />
+    </group>
 
+    <group android:name="foreground">
         <path
             android:name="shadow"
             android:pathData="M41.3,91.7 L82.5,133 L133.5,133 L66.7,66.3 z">

@@ -88,7 +88,6 @@ public class AuthActivity extends AppCompatActivity {
         final VolleySingleton volleySingleton = VolleySingleton.getInstance(getApplicationContext());
         SteamApi steamApi = new SteamApi(volleySingleton);
 
-        final AuthActivity authActivity = this;
         steamApi.getPlayerSummaries(new Long[]{steamId}, new SteamApi.ResponseListener<LongSparseArray<SteamProfile>>() {
             @Override
             public void onSuccess(LongSparseArray<SteamProfile> response) {
@@ -96,7 +95,7 @@ public class AuthActivity extends AppCompatActivity {
                     return;
                 }
 
-                (new ProfileAsyncTask(authActivity)).execute(response.get(steamId));
+                (new ProfileAsyncTask(AuthActivity.this)).execute(response.get(steamId));
             }
 
             @Override
@@ -124,8 +123,6 @@ public class AuthActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            mActivity.startService(new Intent(mActivity, FirstGamesParserService.class));
-
             Intent intent = new Intent(mActivity, MainActivity.class);
             intent.putExtra(MainActivity.KEY_FRAGMENT, MainActivity.FRAGMENT_PROFILE);
 

@@ -114,7 +114,7 @@ public class DashboardFragment extends Fragment implements
             case DashboardItem.TYPE_NEW_GAME:
             case DashboardItem.TYPE_GAME_COMPLETE:
                 Intent intent = new Intent(getContext(), GameActivity.class);
-                intent.putExtra(GameActivity.KEY_PROFILE_ID, dashboardItem.getProfileId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra(GameActivity.KEY_GAME_ID, dashboardItem.getGameId());
 
                 startActivity(intent);

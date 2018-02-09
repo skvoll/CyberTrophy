@@ -96,12 +96,10 @@ public class GamesListFragment extends ListFragment implements
 
     @Override
     public void onRefresh() {
-        final LoaderManager.LoaderCallbacks<Cursor> listFragment = this;
-
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                getLoaderManager().restartLoader(LOADER_ID, null, listFragment);
+                getLoaderManager().restartLoader(LOADER_ID, null, GamesListFragment.this);
             }
         });
     }
@@ -121,7 +119,7 @@ public class GamesListFragment extends ListFragment implements
         }
 
         Intent intent = new Intent(getContext(), GameActivity.class);
-        intent.putExtra(GameActivity.KEY_PROFILE_ID, gameModel.getProfileId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
 
         startActivity(intent);

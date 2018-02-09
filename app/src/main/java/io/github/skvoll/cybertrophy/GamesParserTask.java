@@ -28,7 +28,7 @@ import io.github.skvoll.cybertrophy.steam.SteamApi;
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 import io.github.skvoll.cybertrophy.steam.SteamPlayerAchievement;
 
-public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean> {
+public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.ProgressParams, Boolean> {
     public static final int ACTION_FIRST = 0;
     public static final int ACTION_ALL = 1;
     public static final int ACTION_RECENT = 2;
@@ -148,7 +148,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
 
                 loadSteamGameAchievements(steamGame, mProfileModel.getSteamId());
 
-                publishProgress(steamGame);
+                publishProgress(new ProgressParams(steamGames.size(), i, steamGame));
 
                 if (steamGame.getAchievementsTotalCount() == 0) {
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" has no achievements.");
@@ -421,5 +421,29 @@ public abstract class GamesParserTask extends AsyncTask<Long, SteamGame, Boolean
         String where = DataContract.AchievementEntry.COLUMN_GAME_ID + " = ?";
         String[] selectionArgs = {gameModel.getId().toString()};
         mContentResolver.delete(DataContract.AchievementEntry.URI, where, selectionArgs);
+    }
+
+    protected class ProgressParams {
+        private int mMax;
+        private int mMin;
+        private SteamGame mSteamGame;
+
+        ProgressParams(int max, int min, SteamGame steamGame) {
+            mMax = max;
+            mMin = min;
+            mSteamGame = steamGame;
+        }
+
+        public int getMax() {
+            return mMax;
+        }
+
+        public int getMin() {
+            return mMin;
+        }
+
+        public SteamGame getSteamGame() {
+            return mSteamGame;
+        }
     }
 }

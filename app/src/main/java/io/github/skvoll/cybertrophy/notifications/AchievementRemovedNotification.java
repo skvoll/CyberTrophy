@@ -17,8 +17,7 @@ public final class AchievementRemovedNotification extends BaseNotification {
         super(context);
 
         mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_achievements_removed, 1))
-                .setContentText(mResources.getString(R.string.empty))
-                .setSmallIcon(android.R.drawable.ic_menu_add);
+                .setContentText(mResources.getString(R.string.empty));
     }
 
     public AchievementRemovedNotification addGame(GameModel gameModel) {
@@ -31,11 +30,13 @@ public final class AchievementRemovedNotification extends BaseNotification {
                 R.plurals.notification_achievements_removed, mAchievementsCount));
 
         if (mGames.size() > 1) {
-            mBuilder.setContentTitle(mResources.getString(
-                    R.string.notification_achievements_removed_in_games, mAchievementsCount, mGames.size()));
+            mBuilder.setContentText(mResources.getString(
+                    R.string.notification_achievements_removed_from_games,
+                    mAchievementsCount, mGames.size()));
         } else {
-            mBuilder.setContentTitle(mResources.getQuantityString(
-                    R.plurals.notification_achievements_removed_in_game, mAchievementsCount, mGames.get(0)));
+            mBuilder.setContentText(mResources.getQuantityString(
+                    R.plurals.notification_achievements_removed_from_game,
+                    mAchievementsCount, mAchievementsCount, mGames.get(0)));
         }
 
         return this;
@@ -43,6 +44,6 @@ public final class AchievementRemovedNotification extends BaseNotification {
 
     @Override
     public int getId() {
-        return 0;
+        return ID;
     }
 }

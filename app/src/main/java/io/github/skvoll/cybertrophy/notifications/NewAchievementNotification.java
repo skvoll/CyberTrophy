@@ -17,8 +17,7 @@ public final class NewAchievementNotification extends BaseNotification {
         super(context);
 
         mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_new_achievements, 1))
-                .setContentText(mResources.getString(R.string.empty))
-                .setSmallIcon(android.R.drawable.ic_menu_add);
+                .setContentText(mResources.getString(R.string.empty));
     }
 
     public NewAchievementNotification addGame(GameModel gameModel) {
@@ -32,10 +31,12 @@ public final class NewAchievementNotification extends BaseNotification {
 
         if (mGames.size() > 1) {
             mBuilder.setContentText(mResources.getString(
-                    R.string.notification_new_achievements_in_games, mAchievementsCount, mGames.size()));
+                    R.string.notification_new_achievements_in_games,
+                    mAchievementsCount, mGames.size()));
         } else {
             mBuilder.setContentText(mResources.getQuantityString(
-                    R.plurals.notification_new_achievements_in_game, mAchievementsCount, mGames.get(0)));
+                    R.plurals.notification_new_achievements_in_game,
+                    mAchievementsCount, mAchievementsCount, mGames.get(0)));
         }
 
         return this;

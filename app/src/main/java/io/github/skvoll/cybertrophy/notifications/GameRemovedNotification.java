@@ -18,8 +18,7 @@ public final class GameRemovedNotification extends BaseNotification {
         super(context);
 
         mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_games_removed_from_library, 1))
-                .setContentText(mResources.getString(R.string.empty))
-                .setSmallIcon(android.R.drawable.ic_menu_add);
+                .setContentText(mResources.getString(R.string.empty));
     }
 
     public GameRemovedNotification addGame(GameModel gameModel) {

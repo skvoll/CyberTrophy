@@ -98,12 +98,10 @@ public class AchievementsListFragment extends ListFragment implements
 
     @Override
     public void onRefresh() {
-        final LoaderManager.LoaderCallbacks<Cursor> listFragment = this;
-
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                getLoaderManager().restartLoader(LOADER_ID, null, listFragment);
+                getLoaderManager().restartLoader(LOADER_ID, null, AchievementsListFragment.this);
             }
         });
     }
