@@ -38,6 +38,7 @@ public class GamesListFragment extends ListFragment implements
     private int mType;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ViewGroup mViewProgress;
     private GamesListAdapter mGamesListAdapter;
 
     public GamesListFragment() {
@@ -75,6 +76,7 @@ public class GamesListFragment extends ListFragment implements
         ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_games_list, container, false);
 
         mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
+        mViewProgress = mRootView.findViewById(android.R.id.progress);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
@@ -170,6 +172,7 @@ public class GamesListFragment extends ListFragment implements
         mGamesListAdapter.swapCursor(cursor);
 
         mSwipeRefreshLayout.setRefreshing(false);
+        mViewProgress.setVisibility(View.GONE);
     }
 
     @Override
