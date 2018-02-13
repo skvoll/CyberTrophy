@@ -33,7 +33,7 @@ public abstract class DataContract {
                 + COLUMN_AVATAR + " TEXT NOT NULL,"
                 + COLUMN_AVATAR_MEDIUM + " TEXT NOT NULL,"
                 + COLUMN_AVATAR_FULL + " TEXT NOT NULL,"
-                + COLUMN_LOC_COUNTRY_CODE + " TEXT NOT NULL,"
+                + COLUMN_LOC_COUNTRY_CODE + " TEXT,"
                 + COLUMN_BACKGROUND_IMAGE + " TEXT,"
                 + COLUMN_IS_INITIALIZED + " BOOLEAN NOT NULL DEFAULT 1,"
                 + COLUMN_IS_ACTIVE + " BOOLEAN NOT NULL DEFAULT 1);";
