@@ -9,6 +9,21 @@
         <item name="android:navigationBarColor">@color/primaryDarkColor</item>
 
         <item name="android:windowBackground">@color/primaryLightColor</item>
+
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.NegativeButtonStyle</item>
+    </style>
+
+    <style name="AppTheme.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/secondaryDarkColor</item>
+    </style>
+
+    <style name="AppTheme.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/secondaryDarkColor</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

@@ -61,6 +61,25 @@
                     android:layout_height="wrap_content"
                     android:text="Reset" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Data"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/grayTextColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grayTextColor" />
+
+            <Button
+                android:id="@+id/btn_wipe_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wipe data" />
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -1,8 +1,11 @@
 package io.github.skvoll.cybertrophy;
 
 import android.app.NotificationManager;
+import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,7 +17,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import io.github.skvoll.cybertrophy.data.AchievementModel;
+import io.github.skvoll.cybertrophy.data.DataContract;
+import io.github.skvoll.cybertrophy.data.DatabaseHelper;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.AchievementRemovedNotification;
 import io.github.skvoll.cybertrophy.notifications.AchievementUnlockedNotification;
 import io.github.skvoll.cybertrophy.notifications.GameCompleteNotification;
@@ -85,6 +91,14 @@ public class DevToolsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 resetNotifications();
+            }
+        });
+
+        Button btnWipeData = findViewById(R.id.btn_wipe_data);
+        btnWipeData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wipeData();
             }
         });
     }
@@ -168,5 +182,38 @@ public class DevToolsActivity extends AppCompatActivity {
             (Toast.makeText(this,
                     "Notification will be shown after 5 seconds", Toast.LENGTH_SHORT)).show();
         }
+    }
+
+    private void wipeData() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Wipe data?")
+                .setPositiveButton("agree", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        DatabaseHelper databaseHelper = new DatabaseHelper(DevToolsActivity.this);
+                        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+
+                        ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+
+                        if (profileModel != null) {
+                            sqLiteDatabase.execSQL("DELETE FROM " + DataContract.LogEntry.TABLE_NAME);
+                            sqLiteDatabase.execSQL("DELETE FROM " + DataContract.AchievementEntry.TABLE_NAME);
+                            sqLiteDatabase.execSQL("DELETE FROM " + DataContract.GameEntry.TABLE_NAME);
+
+                            profileModel.setInitialized(false);
+                            profileModel.save(getContentResolver());
+                        }
+
+                        sqLiteDatabase.close();
+
+                        (new GamesParserRetryNotification(DevToolsActivity.this)).show();
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder.create().show();
     }
 }
