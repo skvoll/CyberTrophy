@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.skvoll.cybertrophy.data.ProfileModel;
-import io.github.skvoll.cybertrophy.games_list.GamesListFragment;
+import io.github.skvoll.cybertrophy.games.list.GamesListFragment;
 
 public class GamesFragment extends Fragment {
     public static final String KEY_TAB = "TAB";
@@ -42,10 +42,10 @@ public class GamesFragment extends Fragment {
             return null;
         }
 
-        ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_games, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_games, container, false);
 
-        mTabLayout = mRootView.findViewById(R.id.tl_tabs);
-        mViewPager = mRootView.findViewById(R.id.vp_container);
+        mTabLayout = rootView.findViewById(R.id.tl_tabs);
+        mViewPager = rootView.findViewById(R.id.vp_container);
 
         mPagerAdapter = new PagerAdapter(getChildFragmentManager());
         mPagerAdapter.addFragment(
@@ -61,7 +61,7 @@ public class GamesFragment extends Fragment {
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        return mRootView;
+        return rootView;
     }
 
     @Override

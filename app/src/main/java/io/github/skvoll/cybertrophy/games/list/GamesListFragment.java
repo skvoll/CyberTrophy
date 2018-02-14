@@ -1,4 +1,4 @@
-package io.github.skvoll.cybertrophy.games_list;
+package io.github.skvoll.cybertrophy.games.list;
 
 import android.content.Intent;
 import android.database.Cursor;

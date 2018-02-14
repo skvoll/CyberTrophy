@@ -7,12 +7,17 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 import io.github.skvoll.cybertrophy.steam.SteamAchievement;
 
 public final class AchievementModel extends Model {
+    public static final int ALL = 0;
+    public static final int LOCKED = 1;
+    public static final int UNLOCKED = 2;
+
     private Long mId;
     private Long mProfileId;
     private Long mGameId;
@@ -81,7 +86,8 @@ public final class AchievementModel extends Model {
         return achievementModel;
     }
 
-    public static HashMap<String, AchievementModel> getByGame(ContentResolver contentResolver, GameModel gameModel) {
+    public static HashMap<String, AchievementModel> getMapByGame(
+            ContentResolver contentResolver, GameModel gameModel) {
         String selection = AchievementEntry.COLUMN_GAME_ID + " = ?";
         String[] selectionArgs = new String[]{gameModel.getId().toString()};
 
@@ -111,6 +117,65 @@ public final class AchievementModel extends Model {
         cursor.close();
 
         return achievementModels;
+    }
+
+    public static ArrayList<AchievementModel> getByGame(
+            ContentResolver contentResolver, GameModel gameModel, int status, int count) {
+        String selection = AchievementEntry.COLUMN_GAME_ID + " = ?";
+        String[] selectionArgs = new String[]{gameModel.getId().toString()};
+
+        String sortOrder;
+
+        switch (status) {
+            case LOCKED:
+                selection += " AND " + AchievementEntry.COLUMN_IS_UNLOCKED + " = 0";
+                sortOrder = AchievementEntry.COLUMN_PERCENT + " DESC";
+                break;
+            case UNLOCKED:
+                selection += " AND " + AchievementEntry.COLUMN_IS_UNLOCKED + " = 1";
+                sortOrder = AchievementEntry.COLUMN_UNLOCK_TIME + " DESC";
+                break;
+            default:
+                sortOrder = AchievementEntry.COLUMN_NAME;
+                break;
+        }
+
+        Cursor cursor = contentResolver.query(AchievementEntry.URI, null, selection,
+                selectionArgs, sortOrder + " LIMIT " + count);
+
+        if (cursor == null) {
+            return new ArrayList<>();
+        }
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            return new ArrayList<>();
+        }
+
+        ArrayList<AchievementModel> achievementModels = new ArrayList<>(cursor.getCount());
+
+        while (!cursor.isAfterLast()) {
+            AchievementModel achievementModel = new AchievementModel(cursor);
+
+            achievementModels.add(achievementModel);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return achievementModels;
+    }
+
+    public static ArrayList<AchievementModel> getByGame(
+            ContentResolver contentResolver, GameModel gameModel, int status) {
+        return getByGame(contentResolver, gameModel, status, Integer.MAX_VALUE);
+    }
+
+    public static ArrayList<AchievementModel> getByGame(
+            ContentResolver contentResolver, GameModel gameModel) {
+        return getByGame(contentResolver, gameModel, ALL);
     }
 
     @Override

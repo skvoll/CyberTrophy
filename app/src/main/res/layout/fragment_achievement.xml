@@ -77,7 +77,7 @@
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@color/primaryTextColor"
-                    tools:text="01.01.1970\n00:00" />
+                    tools:text="01.01.1970 00:00" />
             </LinearLayout>
 
             <LinearLayout

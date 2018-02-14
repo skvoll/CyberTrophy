@@ -53,12 +53,14 @@
 
     <string name="title_games">Games</string>
 
-    <string name="new_game_in_library">New game in library</string>
-    <string name="game_complete">Complete</string>
-    <string name="achievement_unlocked">Achievement unlocked</string>
-    <string name="game_achievements_progress">%d/%d achievements</string>
+    <string name="list_placeholder">List placeholder</string>
     <string name="game_logo_description">Game logo</string>
     <string name="achievement_icon_description">Achievement icon</string>
+
+    <string name="dashboard_title_recent_achievements">Recent achievements</string>
+    <string name="dashboard_title_locked_achievements">Locked achievements</string>
+    <string name="dashboard_game_achievements_progress">%d/%d achievements</string>
+
     <string name="profile_avatar_description">Profile avatar</string>
     <string name="profile_background_description">Profile background</string>
 

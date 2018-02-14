@@ -111,6 +111,33 @@ public final class GameModel extends Model {
         return gameModels;
     }
 
+    public static GameModel getCurrent(ContentResolver contentResolver, ProfileModel profileModel) {
+        String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
+        selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
+                + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
+                + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+        String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
+
+        Cursor cursor = contentResolver.query(GameEntry.URI, null, selection,
+                selectionArgs, GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1");
+
+        if (cursor == null) {
+            return null;
+        }
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            return null;
+        }
+
+        GameModel gameModel = new GameModel(cursor);
+
+        cursor.close();
+
+        return gameModel;
+    }
+
     @Override
     public Uri getUri(Long id) {
         if (id == null) {

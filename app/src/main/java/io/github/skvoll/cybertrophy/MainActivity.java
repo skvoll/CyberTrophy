@@ -1,6 +1,5 @@
 package io.github.skvoll.cybertrophy;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import io.github.skvoll.cybertrophy.dashboard.DashboardFragment;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 import io.github.skvoll.cybertrophy.services.AllGamesParserJob;
@@ -20,8 +18,6 @@ import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 import io.github.skvoll.cybertrophy.services.RecentGamesParserJob;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String ACTION_CLOSE_NOTIFICATION = "CLOSE_NOTIFICATION";
-    public static final String KEY_NOTIFICATION_ID = "NOTIFICATION_ID";
     public static final String KEY_FRAGMENT = "FRAGMENT";
     public static final int FRAGMENT_DASHBOARD = R.id.menu_dashboard;
     public static final int FRAGMENT_GAMES = R.id.menu_games;
@@ -51,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BaseNotification.cancelNotifications(this);
-
         setup();
 
         ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
@@ -75,26 +69,6 @@ public class MainActivity extends AppCompatActivity {
         mProfileFragment = new ProfileFragment();
 
         int selectedItem = FRAGMENT_DASHBOARD;
-
-        if (getIntent().getAction() != null) {
-            switch (getIntent().getAction()) {
-                case ACTION_CLOSE_NOTIFICATION:
-                    Bundle actionExtras = getIntent().getExtras();
-                    if (actionExtras == null) {
-                        break;
-                    }
-
-                    NotificationManager notificationManager
-                            = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                    if (notificationManager == null) {
-                        break;
-                    }
-
-                    notificationManager.cancel(actionExtras.getInt(KEY_NOTIFICATION_ID));
-                    break;
-            }
-        }
 
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
@@ -156,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setup() {
         BaseNotification.createChannels(this);
+        BaseNotification.cancelNotifications(this);
 
         Log.d(TAG, AllGamesParserJob.class.getSimpleName() + " is "
                 + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "setted" : "not setted"));

@@ -181,7 +181,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
 
                     updateGame(gameModel, steamGame);
 
-                    HashMap<String, AchievementModel> achievementModels = AchievementModel.getByGame(mContentResolver, gameModel);
+                    HashMap<String, AchievementModel> achievementModels = AchievementModel.getMapByGame(mContentResolver, gameModel);
 
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {
                         if (!achievementModels.containsKey(steamAchievement.name)) {

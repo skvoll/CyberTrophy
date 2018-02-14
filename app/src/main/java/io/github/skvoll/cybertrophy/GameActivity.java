@@ -14,13 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.skvoll.cybertrophy.achievements_list.AchievementsListFragment;
+import io.github.skvoll.cybertrophy.achievements.list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
@@ -89,7 +88,8 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementsListFragment.TYPE_LOCKED,
+                                AchievementsListFragment.ACHIEVEMENTS_STATUS_LOCKED,
+                                AchievementsListFragment.VIEW_TYPE_FULL,
                                 this
                         ),
                         null
@@ -101,7 +101,8 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementsListFragment.TYPE_LOCKED,
+                                AchievementsListFragment.ACHIEVEMENTS_STATUS_LOCKED,
+                                AchievementsListFragment.VIEW_TYPE_FULL,
                                 this
                         ),
                         getString(R.string.achievements_list_locked)
@@ -109,7 +110,8 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementsListFragment.TYPE_UNLOCKED,
+                                AchievementsListFragment.ACHIEVEMENTS_STATUS_UNLOCKED,
+                                AchievementsListFragment.VIEW_TYPE_FULL,
                                 this
                         ),
                         getString(R.string.achievements_list_unlocked)
@@ -119,7 +121,8 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementsListFragment.TYPE_UNLOCKED,
+                                AchievementsListFragment.ACHIEVEMENTS_STATUS_UNLOCKED,
+                                AchievementsListFragment.VIEW_TYPE_FULL,
                                 this
                         ),
                         null
@@ -166,7 +169,6 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
 
     @Override
     public void onClick(AchievementModel achievementModel) {
-        FrameLayout frameLayout = findViewById(R.id.fl_drawer);
         Fragment fragment = AchievementFragment.newInstance(achievementModel);
 
         getSupportFragmentManager().beginTransaction()

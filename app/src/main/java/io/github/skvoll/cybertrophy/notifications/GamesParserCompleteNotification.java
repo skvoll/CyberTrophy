@@ -14,8 +14,6 @@ public final class GamesParserCompleteNotification extends BaseNotification {
         super(context);
 
         Intent intent = new Intent(mContext, MainActivity.class);
-        intent.setAction(MainActivity.ACTION_CLOSE_NOTIFICATION);
-        intent.putExtra(MainActivity.KEY_NOTIFICATION_ID, getId());
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
