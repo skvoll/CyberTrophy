@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/primaryLightColor"
     android:orientation="vertical"
-    tools:context="io.github.skvoll.cybertrophy.AchievementFragment">
+    tools:context="io.github.skvoll.cybertrophy.AchievementPreviewFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

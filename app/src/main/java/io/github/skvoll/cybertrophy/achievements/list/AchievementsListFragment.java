@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -23,22 +22,13 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 
 public class AchievementsListFragment extends Fragment implements
         SwipeRefreshLayout.OnRefreshListener {
-    public static final int ACHIEVEMENTS_STATUS_ALL = 0;
-    public static final int ACHIEVEMENTS_STATUS_LOCKED = 1;
-    public static final int ACHIEVEMENTS_STATUS_UNLOCKED = 2;
-
-    public static final int VIEW_TYPE_FULL = AchievementsListAdapter.TYPE_FULL;
-    public static final int VIEW_TYPE_SMALL = AchievementsListAdapter.TYPE_SMALL;
-
     private static final String TAG = AchievementsListFragment.class.getSimpleName();
     private static final String KEY_GAME_ID = "GAME_ID";
     private static final String KEY_ACHIEVEMENTS_STATUS = "ACHIEVEMENTS_STATUS";
-    private static final String KEY_VIEW_TYPE = "VIEW_TYPE";
 
     private OnItemClickListener mOnItemClickListener;
     private Long mGameId;
     private int mAchievementsStatus;
-    private int mViewType;
     private SwipeRefreshLayout mSrlRefresh;
     private RecyclerView mRvList;
     private View mIvPlaceholder;
@@ -49,14 +39,13 @@ public class AchievementsListFragment extends Fragment implements
     }
 
     public static AchievementsListFragment newInstance(
-            Long gameId, int achievementsStatus, int viewType, OnItemClickListener onItemClickListener) {
+            Long gameId, int achievementsStatus, OnItemClickListener onItemClickListener) {
         AchievementsListFragment fragment = new AchievementsListFragment();
         fragment.setOnItemClickListener(onItemClickListener);
 
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_GAME_ID, gameId);
         bundle.putInt(KEY_ACHIEVEMENTS_STATUS, achievementsStatus);
-        bundle.putInt(KEY_VIEW_TYPE, viewType);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -71,8 +60,7 @@ public class AchievementsListFragment extends Fragment implements
         }
 
         mGameId = getArguments().getLong(KEY_GAME_ID, -1);
-        mAchievementsStatus = getArguments().getInt(KEY_ACHIEVEMENTS_STATUS, ACHIEVEMENTS_STATUS_ALL);
-        mViewType = getArguments().getInt(KEY_VIEW_TYPE, VIEW_TYPE_FULL);
+        mAchievementsStatus = getArguments().getInt(KEY_ACHIEVEMENTS_STATUS, AchievementModel.ALL);
 
         if (mGameId == -1) {
             throw new IllegalArgumentException();
@@ -92,35 +80,22 @@ public class AchievementsListFragment extends Fragment implements
         mIvPlaceholder = rootView.findViewById(android.R.id.empty);
         mLlProgress = rootView.findViewById(android.R.id.progress);
 
-        int orientation;
-        if (mViewType == VIEW_TYPE_FULL) {
-            mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-            mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
-            mSrlRefresh.setOnRefreshListener(this);
+        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
+        mSrlRefresh.setOnRefreshListener(this);
 
-            orientation = LinearLayout.VERTICAL;
-            mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
-        } else {
-            mSrlRefresh.setEnabled(false);
-
-            orientation = LinearLayout.HORIZONTAL;
-        }
-
-        mRvList.setLayoutManager(new LinearLayoutManager(getContext(), orientation, false));
+        mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
+        mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mGameModel = GameModel.getById(getContext().getContentResolver(), mGameId);
-        (new LoadDataAsyncTask(this, mAchievementsStatus)).execute(mGameModel);
+        (new LoadDataTask(this, mAchievementsStatus)).execute(mGameModel);
 
         return rootView;
     }
 
     @Override
     public void onRefresh() {
-        if (getContext() == null) {
-            return;
-        }
-
-        (new LoadDataAsyncTask(this, mAchievementsStatus)).execute(mGameModel);
+        (new LoadDataTask(this, mAchievementsStatus)).execute(mGameModel);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -129,7 +104,7 @@ public class AchievementsListFragment extends Fragment implements
 
     void setData(ArrayList<AchievementModel> achievementModels) {
         AchievementsListAdapter adapter = new AchievementsListAdapter(getContext(),
-                achievementModels, mOnItemClickListener, mViewType);
+                achievementModels, mOnItemClickListener, AchievementsListAdapter.TYPE_FULL);
 
         mRvList.swapAdapter(adapter, false);
 
@@ -149,12 +124,12 @@ public class AchievementsListFragment extends Fragment implements
         void onClick(AchievementModel achievementModel);
     }
 
-    private static class LoadDataAsyncTask extends AsyncTask<GameModel, Void, ArrayList<AchievementModel>> {
+    private static class LoadDataTask extends AsyncTask<GameModel, Void, ArrayList<AchievementModel>> {
         private WeakReference<AchievementsListFragment> mFragmentWeakReference;
         private int mAchievementsStatus;
         private ContentResolver mContentResolver;
 
-        LoadDataAsyncTask(AchievementsListFragment fragment, int achievementsStatus) {
+        LoadDataTask(AchievementsListFragment fragment, int achievementsStatus) {
             if (fragment.getContext() == null) {
                 return;
             }

@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
+
 import io.github.skvoll.cybertrophy.GamesParserTask;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
@@ -83,20 +85,26 @@ public final class AllGamesParserJob extends JobService {
     }
 
     private static class JobTask extends GamesParserTask {
-        private JobService mJobService;
+        private WeakReference<JobService> mJobServiceWeakReference;
         private JobParameters mJobParameters;
 
         JobTask(JobService service, JobParameters jobParameters, ProfileModel profileModel) {
             super(service, profileModel, GamesParserTask.ACTION_ALL);
 
-            mJobService = service;
+            mJobServiceWeakReference = new WeakReference<>(service);
             mJobParameters = jobParameters;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
+            JobService service = mJobServiceWeakReference.get();
+
+            if (service == null) {
+                return;
+            }
+
             if (success) {
-                SharedPreferences sharedPreferences = mJobService.getSharedPreferences("DEBUG", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = service.getSharedPreferences("DEBUG", MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
 
                 sharedPreferencesEditor.putLong(TAG + "_LAST_PARSED", System.currentTimeMillis());
@@ -105,7 +113,7 @@ public final class AllGamesParserJob extends JobService {
             }
 
             sIsRunning = false;
-            mJobService.jobFinished(mJobParameters, !success);
+            service.jobFinished(mJobParameters, !success);
         }
     }
 }

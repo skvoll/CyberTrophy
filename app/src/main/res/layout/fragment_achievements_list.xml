@@ -11,13 +11,10 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@android:id/list"
+            tools:listitem="@layout/fragment_achievements_list_item_full"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="8dp"
-            android:paddingEnd="4dp"
-            android:paddingStart="4dp"
-            android:paddingTop="8dp"
             android:scrollbars="vertical"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -31,20 +28,18 @@
         android:contentDescription="@string/list_placeholder"
         android:src="@drawable/placeholder"
         android:tint="@color/secondaryColor"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:visibility="gone" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@android:id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primaryLightColor"
-        android:gravity="center"
         tools:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
-    </LinearLayout>
+    </FrameLayout>
 </FrameLayout>

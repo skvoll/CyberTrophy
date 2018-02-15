@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
+
 import io.github.skvoll.cybertrophy.GamesParserTask;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
@@ -45,7 +47,7 @@ public final class FirstGamesParserService extends Service {
 
         startForeground(mNotification.getId(), mNotification.build());
 
-        mServiceTask.execute();
+        mServiceTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         sIsRunning = true;
 
@@ -74,15 +76,13 @@ public final class FirstGamesParserService extends Service {
     }
 
     private static class ServiceTask extends GamesParserTask {
-        private FirstGamesParserService mService;
-        private GamesParserNotification mNotification;
+        private WeakReference<FirstGamesParserService> mServiceWeakReference;
         private ProfileModel mProfileModel;
 
         ServiceTask(FirstGamesParserService service, ProfileModel profileModel, int action) {
             super(service, profileModel, action);
 
-            mService = service;
-            mNotification = new GamesParserNotification(mService);
+            mServiceWeakReference = new WeakReference<>(service);
             mProfileModel = profileModel;
         }
 
@@ -90,20 +90,34 @@ public final class FirstGamesParserService extends Service {
         protected void onProgressUpdate(ProgressParams... values) {
             ProgressParams progressParams = values[0];
 
-            mService.startForeground(mNotification.getId(), mNotification.setProgress(progressParams.getMax(),
+            FirstGamesParserService service = mServiceWeakReference.get();
+
+            if (service == null) {
+                return;
+            }
+
+            GamesParserNotification notification = new GamesParserNotification(service);
+
+            service.startForeground(notification.getId(), notification.setProgress(progressParams.getMax(),
                     progressParams.getMin(), progressParams.getSteamGame()).build());
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
-            if (success) {
-                mProfileModel.setInitialized(true);
-                mProfileModel.save(mService.getContentResolver());
+            FirstGamesParserService service = mServiceWeakReference.get();
 
-                (new GamesParserCompleteNotification(mService)).show();
+            if (service == null) {
+                return;
             }
 
-            mService.stopSelf();
+            if (success) {
+                mProfileModel.setInitialized(true);
+                mProfileModel.save(service.getContentResolver());
+
+                (new GamesParserCompleteNotification(service)).show();
+            }
+
+            service.stopSelf();
         }
     }
 }

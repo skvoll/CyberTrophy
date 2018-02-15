@@ -17,9 +17,9 @@ import io.github.skvoll.cybertrophy.GlideApp;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 
-final class AchievementsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    static final int TYPE_FULL = 1;
-    static final int TYPE_SMALL = 2;
+public final class AchievementsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int TYPE_FULL = 1;
+    public static final int TYPE_SMALL = 2;
 
     private Context mContext;
     private ArrayList<AchievementModel> mItems;
@@ -27,12 +27,7 @@ final class AchievementsListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private AchievementsListFragment.OnItemClickListener mOnItemClickListener;
     private int mMaxWidth;
 
-    AchievementsListAdapter(Context context, ArrayList<AchievementModel> achievementModels,
-                            AchievementsListFragment.OnItemClickListener onItemClickListener) {
-        this(context, achievementModels, onItemClickListener, TYPE_FULL);
-    }
-
-    AchievementsListAdapter(Context context, ArrayList<AchievementModel> achievementModels,
+    public AchievementsListAdapter(Context context, ArrayList<AchievementModel> achievementModels,
                             AchievementsListFragment.OnItemClickListener onItemClickListener, int type) {
         mContext = context;
         mItems = achievementModels;

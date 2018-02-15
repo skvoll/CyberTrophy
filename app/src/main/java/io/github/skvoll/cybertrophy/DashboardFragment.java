@@ -2,13 +2,16 @@ package io.github.skvoll.cybertrophy;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,17 +22,24 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import io.github.skvoll.cybertrophy.achievements.list.AchievementsListAdapter;
 import io.github.skvoll.cybertrophy.achievements.list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
+import io.github.skvoll.cybertrophy.notifications.GamesParserNotification;
+import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 
 public class DashboardFragment extends Fragment implements
-        AchievementsListFragment.OnItemClickListener {
+        AchievementsListFragment.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
     private ProfileModel mProfileModel;
-    private View mRootView;
+    private DrawerLayout mRootView;
+    private SwipeRefreshLayout mSrlRefresh;
 
     public DashboardFragment() {
     }
@@ -46,30 +56,44 @@ public class DashboardFragment extends Fragment implements
             return null;
         }
 
-        mRootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        mRootView = (DrawerLayout) inflater.inflate(R.layout.fragment_dashboard, container, false);
+        mRootView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mRootView.addDrawerListener(new ActionBarDrawerToggle(
+                getActivity(), mRootView, null, R.string.empty, R.string.empty) {
 
-        setGame();
+            @Override
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+
+                mRootView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        });
+
+        mSrlRefresh = mRootView.findViewById(R.id.srl_refresh);
+        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
+        mSrlRefresh.setOnRefreshListener(this);
+
+        (new LoadDataTask(this)).execute(mProfileModel);
 
         return mRootView;
     }
 
-    private void setGame() {
-        if (getContext() == null || getActivity() == null) {
-            return;
-        }
+    private void setData(LoadDataTask.LoadDataTaskResult result) {
+        mSrlRefresh.setRefreshing(false);
 
-        ContentResolver contentResolver = getContext().getContentResolver();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        setGame(result.gameModel);
+        setRecentAchievements(result.recentAchievementModels);
+        setLockedAchievements(result.lockedAchievementModels);
+    }
 
+    private void setGame(final GameModel gameModel) {
         LinearLayout llGame = mRootView.findViewById(R.id.ll_game);
-
-        final GameModel gameModel = GameModel.getCurrent(contentResolver, mProfileModel);
-
-        if (gameModel == null) {
-            llGame.setVisibility(View.GONE);
-
-            return;
-        }
 
         CardView cvGame = llGame.findViewById(R.id.cv_item);
         ImageView ivGameLogo = llGame.findViewById(R.id.iv_game_logo);
@@ -85,8 +109,8 @@ public class DashboardFragment extends Fragment implements
                 gameModel.getAchievementsUnlockedCount(),
                 gameModel.getAchievementsTotalCount()));
         pbGameProgress.setScaleY(2f);
-        pbGameProgress.setMax(gameModel.getAchievementsUnlockedCount());
-        pbGameProgress.setProgress(gameModel.getAchievementsTotalCount());
+        pbGameProgress.setMax(gameModel.getAchievementsTotalCount());
+        pbGameProgress.setProgress(gameModel.getAchievementsUnlockedCount());
 
         cvGame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,60 +123,72 @@ public class DashboardFragment extends Fragment implements
             }
         });
 
-        ArrayList<AchievementModel> achievementModels = AchievementModel.getByGame(
-                contentResolver, gameModel, AchievementModel.UNLOCKED, 3);
-
-        if (achievementModels.size() > 0) {
-            LinearLayout llRecentAchievements = llGame.findViewById(R.id.ll_recent_achievements);
-            View vRecentAchievement;
-            CardView cvContainer;
-            ImageView ivAchievementIcon;
-            TextView tvAchievementName;
-            TextView tvAchievementDescription;
-            TextView tvAchievementTime;
-
-            for (final AchievementModel achievementModel : achievementModels) {
-                vRecentAchievement = getLayoutInflater().inflate(
-                        R.layout.fragment_dashboard_achievement, llRecentAchievements, false);
-
-                cvContainer = vRecentAchievement.findViewById(R.id.cv_item);
-                ivAchievementIcon = vRecentAchievement.findViewById(R.id.iv_achievement_icon);
-                tvAchievementName = vRecentAchievement.findViewById(R.id.tv_achievement_name);
-                tvAchievementDescription = vRecentAchievement.findViewById(R.id.tv_achievement_description);
-                tvAchievementTime = vRecentAchievement.findViewById(R.id.tv_achievement_time);
-
-                GlideApp.with(this).load(achievementModel.getIconUrl())
-                        .placeholder(R.drawable.achievement_icon_empty)
-                        .into(ivAchievementIcon);
-                tvAchievementName.setText(achievementModel.getName());
-                if (achievementModel.getDescription() != null) {
-                    tvAchievementDescription.setText(achievementModel.getDescription());
-                }
-                tvAchievementTime.setText(DateUtils.getRelativeTimeSpanString(
-                        achievementModel.getUnlockTime() * 1000L));
-
-                cvContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showAchievement(achievementModel);
-                    }
-                });
-
-                llRecentAchievements.addView(vRecentAchievement);
-            }
-        }
-
-        AchievementsListFragment achievementsListFragment = AchievementsListFragment.newInstance(
-                gameModel.getId(), AchievementsListFragment.ACHIEVEMENTS_STATUS_LOCKED,
-                AchievementsListFragment.VIEW_TYPE_SMALL, this);
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fl_locked_achievements, achievementsListFragment).commit();
+        mRootView.findViewById(android.R.id.progress).setVisibility(View.GONE);
+        mRootView.findViewById(R.id.sv_container).setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onClick(AchievementModel achievementModel) {
-        showAchievement(achievementModel);
+    private void setRecentAchievements(ArrayList<AchievementModel> achievementModels) {
+        if (achievementModels.size() == 0) {
+            return;
+        }
+
+        LinearLayout llRecentAchievements = mRootView.findViewById(R.id.ll_recent_achievements);
+
+        View vRecentAchievement;
+        CardView cvContainer;
+        ImageView ivAchievementIcon;
+        TextView tvAchievementName;
+        TextView tvAchievementDescription;
+        TextView tvAchievementTime;
+
+        llRecentAchievements.removeAllViews();
+
+        for (final AchievementModel achievementModel : achievementModels) {
+            vRecentAchievement = getLayoutInflater().inflate(
+                    R.layout.fragment_dashboard_achievement, llRecentAchievements, false);
+
+            cvContainer = vRecentAchievement.findViewById(R.id.cv_item);
+            ivAchievementIcon = vRecentAchievement.findViewById(R.id.iv_achievement_icon);
+            tvAchievementName = vRecentAchievement.findViewById(R.id.tv_achievement_name);
+            tvAchievementDescription = vRecentAchievement.findViewById(R.id.tv_achievement_description);
+            tvAchievementTime = vRecentAchievement.findViewById(R.id.tv_achievement_time);
+
+            GlideApp.with(this).load(achievementModel.getIconUrl())
+                    .placeholder(R.drawable.achievement_icon_empty)
+                    .into(ivAchievementIcon);
+            tvAchievementName.setText(achievementModel.getName());
+            if (achievementModel.getDescription() != null) {
+                tvAchievementDescription.setText(achievementModel.getDescription());
+            }
+            tvAchievementTime.setText(DateUtils.getRelativeTimeSpanString(
+                    achievementModel.getUnlockTime() * 1000L));
+
+            cvContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAchievement(achievementModel);
+                }
+            });
+
+            llRecentAchievements.addView(vRecentAchievement);
+        }
+
+        mRootView.findViewById(R.id.pb_recent_achievements).setVisibility(View.GONE);
+        llRecentAchievements.setVisibility(View.VISIBLE);
+    }
+
+    private void setLockedAchievements(ArrayList<AchievementModel> achievementModels) {
+        if (achievementModels.size() == 0) {
+            return;
+        }
+
+        RecyclerView rvLockedAchievements = mRootView.findViewById(R.id.rv_locked_achievements);
+        rvLockedAchievements.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvLockedAchievements.setAdapter(new AchievementsListAdapter(getContext(), achievementModels,
+                this, AchievementsListAdapter.TYPE_SMALL));
+
+        mRootView.findViewById(R.id.pb_locked_achievements).setVisibility(View.GONE);
     }
 
     private void showAchievement(AchievementModel achievementModel) {
@@ -160,12 +196,113 @@ public class DashboardFragment extends Fragment implements
             return;
         }
 
-        Fragment fragment = AchievementFragment.newInstance(achievementModel);
+        Fragment fragment = AchievementPreviewFragment.newInstance(achievementModel);
 
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_drawer, fragment).commit();
 
-        ((DrawerLayout) mRootView).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((DrawerLayout) mRootView).openDrawer(Gravity.END);
+        mRootView.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        mRootView.openDrawer(Gravity.END);
+    }
+
+    @Override
+    public void onClick(AchievementModel achievementModel) {
+        showAchievement(achievementModel);
+    }
+
+    @Override
+    public void onRefresh() {
+        if (getContext() == null) {
+            return;
+        }
+
+        GameModel gameModel = GameModel.getCurrent(getContext().getContentResolver(), mProfileModel);
+
+        if (gameModel == null) {
+            return;
+        }
+
+        (new UpdateGameTask(this, mProfileModel)).execute(gameModel.getAppId());
+    }
+
+    private static class LoadDataTask extends AsyncTask<ProfileModel, Void, LoadDataTask.LoadDataTaskResult> {
+        private WeakReference<DashboardFragment> mFragmentWeakReference;
+        private ContentResolver mContentResolver;
+
+        LoadDataTask(DashboardFragment fragment) {
+            if (fragment.getContext() == null) {
+                return;
+            }
+
+            mFragmentWeakReference = new WeakReference<>(fragment);
+            mContentResolver = fragment.getContext().getContentResolver();
+        }
+
+        @Override
+        protected LoadDataTaskResult doInBackground(ProfileModel... profileModels) {
+            ProfileModel profileModel = profileModels[0];
+
+            if (profileModel == null) {
+                return null;
+            }
+
+            GameModel gameModel = GameModel.getCurrent(mContentResolver, profileModel);
+            ArrayList<AchievementModel> recentAchievementModels = AchievementModel.getByGame(
+                    mContentResolver, gameModel, AchievementModel.UNLOCKED, 3);
+            ArrayList<AchievementModel> lockedAchievementModels = AchievementModel.getByGame(
+                    mContentResolver, gameModel, AchievementModel.LOCKED);
+
+            return new LoadDataTaskResult(gameModel, recentAchievementModels, lockedAchievementModels);
+        }
+
+        @Override
+        protected void onPostExecute(LoadDataTaskResult result) {
+            DashboardFragment fragment = mFragmentWeakReference.get();
+
+            if (fragment == null) {
+                return;
+            }
+
+            fragment.setData(result);
+        }
+
+        static class LoadDataTaskResult {
+            GameModel gameModel;
+            ArrayList<AchievementModel> recentAchievementModels;
+            ArrayList<AchievementModel> lockedAchievementModels;
+
+            LoadDataTaskResult(GameModel gameModel,
+                               ArrayList<AchievementModel> recentAchievementModels,
+                               ArrayList<AchievementModel> lockedAchievementModels) {
+                this.gameModel = gameModel;
+                this.recentAchievementModels = recentAchievementModels;
+                this.lockedAchievementModels = lockedAchievementModels;
+            }
+        }
+    }
+
+    private static class UpdateGameTask extends GamesParserTask {
+        private WeakReference<DashboardFragment> mFragmentWeakReference;
+        private ProfileModel mProfileModel;
+
+        UpdateGameTask(DashboardFragment fragment, ProfileModel profileModel) {
+            super(fragment.getContext(), profileModel, ACTION_EXACT);
+
+            mFragmentWeakReference = new WeakReference<>(fragment);
+            mProfileModel = profileModel;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            DashboardFragment fragment = mFragmentWeakReference.get();
+
+            if (fragment == null) {
+                return;
+            }
+
+            if (success) {
+                (new LoadDataTask(fragment)).execute(mProfileModel);
+            }
+        }
     }
 }

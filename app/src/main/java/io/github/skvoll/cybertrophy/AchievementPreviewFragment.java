@@ -24,8 +24,8 @@ import java.util.Date;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
-public class AchievementFragment extends Fragment {
-    private static final String TAG = AchievementFragment.class.getSimpleName();
+public class AchievementPreviewFragment extends Fragment {
+    private static final String TAG = AchievementPreviewFragment.class.getSimpleName();
     private static final String KEY_ID = "ID";
 
     private Context mContext;
@@ -34,17 +34,17 @@ public class AchievementFragment extends Fragment {
 
     private ViewGroup mRootView;
 
-    public AchievementFragment() {
+    public AchievementPreviewFragment() {
     }
 
-    public static AchievementFragment newInstance(AchievementModel achievementModel) {
-        AchievementFragment achievementFragment = new AchievementFragment();
+    public static AchievementPreviewFragment newInstance(AchievementModel achievementModel) {
+        AchievementPreviewFragment achievementPreviewFragment = new AchievementPreviewFragment();
 
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_ID, achievementModel.getId());
-        achievementFragment.setArguments(bundle);
+        achievementPreviewFragment.setArguments(bundle);
 
-        return achievementFragment;
+        return achievementPreviewFragment;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AchievementFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievement, container, false);
+        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievement_preview, container, false);
 
         final ImageView ivIcon = mRootView.findViewById(R.id.iv_icon);
         final TextView tvName = mRootView.findViewById(R.id.tv_name);
