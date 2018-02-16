@@ -91,14 +91,14 @@ public class AchievementsListFragment extends Fragment implements
                 mOnItemClickListener, AchievementsListAdapter.TYPE_FULL));
 
         mGameModel = GameModel.getById(getContext().getContentResolver(), mGameId);
-        (new LoadDataTask(this, mAchievementsStatus)).execute(mGameModel);
+        (new LoadDataTask(this, mAchievementsStatus, mGameModel)).execute();
 
         return rootView;
     }
 
     @Override
     public void onRefresh() {
-        (new LoadDataTask(this, mAchievementsStatus)).execute(mGameModel);
+        (new LoadDataTask(this, mAchievementsStatus, mGameModel)).execute();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -127,35 +127,38 @@ public class AchievementsListFragment extends Fragment implements
         void onClick(AchievementModel achievementModel);
     }
 
-    private static class LoadDataTask extends AsyncTask<GameModel, Void, ArrayList<AchievementModel>> {
+    private static class LoadDataTask extends AsyncTask<Void, Void, ArrayList<AchievementModel>> {
         private WeakReference<AchievementsListFragment> mFragmentWeakReference;
         private int mAchievementsStatus;
+        private GameModel mGameModel;
         private ContentResolver mContentResolver;
 
-        // TODO: move gameModel to constructor
-        LoadDataTask(AchievementsListFragment fragment, int achievementsStatus) {
+        LoadDataTask(AchievementsListFragment fragment, int achievementsStatus, GameModel gameModel) {
             if (fragment.getContext() == null) {
                 return;
             }
 
             mFragmentWeakReference = new WeakReference<>(fragment);
             mAchievementsStatus = achievementsStatus;
+            mGameModel = gameModel;
             mContentResolver = fragment.getContext().getContentResolver();
         }
 
         @Override
-        protected ArrayList<AchievementModel> doInBackground(GameModel... gameModels) {
-            GameModel gameModel = gameModels[0];
-
-            if (gameModel == null) {
+        protected ArrayList<AchievementModel> doInBackground(Void... voids) {
+            if (mContentResolver == null) {
                 return null;
             }
 
-            return AchievementModel.getByGame(mContentResolver, gameModel, mAchievementsStatus);
+            return AchievementModel.getByGame(mContentResolver, mGameModel, mAchievementsStatus);
         }
 
         @Override
         protected void onPostExecute(ArrayList<AchievementModel> achievementModels) {
+            if (mFragmentWeakReference == null) {
+                return;
+            }
+
             AchievementsListFragment fragment = mFragmentWeakReference.get();
 
             if (fragment == null) {

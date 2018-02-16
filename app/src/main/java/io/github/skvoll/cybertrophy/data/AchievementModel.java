@@ -180,7 +180,6 @@ public final class AchievementModel extends Model {
 
     @Override
     public Uri getUri(Long id) {
-        // TODO: check with null id
         if (id == null) {
             return AchievementEntry.URI;
         }

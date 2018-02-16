@@ -91,14 +91,14 @@ public class GamesListFragment extends Fragment implements
                 new ArrayList<GameModel>(), mOnItemClickListener));
 
         mProfileModel = ProfileModel.getById(getContext().getContentResolver(), mProfileId);
-        (new LoadDataTask(this, mGameStatus)).execute(mProfileModel);
+        (new LoadDataTask(this, mGameStatus, mProfileModel)).execute();
 
         return rootView;
     }
 
     @Override
     public void onRefresh() {
-        (new LoadDataTask(this, mGameStatus)).execute(mProfileModel);
+        (new LoadDataTask(this, mGameStatus, mProfileModel)).execute();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -127,35 +127,38 @@ public class GamesListFragment extends Fragment implements
         void onClick(GameModel gameModel);
     }
 
-    private static class LoadDataTask extends AsyncTask<ProfileModel, Void, ArrayList<GameModel>> {
+    private static class LoadDataTask extends AsyncTask<Void, Void, ArrayList<GameModel>> {
         private WeakReference<GamesListFragment> mFragmentWeakReference;
         private int mGameStatus;
+        private ProfileModel mProfileModel;
         private ContentResolver mContentResolver;
 
-        // TODO: move profileModel to constructor
-        LoadDataTask(GamesListFragment fragment, int gameStatus) {
+        LoadDataTask(GamesListFragment fragment, int gameStatus, ProfileModel profileModel) {
             if (fragment.getContext() == null) {
                 return;
             }
 
             mFragmentWeakReference = new WeakReference<>(fragment);
             mGameStatus = gameStatus;
+            mProfileModel = profileModel;
             mContentResolver = fragment.getContext().getContentResolver();
         }
 
         @Override
-        protected ArrayList<GameModel> doInBackground(ProfileModel... profileModels) {
-            ProfileModel profileModel = profileModels[0];
-
-            if (profileModel == null) {
+        protected ArrayList<GameModel> doInBackground(Void... voids) {
+            if (mContentResolver == null) {
                 return null;
             }
 
-            return GameModel.getByProfile(mContentResolver, profileModel, mGameStatus);
+            return GameModel.getByProfile(mContentResolver, mProfileModel, mGameStatus);
         }
 
         @Override
         protected void onPostExecute(ArrayList<GameModel> gameModels) {
+            if (mFragmentWeakReference == null) {
+                return;
+            }
+
             GamesListFragment fragment = mFragmentWeakReference.get();
 
             if (fragment == null) {
