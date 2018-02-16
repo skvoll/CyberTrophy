@@ -38,8 +38,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:foregroundTint="@color/grayTextColor"
-                    android:backgroundTint="@color/grayTextColor" />
+                    android:backgroundTint="@color/grayTextColor"
+                    android:foregroundTint="@color/grayTextColor" />
 
                 <CheckBox
                     android:id="@+id/cd_notification_delay"

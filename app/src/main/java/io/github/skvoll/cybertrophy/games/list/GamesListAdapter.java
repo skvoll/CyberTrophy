@@ -22,7 +22,7 @@ public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private GamesListFragment.OnItemClickListener mOnItemClickListener;
 
     GamesListAdapter(Context context, ArrayList<GameModel> gameModels,
-                            GamesListFragment.OnItemClickListener onItemClickListener) {
+                     GamesListFragment.OnItemClickListener onItemClickListener) {
         mContext = context;
         mItems = gameModels;
         mOnItemClickListener = onItemClickListener;

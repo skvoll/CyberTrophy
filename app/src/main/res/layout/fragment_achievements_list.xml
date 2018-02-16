@@ -11,12 +11,12 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@android:id/list"
-            tools:listitem="@layout/fragment_achievements_list_item_full"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbars="vertical"
             android:visibility="gone"
+            tools:listitem="@layout/fragment_achievements_list_item_full"
             tools:visibility="visible" />
     </android.support.v4.widget.SwipeRefreshLayout>
 

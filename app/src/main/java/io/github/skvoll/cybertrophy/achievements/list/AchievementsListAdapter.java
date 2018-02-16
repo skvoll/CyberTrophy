@@ -28,7 +28,7 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     private int mMaxWidth;
 
     public AchievementsListAdapter(Context context, ArrayList<AchievementModel> achievementModels,
-                            AchievementsListFragment.OnItemClickListener onItemClickListener, int type) {
+                                   AchievementsListFragment.OnItemClickListener onItemClickListener, int type) {
         mContext = context;
         mItems = achievementModels;
         mType = type;
