@@ -32,8 +32,6 @@ public class AchievementPreviewFragment extends Fragment {
     private AchievementModel mAchievementModel;
     private GameModel mGameModel;
 
-    private ViewGroup mRootView;
-
     public AchievementPreviewFragment() {
     }
 
@@ -79,21 +77,22 @@ public class AchievementPreviewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievement_preview, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievement_preview, container, false);
 
-        final ImageView ivIcon = mRootView.findViewById(R.id.iv_icon);
-        final TextView tvName = mRootView.findViewById(R.id.tv_name);
-        final LinearLayout llUnlockDate = mRootView.findViewById(R.id.ll_unlock_date_wrapper);
-        final TextView tvUnlockDate = mRootView.findViewById(R.id.tv_unlock_date);
-        final TextView tvPercentage = mRootView.findViewById(R.id.tv_percentage);
-        final Button btnShowInfo = mRootView.findViewById(R.id.btn_show_info);
+        final ImageView ivIcon = rootView.findViewById(R.id.iv_icon);
+        final ImageView ivIconMask = rootView.findViewById(R.id.iv_icon_mask);
+        final TextView tvName = rootView.findViewById(R.id.tv_name);
+        final LinearLayout llUnlockDate = rootView.findViewById(R.id.ll_unlock_date_wrapper);
+        final TextView tvUnlockDate = rootView.findViewById(R.id.tv_unlock_date);
+        final TextView tvPercentage = rootView.findViewById(R.id.tv_percentage);
+        final Button btnShowInfo = rootView.findViewById(R.id.btn_show_info);
 
-        final ImageButton btnGuidesSteam = mRootView.findViewById(R.id.btn_guides_steam);
-        final ImageButton btnGuidesYoutube = mRootView.findViewById(R.id.btn_guides_youtube);
-        final ImageButton btnGuidesGoogle = mRootView.findViewById(R.id.btn_guides_google);
+        final ImageButton btnGuidesSteam = rootView.findViewById(R.id.btn_guides_steam);
+        final ImageButton btnGuidesYoutube = rootView.findViewById(R.id.btn_guides_youtube);
+        final ImageButton btnGuidesGoogle = rootView.findViewById(R.id.btn_guides_google);
 
-        final LinearLayout llAchievementInfo = mRootView.findViewById(R.id.ll_achievement_info);
-        final TextView tvDescription = mRootView.findViewById(R.id.tv_description);
+        final LinearLayout llAchievementInfo = rootView.findViewById(R.id.ll_achievement_info);
+        final TextView tvDescription = rootView.findViewById(R.id.tv_description);
 
         final String description = mAchievementModel.getDescription() != null
                 ? mAchievementModel.getDescription()
@@ -106,37 +105,40 @@ public class AchievementPreviewFragment extends Fragment {
 
         final String unlockDate = dateFormat.format(date);
 
-        if (mAchievementModel.isUnlocked() || !mAchievementModel.isHidden()) {
-            String icon = mAchievementModel.isUnlocked() ?
-                    mAchievementModel.getIconUrl() : mAchievementModel.getIconGrayUrl();
-
-            GlideApp.with(mContext).load(icon)
+        if (mAchievementModel.isUnlocked()) {
+            GlideApp.with(mContext).load(mAchievementModel.getIconUrl())
                     .placeholder(R.drawable.achievement_icon_empty)
                     .into(ivIcon);
+
             tvName.setText(mAchievementModel.getName());
             tvDescription.setText(description);
         } else {
-            GlideApp.with(mContext).load(R.drawable.achievement_icon_hidden)
+            GlideApp.with(mContext).load(mAchievementModel.getIconGrayUrl())
                     .placeholder(R.drawable.achievement_icon_empty)
                     .into(ivIcon);
-            tvName.setText(R.string.achievement_title_hidden);
 
-            llAchievementInfo.setVisibility(View.GONE);
-            btnShowInfo.setVisibility(View.VISIBLE);
+            if (mAchievementModel.isHidden()) {
+                ivIconMask.setVisibility(View.VISIBLE);
 
-            btnShowInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    GlideApp.with(mContext).load(mAchievementModel.getIconGrayUrl())
-                            .placeholder(R.drawable.achievement_icon_empty)
-                            .into(ivIcon);
-                    tvName.setText(mAchievementModel.getName());
-                    tvDescription.setText(description);
+                tvName.setText(R.string.achievement_title_hidden);
+                llAchievementInfo.setVisibility(View.GONE);
+                btnShowInfo.setVisibility(View.VISIBLE);
 
-                    llAchievementInfo.setVisibility(View.VISIBLE);
-                    btnShowInfo.setVisibility(View.GONE);
-                }
-            });
+                btnShowInfo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ivIconMask.setVisibility(View.GONE);
+                        tvName.setText(mAchievementModel.getName());
+                        tvDescription.setText(description);
+
+                        llAchievementInfo.setVisibility(View.VISIBLE);
+                        btnShowInfo.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                tvName.setText(mAchievementModel.getName());
+                tvDescription.setText(description);
+            }
         }
 
         if (!mAchievementModel.isUnlocked()) {
@@ -167,7 +169,7 @@ public class AchievementPreviewFragment extends Fragment {
             }
         });
 
-        return mRootView;
+        return rootView;
     }
 
     private void guidesSearchSteam(Long appId, String achievementName) {

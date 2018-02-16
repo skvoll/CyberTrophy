@@ -67,21 +67,31 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                         ? achievementModel.getDescription()
                         : mContext.getResources().getString(R.string.empty_achievement_description);
 
-                if (achievementModel.isUnlocked() || !achievementModel.isHidden()) {
-                    String icon = achievementModel.isUnlocked() ?
-                            achievementModel.getIconUrl() : achievementModel.getIconGrayUrl();
-
-                    GlideApp.with(mContext).load(icon)
+                if (achievementModel.isUnlocked()) {
+                    GlideApp.with(mContext).load(achievementModel.getIconUrl())
                             .placeholder(R.drawable.achievement_icon_empty)
                             .into(achievementFullViewHolder.ivIcon);
+
+                    achievementFullViewHolder.ivIconMask.setVisibility(View.GONE);
+
                     achievementFullViewHolder.tvName.setText(achievementModel.getName());
                     achievementFullViewHolder.tvDescription.setText(description);
                 } else {
-                    GlideApp.with(mContext).load(R.drawable.achievement_icon_hidden)
+                    GlideApp.with(mContext).load(achievementModel.getIconGrayUrl())
                             .placeholder(R.drawable.achievement_icon_empty)
                             .into(achievementFullViewHolder.ivIcon);
-                    achievementFullViewHolder.tvName.setText(R.string.achievement_title_hidden);
-                    achievementFullViewHolder.tvDescription.setText(mContext.getResources().getString(R.string.empty));
+
+                    if (achievementModel.isHidden()) {
+                        achievementFullViewHolder.ivIconMask.setVisibility(View.VISIBLE);
+
+                        achievementFullViewHolder.tvName.setText(R.string.achievement_title_hidden);
+                        achievementFullViewHolder.tvDescription.setText(mContext.getResources().getString(R.string.empty));
+                    } else {
+                        achievementFullViewHolder.ivIconMask.setVisibility(View.GONE);
+
+                        achievementFullViewHolder.tvName.setText(achievementModel.getName());
+                        achievementFullViewHolder.tvDescription.setText(description);
+                    }
                 }
 
                 if (achievementModel.isUnlocked()) {
@@ -105,15 +115,16 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                 AchievementSmallViewHolder achievementSmallViewHolder
                         = (AchievementSmallViewHolder) viewHolder;
 
-                if (achievementModel.isUnlocked() || !achievementModel.isHidden()) {
-                    String icon = achievementModel.isUnlocked() ?
-                            achievementModel.getIconUrl() : achievementModel.getIconGrayUrl();
-
-                    GlideApp.with(mContext).load(icon)
+                if (achievementModel.isUnlocked()) {
+                    GlideApp.with(mContext).load(achievementModel.getIconUrl())
                             .placeholder(R.drawable.achievement_icon_empty)
                             .into(achievementSmallViewHolder.ivIcon);
                 } else {
-                    GlideApp.with(mContext).load(R.drawable.achievement_icon_hidden)
+                    if (achievementModel.isHidden()) {
+                        achievementSmallViewHolder.ivIconMask.setVisibility(View.VISIBLE);
+                    }
+
+                    GlideApp.with(mContext).load(achievementModel.getIconGrayUrl())
                             .placeholder(R.drawable.achievement_icon_empty)
                             .into(achievementSmallViewHolder.ivIcon);
                 }
@@ -137,6 +148,7 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
         View vContainer;
         View vProgress;
         ImageView ivIcon;
+        ImageView ivIconMask;
         TextView tvName;
         TextView tvDescription;
         TextView tvInfo;
@@ -148,6 +160,7 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
 
             vProgress = itemView.findViewById(R.id.v_progress);
             ivIcon = itemView.findViewById(R.id.iv_icon);
+            ivIconMask = itemView.findViewById(R.id.iv_icon_mask);
             tvName = itemView.findViewById(R.id.tv_name);
             tvDescription = itemView.findViewById(R.id.tv_description);
             tvInfo = itemView.findViewById(R.id.tv_info);
@@ -156,11 +169,13 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
 
     private static final class AchievementSmallViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon;
+        ImageView ivIconMask;
 
         AchievementSmallViewHolder(View itemView) {
             super(itemView);
 
-            ivIcon = (ImageView) itemView;
+            ivIcon = itemView.findViewById(R.id.iv_icon);
+            ivIconMask = itemView.findViewById(R.id.iv_icon_mask);
         }
     }
 }

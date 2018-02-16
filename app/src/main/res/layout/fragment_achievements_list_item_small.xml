@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="72dp"
     android:layout_height="72dp"
     android:layout_marginEnd="4dp"
-    android:layout_marginStart="4dp"
-    android:contentDescription="@string/achievement_icon_description"
-    android:src="@drawable/achievement_icon_empty" />
+    android:layout_marginStart="4dp">
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/iv_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/achievement_icon_description"
+        android:src="@drawable/achievement_icon_empty" />
+
+    <ImageView
+        android:id="@+id/iv_icon_mask"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:contentDescription="@string/achievement_icon_description"
+        android:src="@drawable/achievement_icon_hidden"
+        android:visibility="gone" />
+</android.support.design.widget.CoordinatorLayout>
