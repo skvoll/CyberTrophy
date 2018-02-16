@@ -39,4 +39,8 @@
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/secondaryTextColor</item>
     </style>
+
+    <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="colorControlHighlight">#33FFFFFF</item>
+    </style>
 </resources>

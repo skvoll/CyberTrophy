@@ -124,32 +124,33 @@ public class DevToolsActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                AchievementModel achievementModelFirst = AchievementModel.getById(getContentResolver(), 1L);
-                AchievementModel achievementModelSecond = AchievementModel.getById(getContentResolver(), 2L);
-                GameModel gameModelFirst = GameModel.getById(getContentResolver(), 1L);
-                GameModel gameModelSecond = GameModel.getById(getContentResolver(), 2L);
+                ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+                ArrayList<GameModel> gameModels = GameModel.getByProfile(
+                        getContentResolver(), profileModel, GameModel.IN_PROGRESS, 2);
+                ArrayList<AchievementModel> achievementModels = AchievementModel.getByGame(
+                        getContentResolver(), gameModels.get(0), AchievementModel.LOCKED, 2);
                 boolean isFirst = Math.random() < 0.5;
                 switch (notificationName) {
                     case "AchievementRemoved":
-                        mAchievementRemovedNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        mAchievementRemovedNotification.addGame(isFirst ? gameModels.get(0) : gameModels.get(1)).show();
                         break;
                     case "AchievementUnlocked":
                         mAchievementUnlockedNotification.addAchievement(
-                                isFirst ? gameModelFirst : gameModelSecond,
-                                isFirst ? achievementModelFirst : achievementModelSecond).show();
+                                isFirst ? gameModels.get(0) : gameModels.get(1),
+                                isFirst ? achievementModels.get(0) : achievementModels.get(1)).show();
                         mAchievementUnlockedNotification.show();
                         break;
                     case "GameComplete":
-                        mGameCompleteNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        mGameCompleteNotification.addGame(isFirst ? gameModels.get(0) : gameModels.get(1)).show();
                         break;
                     case "GameRemoved":
-                        mGameRemovedNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        mGameRemovedNotification.addGame(isFirst ? gameModels.get(0) : gameModels.get(1)).show();
                         break;
                     case "NewAchievement":
-                        mNewAchievementNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        mNewAchievementNotification.addGame(isFirst ? gameModels.get(0) : gameModels.get(1)).show();
                         break;
                     case "NewGame":
-                        mNewGameNotification.addGame(isFirst ? gameModelFirst : gameModelSecond).show();
+                        mNewGameNotification.addGame(isFirst ? gameModels.get(0) : gameModels.get(1)).show();
                         break;
 
                     // services
@@ -159,8 +160,8 @@ public class DevToolsActivity extends AppCompatActivity {
                     case "GamesParser":
                         Double progress = Math.random() * 10;
                         SteamGame steamGame = new SteamGame();
-                        if (gameModelFirst != null && gameModelSecond != null) {
-                            steamGame.name = isFirst ? gameModelFirst.getName() : gameModelSecond.getName();
+                        if (gameModels.get(0) != null && gameModels.get(1) != null) {
+                            steamGame.name = isFirst ? gameModels.get(0).getName() : gameModels.get(1).getName();
                         } else {
                             steamGame.name = "Random game name";
                         }

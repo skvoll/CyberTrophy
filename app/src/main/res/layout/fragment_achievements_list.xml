@@ -28,8 +28,7 @@
         android:contentDescription="@string/list_placeholder"
         android:src="@drawable/placeholder"
         android:tint="@color/secondaryColor"
-        android:visibility="gone"
-        tools:visibility="gone" />
+        android:visibility="gone" />
 
     <FrameLayout
         android:id="@android:id/progress"

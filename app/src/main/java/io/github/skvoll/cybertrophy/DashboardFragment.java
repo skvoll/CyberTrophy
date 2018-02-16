@@ -90,6 +90,10 @@ public class DashboardFragment extends Fragment implements
     private void setData(LoadDataTask.LoadDataTaskResult result) {
         mSrlRefresh.setRefreshing(false);
 
+        if (result == null) {
+            return;
+        }
+
         setGame(result.gameModel);
         setRecentAchievements(result.recentAchievementModels);
         setLockedAchievements(result.lockedAchievementModels);
@@ -248,6 +252,11 @@ public class DashboardFragment extends Fragment implements
             }
 
             GameModel gameModel = GameModel.getCurrent(mContentResolver, profileModel);
+
+            if (gameModel == null) {
+                return null;
+            }
+
             ArrayList<AchievementModel> recentAchievementModels = AchievementModel.getByGame(
                     mContentResolver, gameModel, AchievementModel.UNLOCKED, 3);
             ArrayList<AchievementModel> lockedAchievementModels = AchievementModel.getByGame(
