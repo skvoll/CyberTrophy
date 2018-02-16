@@ -131,7 +131,7 @@ public class DashboardFragment extends Fragment implements
         });
 
         mRootView.findViewById(android.R.id.progress).setVisibility(View.GONE);
-        mRootView.findViewById(R.id.sv_container).setVisibility(View.VISIBLE);
+        mRootView.findViewById(R.id.srl_refresh).setVisibility(View.VISIBLE);
     }
 
     private void setRecentAchievements(ArrayList<AchievementModel> achievementModels) {
@@ -245,6 +245,10 @@ public class DashboardFragment extends Fragment implements
 
         @Override
         protected LoadDataTaskResult doInBackground(ProfileModel... profileModels) {
+            if (mContentResolver == null) {
+                return null;
+            }
+
             ProfileModel profileModel = profileModels[0];
 
             if (profileModel == null) {
@@ -267,6 +271,10 @@ public class DashboardFragment extends Fragment implements
 
         @Override
         protected void onPostExecute(LoadDataTaskResult result) {
+            if (mFragmentWeakReference == null) {
+                return;
+            }
+
             DashboardFragment fragment = mFragmentWeakReference.get();
 
             if (fragment == null) {
@@ -304,6 +312,10 @@ public class DashboardFragment extends Fragment implements
 
         @Override
         protected void onPostExecute(Boolean success) {
+            if (mFragmentWeakReference == null) {
+                return;
+            }
+
             DashboardFragment fragment = mFragmentWeakReference.get();
 
             if (fragment == null) {

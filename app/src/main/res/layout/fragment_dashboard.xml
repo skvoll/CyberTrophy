@@ -28,15 +28,14 @@
             android:id="@+id/srl_refresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:visibility="visible">
 
             <ScrollView
                 android:id="@+id/sv_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:nestedScrollingEnabled="true"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:layout_height="match_parent">
 
                 <include layout="@layout/fragment_dashboard_game" />
             </ScrollView>
