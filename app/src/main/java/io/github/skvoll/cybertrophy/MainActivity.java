@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int devToolsCounter = 0;
 
-    private BottomNavigationView mBottomNavigationView;
+    private BottomNavigationView mBtnNavigation;
     private FragmentManager mFragmentManager;
     private Fragment mDashboardFragment;
     private Fragment mGamesFragment;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mFragmentManager = getSupportFragmentManager();
-        mBottomNavigationView = findViewById(R.id.bnv_navigation);
+        mBtnNavigation = findViewById(R.id.bnv_navigation);
         mDashboardFragment = new DashboardFragment();
         mGamesFragment = new GamesFragment();
         mProfileFragment = new ProfileFragment();
@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
             selectedItem = bundle.getInt(KEY_FRAGMENT, FRAGMENT_DASHBOARD);
         }
 
-        mBottomNavigationView.setSelectedItemId(selectedItem);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mBtnNavigation.setSelectedItemId(selectedItem);
+        mBtnNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         if (savedInstanceState == null) {
             setFragment(selectedItem);
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(KEY_FRAGMENT, mBottomNavigationView.getSelectedItemId());
+        outState.putInt(KEY_FRAGMENT, mBtnNavigation.getSelectedItemId());
     }
 
     @NonNull
@@ -132,9 +132,9 @@ public class MainActivity extends AppCompatActivity {
         BaseNotification.createChannels(this);
         BaseNotification.cancelNotifications(this);
 
-        Log.d(TAG, AllGamesParserJob.class.getSimpleName() + " is "
-                + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "setted" : "not setted"));
-        Log.d(TAG, RecentGamesParserJob.class.getSimpleName() + " is "
-                + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "setted" : "not setted"));
+        Log.d(TAG, AllGamesParserJob.class.getSimpleName() + " has "
+                + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
+        Log.d(TAG, RecentGamesParserJob.class.getSimpleName() + " has "
+                + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
     }
 }

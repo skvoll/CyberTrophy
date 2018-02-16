@@ -1,112 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dl_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="io.github.skvoll.cybertrophy.DashboardFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_refresh"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/sv_container"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tb_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                app:title="@string/title_currently_playing"
+                app:titleTextColor="@color/primaryTextColor" />
+        </android.support.design.widget.AppBarLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_game"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="4dp">
-
-                    <include layout="@layout/fragment_dashboard_game" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:text="@string/dashboard_title_recent_achievements"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="@color/secondaryColor" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_recent_achievements"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone" />
-
-                    <ProgressBar
-                        android:id="@+id/pb_recent_achievements"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:text="@string/dashboard_title_locked_achievements"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="@color/secondaryColor" />
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardUseCompatPadding="true"
-                        card_view:cardCornerRadius="2dp">
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rv_locked_achievements"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipToPadding="false"
-                            android:paddingBottom="8dp"
-                            android:paddingEnd="4dp"
-                            android:paddingStart="4dp"
-                            android:paddingTop="8dp"
-                            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                            tools:listitem="@layout/fragment_achievements_list_item_small"
-                            tools:orientation="horizontal" />
-
-                        <ProgressBar
-                            android:id="@+id/pb_locked_achievements"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            tools:visibility="gone" />
-                    </android.support.v7.widget.CardView>
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@android:id/progress"
-            android:layout_width="wrap_content"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl_refresh"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ScrollView
+                android:id="@+id/sv_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <include layout="@layout/fragment_dashboard_game" />
+            </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <FrameLayout
+            android:id="@android:id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="visible"
-            tools:visibility="gone" />
-    </FrameLayout>
+            tools:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <FrameLayout
         android:id="@+id/fl_drawer"

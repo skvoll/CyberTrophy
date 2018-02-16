@@ -51,6 +51,7 @@
 
     <string name="sign_in_through_steam">Sign in through STEAM©</string>
 
+    <string name="title_currently_playing">Currently playing</string>
     <string name="title_games">Games</string>
 
     <string name="list_placeholder">List placeholder</string>
