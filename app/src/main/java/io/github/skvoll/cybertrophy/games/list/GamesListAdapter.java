@@ -1,8 +1,6 @@
 package io.github.skvoll.cybertrophy.games.list;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -12,130 +10,147 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import io.github.skvoll.cybertrophy.GlideApp;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
-final class GamesListAdapter extends CursorAdapter {
-    private static final String TAG = GamesListAdapter.class.getSimpleName();
+public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private Context mContext;
+    private ArrayList<GameModel> mItems;
+    private GamesListFragment.OnItemClickListener mOnItemClickListener;
 
-    GamesListAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
+    GamesListAdapter(Context context, ArrayList<GameModel> gameModels,
+                            GamesListFragment.OnItemClickListener onItemClickListener) {
+        mContext = context;
+        mItems = gameModels;
+        mOnItemClickListener = onItemClickListener;
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_games_list_item, parent, false);
-
-        view.setTag(new ViewHolder(view));
-
-        return view;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new GameViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_games_list_item, parent, false));
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        GameModel gameModel = new GameModel(cursor);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        final GameModel gameModel = mItems.get(position);
         float playTime = gameModel.getPlaytimeForever() / 60;
+        GameViewHolder gameViewHolder = (GameViewHolder) viewHolder;
 
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-        GlideApp.with(context).load(gameModel.getLogoUrl())
+        GlideApp.with(mContext).load(gameModel.getLogoUrl())
                 .placeholder(R.drawable.game_logo_empty)
-                .into(viewHolder.gameLogo);
+                .into(gameViewHolder.ivLogo);
 
-        viewHolder.gameName.setText(gameModel.getName());
+        gameViewHolder.tvName.setText(gameModel.getName());
 
-        viewHolder.gameLastPLay.setText(context.getString(
+        gameViewHolder.tvLastPLay.setText(mContext.getString(
                 R.string.games_list_item_last_play,
                 DateUtils.getRelativeTimeSpanString(gameModel.getLastPlay() * 1000L)
         ));
 
         if (playTime <= 1) {
             playTime = gameModel.getPlaytimeForever();
-            viewHolder.gamePlaytime.setText(context.getResources().getQuantityString(
+            gameViewHolder.tvPlaytime.setText(mContext.getResources().getQuantityString(
                     R.plurals.games_list_item_playtime_minutes,
                     (int) playTime,
                     (int) playTime
             ));
         } else if (playTime <= (24 * 7)) {
-            viewHolder.gamePlaytime.setText(context.getResources().getQuantityString(
+            gameViewHolder.tvPlaytime.setText(mContext.getResources().getQuantityString(
                     R.plurals.games_list_item_playtime_hours,
                     (int) playTime,
                     (int) playTime
             ));
         } else {
             playTime = playTime / 24;
-            viewHolder.gamePlaytime.setText(context.getResources().getQuantityString(
+            gameViewHolder.tvPlaytime.setText(mContext.getResources().getQuantityString(
                     R.plurals.games_list_item_playtime_days,
                     (int) playTime,
                     (int) playTime
             ));
         }
 
-        viewHolder.gameAchievements.setText(context.getString(
+        gameViewHolder.tvAchievements.setText(mContext.getString(
                 R.string.games_list_item_achievements_count,
                 gameModel.getAchievementsTotalCount()
         ));
 
-        viewHolder.gameProgress.setText(context.getString(
+        gameViewHolder.tvProgress.setText(mContext.getString(
                 R.string.games_list_item_achievements_progress,
                 gameModel.getAchievementsUnlockedCount(),
                 gameModel.getAchievementsTotalCount()
         ));
 
-        viewHolder.gameProgressBar.setMax(gameModel.getAchievementsTotalCount());
-        viewHolder.gameProgressBar.setProgress(gameModel.getAchievementsUnlockedCount());
+        gameViewHolder.pbProgress.setMax(gameModel.getAchievementsTotalCount());
+        gameViewHolder.pbProgress.setProgress(gameModel.getAchievementsUnlockedCount());
 
         switch (gameModel.getStatus()) {
-            case GameModel.STATUS_INCOMPLETE:
+            case GameModel.INCOMPLETE:
                 if (playTime > 0) {
-                    viewHolder.gameLastPLay.setVisibility(View.VISIBLE);
-                    viewHolder.gamePlaytime.setVisibility(View.VISIBLE);
+                    gameViewHolder.tvLastPLay.setVisibility(View.VISIBLE);
+                    gameViewHolder.tvPlaytime.setVisibility(View.VISIBLE);
                 } else {
-                    viewHolder.gameLastPLay.setVisibility(View.GONE);
-                    viewHolder.gamePlaytime.setVisibility(View.GONE);
+                    gameViewHolder.tvLastPLay.setVisibility(View.GONE);
+                    gameViewHolder.tvPlaytime.setVisibility(View.GONE);
                 }
-                viewHolder.gameAchievements.setVisibility(View.VISIBLE);
-                viewHolder.gameProgress.setVisibility(View.GONE);
-                viewHolder.gameProgressBar.setVisibility(View.GONE);
+                gameViewHolder.tvAchievements.setVisibility(View.VISIBLE);
+                gameViewHolder.tvProgress.setVisibility(View.GONE);
+                gameViewHolder.pbProgress.setVisibility(View.GONE);
                 break;
-            case GameModel.STATUS_IN_PROGRESS:
-                viewHolder.gameLastPLay.setVisibility(View.VISIBLE);
-                viewHolder.gamePlaytime.setVisibility(View.GONE);
-                viewHolder.gameAchievements.setVisibility(View.GONE);
-                viewHolder.gameProgress.setVisibility(View.VISIBLE);
-                viewHolder.gameProgressBar.setVisibility(View.VISIBLE);
+            case GameModel.IN_PROGRESS:
+                gameViewHolder.tvLastPLay.setVisibility(View.VISIBLE);
+                gameViewHolder.tvPlaytime.setVisibility(View.GONE);
+                gameViewHolder.tvAchievements.setVisibility(View.GONE);
+                gameViewHolder.tvProgress.setVisibility(View.VISIBLE);
+                gameViewHolder.pbProgress.setVisibility(View.VISIBLE);
                 break;
-            case GameModel.STATUS_COMPLETE:
-                viewHolder.gameLastPLay.setVisibility(View.GONE);
-                viewHolder.gamePlaytime.setVisibility(View.VISIBLE);
-                viewHolder.gameAchievements.setVisibility(View.VISIBLE);
-                viewHolder.gameProgress.setVisibility(View.GONE);
-                viewHolder.gameProgressBar.setVisibility(View.GONE);
+            case GameModel.COMPLETE:
+                gameViewHolder.tvLastPLay.setVisibility(View.GONE);
+                gameViewHolder.tvPlaytime.setVisibility(View.VISIBLE);
+                gameViewHolder.tvAchievements.setVisibility(View.VISIBLE);
+                gameViewHolder.tvProgress.setVisibility(View.GONE);
+                gameViewHolder.pbProgress.setVisibility(View.GONE);
                 break;
         }
+
+        gameViewHolder.vContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListener.onClick(gameModel);
+            }
+        });
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView gameLogo;
-        TextView gameName;
-        TextView gameLastPLay;
-        TextView gamePlaytime;
-        TextView gameAchievements;
-        TextView gameProgress;
-        ProgressBar gameProgressBar;
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
 
-        ViewHolder(View itemView) {
+    private static final class GameViewHolder extends RecyclerView.ViewHolder {
+        View vContainer;
+        ImageView ivLogo;
+        TextView tvName;
+        TextView tvLastPLay;
+        TextView tvPlaytime;
+        TextView tvAchievements;
+        TextView tvProgress;
+        ProgressBar pbProgress;
+
+        GameViewHolder(View itemView) {
             super(itemView);
 
-            gameLogo = itemView.findViewById(R.id.iv_game_logo);
-            gameName = itemView.findViewById(R.id.tv_game_name);
-            gameLastPLay = itemView.findViewById(R.id.tv_game_last_play);
-            gamePlaytime = itemView.findViewById(R.id.tv_game_playtime);
-            gameAchievements = itemView.findViewById(R.id.tv_game_achievements);
-            gameProgress = itemView.findViewById(R.id.tv_game_progress);
-            gameProgressBar = itemView.findViewById(R.id.pb_game_progress);
+            vContainer = itemView;
+
+            ivLogo = itemView.findViewById(R.id.iv_logo);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvLastPLay = itemView.findViewById(R.id.tv_last_play);
+            tvPlaytime = itemView.findViewById(R.id.tv_playtime);
+            tvAchievements = itemView.findViewById(R.id.tv_achievements);
+            tvProgress = itemView.findViewById(R.id.tv_progress);
+            pbProgress = itemView.findViewById(R.id.pb_progress);
         }
     }
 }

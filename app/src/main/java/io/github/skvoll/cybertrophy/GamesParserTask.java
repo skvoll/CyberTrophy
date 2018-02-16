@@ -73,7 +73,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
 
         int retryAttempt = 0;
 
-        LongSparseArray<GameModel> gameModels = GameModel.getByProfile(mContentResolver, mProfileModel);
+        LongSparseArray<GameModel> gameModels = GameModel.getMapByProfile(mContentResolver, mProfileModel);
         LongSparseArray<SteamGame> steamGames;
 
         try {

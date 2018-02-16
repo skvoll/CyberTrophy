@@ -24,7 +24,8 @@ import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 
-public class GameActivity extends AppCompatActivity implements AchievementsListFragment.OnItemClickListener {
+public class GameActivity extends AppCompatActivity implements
+        AchievementsListFragment.OnItemClickListener {
     public static final String KEY_GAME_ID = "GAME_ID";
 
     private static final String TAG = GameActivity.class.getSimpleName();
@@ -84,7 +85,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
         }
 
         switch (mGameModel.getStatus()) {
-            case GameModel.STATUS_INCOMPLETE:
+            case GameModel.INCOMPLETE:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
@@ -96,7 +97,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
 
                 mTabLayout.setVisibility(View.GONE);
                 break;
-            case GameModel.STATUS_IN_PROGRESS:
+            case GameModel.IN_PROGRESS:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
@@ -114,7 +115,7 @@ public class GameActivity extends AppCompatActivity implements AchievementsListF
                         getString(R.string.achievements_list_unlocked)
                 );
                 break;
-            case GameModel.STATUS_COMPLETE:
+            case GameModel.COMPLETE:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),

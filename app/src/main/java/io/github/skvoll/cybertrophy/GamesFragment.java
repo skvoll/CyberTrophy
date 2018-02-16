@@ -1,5 +1,6 @@
 package io.github.skvoll.cybertrophy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,10 +16,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.games.list.GamesListFragment;
 
-public class GamesFragment extends Fragment {
+public class GamesFragment extends Fragment implements
+        GamesListFragment.OnItemClickListener {
     public static final String KEY_TAB = "TAB";
 
     private static final String TAG = GamesFragment.class.getSimpleName();
@@ -49,13 +52,13 @@ public class GamesFragment extends Fragment {
 
         mPagerAdapter = new PagerAdapter(getChildFragmentManager());
         mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(profileModel.getId(), GamesListFragment.TYPE_IN_PROGRESS),
+                GamesListFragment.newInstance(profileModel.getId(), GameModel.IN_PROGRESS, this),
                 getString(R.string.games_list_tab_in_progress));
         mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(profileModel.getId(), GamesListFragment.TYPE_INCOMPLETE),
+                GamesListFragment.newInstance(profileModel.getId(), GameModel.INCOMPLETE, this),
                 getString(R.string.games_list_tab_incomplete));
         mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(profileModel.getId(), GamesListFragment.TYPE_COMPLETE),
+                GamesListFragment.newInstance(profileModel.getId(), GameModel.COMPLETE, this),
                 getString(R.string.games_list_tab_complete));
 
         mViewPager.setAdapter(mPagerAdapter);
@@ -83,6 +86,19 @@ public class GamesFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         outState.putInt(KEY_TAB, mViewPager.getCurrentItem());
+    }
+
+    @Override
+    public void onClick(GameModel gameModel) {
+        if (gameModel == null) {
+            return;
+        }
+
+        Intent intent = new Intent(getContext(), GameActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
+
+        startActivity(intent);
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {

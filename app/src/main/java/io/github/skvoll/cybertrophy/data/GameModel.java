@@ -7,15 +7,19 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.util.LongSparseArray;
 
+import java.util.ArrayList;
+
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 import static io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 
 public final class GameModel extends Model {
-    public static final int STATUS_INCOMPLETE = 0;
-    public static final int STATUS_IN_PROGRESS = 1;
-    public static final int STATUS_COMPLETE = 2;
+    public static final int ALL = 0;
+    public static final int INCOMPLETE = 1;
+    public static final int IN_PROGRESS = 2;
+    public static final int COMPLETE = 3;
+    public static final int NO_ACHIEVEMENTS = 4;
 
     private static String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
     private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
@@ -57,6 +61,33 @@ public final class GameModel extends Model {
         mAchievementsUnlockedCount = steamGame.getAchievementsUnlockedCount();
     }
 
+    public static GameModel getCurrent(ContentResolver contentResolver, ProfileModel profileModel) {
+        String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
+        selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
+                + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
+                + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+        String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
+
+        Cursor cursor = contentResolver.query(GameEntry.URI, null, selection,
+                selectionArgs, GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1");
+
+        if (cursor == null) {
+            return null;
+        }
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            return null;
+        }
+
+        GameModel gameModel = new GameModel(cursor);
+
+        cursor.close();
+
+        return gameModel;
+    }
+
     public static GameModel getById(ContentResolver contentResolver, Long id) {
         Uri uri = ContentUris.withAppendedId(GameEntry.URI, id);
         Cursor cursor = contentResolver.query(uri,
@@ -79,7 +110,7 @@ public final class GameModel extends Model {
         return gameModel;
     }
 
-    public static LongSparseArray<GameModel> getByProfile(ContentResolver contentResolver, ProfileModel profileModel) {
+    public static LongSparseArray<GameModel> getMapByProfile(ContentResolver contentResolver, ProfileModel profileModel) {
         String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
 
@@ -111,31 +142,76 @@ public final class GameModel extends Model {
         return gameModels;
     }
 
-    public static GameModel getCurrent(ContentResolver contentResolver, ProfileModel profileModel) {
+    public static ArrayList<GameModel> getByProfile(
+            ContentResolver contentResolver, ProfileModel profileModel, int status, int count) {
         String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
-        selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
-                + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
-                + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
 
-        Cursor cursor = contentResolver.query(GameEntry.URI, null, selection,
-                selectionArgs, GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1");
+        String sortOrder;
+        if (status == NO_ACHIEVEMENTS) {
+            selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " == 0";
+            sortOrder = GameEntry.COLUMN_NAME + " ASC";
+        } else {
+            selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " != 0";
+
+            switch (status) {
+                case IN_PROGRESS:
+                    selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
+                            + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
+                            + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+                    sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC";
+                    break;
+                case INCOMPLETE:
+                    selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == 0";
+                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
+                    break;
+                case COMPLETE:
+                    selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == "
+                            + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
+                    break;
+                default:
+                    sortOrder = GameEntry.COLUMN_NAME;
+                    break;
+            }
+        }
+
+        Cursor cursor = contentResolver.query(GameEntry.URI, null,
+                selection, selectionArgs, sortOrder + " LIMIT " + count);
 
         if (cursor == null) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (!cursor.moveToFirst()) {
             cursor.close();
 
-            return null;
+            return new ArrayList<>();
         }
 
-        GameModel gameModel = new GameModel(cursor);
+        ArrayList<GameModel> gameModels = new ArrayList<>(cursor.getCount());
+
+        while (!cursor.isAfterLast()) {
+            GameModel gameModel = new GameModel(cursor);
+
+            gameModels.add(gameModel);
+
+            cursor.moveToNext();
+        }
 
         cursor.close();
 
-        return gameModel;
+        return gameModels;
+    }
+
+    public static ArrayList<GameModel> getByProfile(
+            ContentResolver contentResolver, ProfileModel profileModel, int status) {
+        return getByProfile(contentResolver, profileModel, status, Integer.MAX_VALUE);
+    }
+
+    public static ArrayList<GameModel> getByProfile(
+            ContentResolver contentResolver, ProfileModel profileModel) {
+        return getByProfile(contentResolver, profileModel, ALL);
     }
 
     @Override
@@ -227,11 +303,11 @@ public final class GameModel extends Model {
 
     public int getStatus() {
         if (isComplete()) {
-            return STATUS_COMPLETE;
+            return COMPLETE;
         } else if (isInProgress()) {
-            return STATUS_IN_PROGRESS;
+            return IN_PROGRESS;
         } else {
-            return STATUS_INCOMPLETE;
+            return INCOMPLETE;
         }
     }
 

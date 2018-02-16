@@ -30,9 +30,6 @@ import io.github.skvoll.cybertrophy.achievements.list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
-import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
-import io.github.skvoll.cybertrophy.notifications.GamesParserNotification;
-import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 
 public class DashboardFragment extends Fragment implements
         AchievementsListFragment.OnItemClickListener,
@@ -78,6 +75,12 @@ public class DashboardFragment extends Fragment implements
         mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
         mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
         mSrlRefresh.setOnRefreshListener(this);
+
+        RecyclerView rvLockedAchievements = mRootView.findViewById(R.id.rv_locked_achievements);
+        rvLockedAchievements.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvLockedAchievements.setAdapter(new AchievementsListAdapter(getContext(), new ArrayList<AchievementModel>(),
+                this, AchievementsListAdapter.TYPE_SMALL));
 
         (new LoadDataTask(this)).execute(mProfileModel);
 
@@ -183,10 +186,8 @@ public class DashboardFragment extends Fragment implements
         }
 
         RecyclerView rvLockedAchievements = mRootView.findViewById(R.id.rv_locked_achievements);
-        rvLockedAchievements.setLayoutManager(
-                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        rvLockedAchievements.setAdapter(new AchievementsListAdapter(getContext(), achievementModels,
-                this, AchievementsListAdapter.TYPE_SMALL));
+        rvLockedAchievements.swapAdapter(new AchievementsListAdapter(getContext(), achievementModels,
+                this, AchievementsListAdapter.TYPE_SMALL), false);
 
         mRootView.findViewById(R.id.pb_locked_achievements).setVisibility(View.GONE);
     }

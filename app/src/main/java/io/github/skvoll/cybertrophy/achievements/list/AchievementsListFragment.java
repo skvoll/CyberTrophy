@@ -29,6 +29,7 @@ public class AchievementsListFragment extends Fragment implements
     private OnItemClickListener mOnItemClickListener;
     private Long mGameId;
     private int mAchievementsStatus;
+
     private SwipeRefreshLayout mSrlRefresh;
     private RecyclerView mRvList;
     private View mIvPlaceholder;
@@ -86,6 +87,8 @@ public class AchievementsListFragment extends Fragment implements
 
         mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRvList.setAdapter(new AchievementsListAdapter(getContext(), new ArrayList<AchievementModel>(),
+                mOnItemClickListener, AchievementsListAdapter.TYPE_FULL));
 
         mGameModel = GameModel.getById(getContext().getContentResolver(), mGameId);
         (new LoadDataTask(this, mAchievementsStatus)).execute(mGameModel);
@@ -129,6 +132,7 @@ public class AchievementsListFragment extends Fragment implements
         private int mAchievementsStatus;
         private ContentResolver mContentResolver;
 
+        // TODO: move gameModel to constructor
         LoadDataTask(AchievementsListFragment fragment, int achievementsStatus) {
             if (fragment.getContext() == null) {
                 return;

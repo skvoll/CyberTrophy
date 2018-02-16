@@ -1,55 +1,52 @@
 package io.github.skvoll.cybertrophy.games.list;
 
-import android.content.Intent;
-import android.database.Cursor;
+import android.content.ContentResolver;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import io.github.skvoll.cybertrophy.GameActivity;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
 import io.github.skvoll.cybertrophy.R;
-import io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.ProfileModel;
 
-public class GamesListFragment extends ListFragment implements
-        SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
-    public static final int LOADER_ID = 0;
-    public static final int TYPE_ALL = 0;
-    public static final int TYPE_IN_PROGRESS = 1;
-    public static final int TYPE_INCOMPLETE = 2;
-    public static final int TYPE_COMPLETE = 3;
-    public static final int TYPE_NO_ACHIEVEMENTS = 4;
-
+public class GamesListFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = GamesListFragment.class.getSimpleName();
     private static final String KEY_PROFILE_ID = "PROFILE_ID";
-    private static final String KEY_TYPE = "TYPE";
+    private static final String KEY_GAME_STATUS = "GAME_STATUS";
 
+    private OnItemClickListener mOnItemClickListener;
     private Long mProfileId;
-    private int mType;
+    private int mGameStatus;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ViewGroup mViewProgress;
-    private GamesListAdapter mGamesListAdapter;
+    private SwipeRefreshLayout mSrlRefresh;
+    private RecyclerView mRvList;
+    private View mIvPlaceholder;
+    private View mLlProgress;
+    private ProfileModel mProfileModel;
 
     public GamesListFragment() {
     }
 
-    public static GamesListFragment newInstance(Long profileId, int type) {
+    public static GamesListFragment newInstance(
+            Long profileId, int gameStatus, OnItemClickListener onItemClickListener) {
         GamesListFragment fragment = new GamesListFragment();
+        fragment.setOnItemClickListener(onItemClickListener);
 
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_PROFILE_ID, profileId);
-        bundle.putInt(KEY_TYPE, type);
+        bundle.putInt(KEY_GAME_STATUS, gameStatus);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -64,119 +61,108 @@ public class GamesListFragment extends ListFragment implements
         }
 
         mProfileId = getArguments().getLong(KEY_PROFILE_ID, -1);
-        mType = getArguments().getInt(KEY_TYPE, -1);
+        mGameStatus = getArguments().getInt(KEY_GAME_STATUS, GameModel.ALL);
 
-        if (mProfileId == -1 || mType == -1) {
+        if (mProfileId == -1) {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_games_list, container, false);
-
-        mSwipeRefreshLayout = mRootView.findViewById(R.id.srl_refresh);
-        mViewProgress = mRootView.findViewById(android.R.id.progress);
-
-        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        mGamesListAdapter = new GamesListAdapter(getContext(), null, 0);
-
-        return mRootView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        setListAdapter(mGamesListAdapter);
-
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @Override
-    public void onRefresh() {
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                getLoaderManager().restartLoader(LOADER_ID, null, GamesListFragment.this);
-            }
-        });
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        if (getContext() == null) {
-            return;
-        }
-
-        GameModel gameModel = GameModel.getById(getContext().getContentResolver(), id);
-
-        if (gameModel == null) {
-            return;
-        }
-
-        Intent intent = new Intent(getContext(), GameActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
-
-        startActivity(intent);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (getContext() == null) {
             return null;
         }
 
-        String select;
-        String sortOrder = null;
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievements_list, container, false);
 
-        if (mType == TYPE_NO_ACHIEVEMENTS) {
-            select = GameEntry.COLUMN_PROFILE_ID + " == " + mProfileId
-                    + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " == 0";
-            sortOrder = GameEntry.COLUMN_NAME + " ASC";
+        mSrlRefresh = rootView.findViewById(R.id.srl_refresh);
+        mRvList = rootView.findViewById(android.R.id.list);
+        mIvPlaceholder = rootView.findViewById(android.R.id.empty);
+        mLlProgress = rootView.findViewById(android.R.id.progress);
+
+        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
+        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
+        mSrlRefresh.setOnRefreshListener(this);
+
+        mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
+        mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRvList.setAdapter(new GamesListAdapter(getContext(),
+                new ArrayList<GameModel>(), mOnItemClickListener));
+
+        mProfileModel = ProfileModel.getById(getContext().getContentResolver(), mProfileId);
+        (new LoadDataTask(this, mGameStatus)).execute(mProfileModel);
+
+        return rootView;
+    }
+
+    @Override
+    public void onRefresh() {
+        (new LoadDataTask(this, mGameStatus)).execute(mProfileModel);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    void setData(ArrayList<GameModel> gameModels) {
+        GamesListAdapter adapter = new GamesListAdapter(getContext(),
+                gameModels, mOnItemClickListener);
+
+        mRvList.swapAdapter(adapter, false);
+
+        mSrlRefresh.setRefreshing(false);
+        mLlProgress.setVisibility(View.GONE);
+
+        if (adapter.getItemCount() > 0) {
+            mRvList.setVisibility(View.VISIBLE);
+            mIvPlaceholder.setVisibility(View.GONE);
         } else {
-            select = GameEntry.COLUMN_PROFILE_ID + " == " + mProfileId
-                    + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " != 0 AND ";
+            mRvList.setVisibility(View.GONE);
+            mIvPlaceholder.setVisibility(View.VISIBLE);
+        }
+    }
 
-            switch (mType) {
-                case TYPE_IN_PROGRESS:
-                    select += GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
-                            + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
-                            + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
-                    sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC";
-                    break;
-                case TYPE_INCOMPLETE:
-                    select += GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == 0";
-                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
-                    break;
-                case TYPE_COMPLETE:
-                    select += GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == "
-                            + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
-                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
-                    break;
+    public interface OnItemClickListener {
+        void onClick(GameModel gameModel);
+    }
+
+    private static class LoadDataTask extends AsyncTask<ProfileModel, Void, ArrayList<GameModel>> {
+        private WeakReference<GamesListFragment> mFragmentWeakReference;
+        private int mGameStatus;
+        private ContentResolver mContentResolver;
+
+        // TODO: move profileModel to constructor
+        LoadDataTask(GamesListFragment fragment, int gameStatus) {
+            if (fragment.getContext() == null) {
+                return;
             }
+
+            mFragmentWeakReference = new WeakReference<>(fragment);
+            mGameStatus = gameStatus;
+            mContentResolver = fragment.getContext().getContentResolver();
         }
 
-        return new CursorLoader(getContext(), GameEntry.URI,
-                null, select, null, sortOrder);
-    }
+        @Override
+        protected ArrayList<GameModel> doInBackground(ProfileModel... profileModels) {
+            ProfileModel profileModel = profileModels[0];
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mGamesListAdapter.swapCursor(cursor);
+            if (profileModel == null) {
+                return null;
+            }
 
-        mSwipeRefreshLayout.setRefreshing(false);
-        mViewProgress.setVisibility(View.GONE);
-    }
+            return GameModel.getByProfile(mContentResolver, profileModel, mGameStatus);
+        }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mGamesListAdapter.swapCursor(null);
+        @Override
+        protected void onPostExecute(ArrayList<GameModel> gameModels) {
+            GamesListFragment fragment = mFragmentWeakReference.get();
+
+            if (fragment == null) {
+                return;
+            }
+
+            fragment.setData(gameModels);
+        }
     }
 }
