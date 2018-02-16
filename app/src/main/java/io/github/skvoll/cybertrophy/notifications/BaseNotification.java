@@ -16,8 +16,8 @@ import io.github.skvoll.cybertrophy.R;
 import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 
 public abstract class BaseNotification {
-    public static final String CHANNEL_DEFAULT = "default";
-    public static final String CHANNEL_SERVICES = "services";
+    static final String CHANNEL_DEFAULT = "default";
+    static final String CHANNEL_SERVICES = "services";
 
     private static final String TAG = BaseNotification.class.getSimpleName();
 

@@ -16,8 +16,9 @@ import android.webkit.WebViewClient;
 
 import com.android.volley.VolleyError;
 
+import java.lang.ref.WeakReference;
+
 import io.github.skvoll.cybertrophy.data.ProfileModel;
-import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 import io.github.skvoll.cybertrophy.steam.SteamApi;
 import io.github.skvoll.cybertrophy.steam.SteamProfile;
 
@@ -106,29 +107,41 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private static class ProfileAsyncTask extends AsyncTask<SteamProfile, Void, Void> {
-        private Activity mActivity;
+        private WeakReference<Activity> mContextWeakReference;
 
         ProfileAsyncTask(Activity activity) {
-            mActivity = activity;
+            mContextWeakReference = new WeakReference<>(activity);
         }
 
         @Override
         protected Void doInBackground(SteamProfile... steamProfiles) {
+            Activity activity = mContextWeakReference.get();
+
+            if (activity == null) {
+                return null;
+            }
+
             ProfileModel profileModel = new ProfileModel(steamProfiles[0]);
-            profileModel.loadBackgroundImage(mActivity);
-            profileModel.save(mActivity.getContentResolver());
+            profileModel.loadBackgroundImage(activity);
+            profileModel.save(activity.getContentResolver());
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Intent intent = new Intent(mActivity, MainActivity.class);
+            Activity activity = mContextWeakReference.get();
+
+            if (activity == null) {
+                return;
+            }
+
+            Intent intent = new Intent(activity, MainActivity.class);
             intent.putExtra(MainActivity.KEY_FRAGMENT, MainActivity.FRAGMENT_PROFILE);
 
-            mActivity.startActivity(intent);
+            activity.startActivity(intent);
 
-            mActivity.finish();
+            activity.finish();
         }
     }
 }

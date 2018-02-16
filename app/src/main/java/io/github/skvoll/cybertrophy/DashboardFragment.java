@@ -222,7 +222,7 @@ public class DashboardFragment extends Fragment implements
             return;
         }
 
-        (new UpdateGameTask(this, mProfileModel)).execute(gameModel.getAppId());
+        (new UpdateGameTask(this, mProfileModel)).execute();
     }
 
     private static class LoadDataTask extends AsyncTask<ProfileModel, Void, LoadDataTask.LoadDataTaskResult> {
@@ -286,7 +286,7 @@ public class DashboardFragment extends Fragment implements
         private ProfileModel mProfileModel;
 
         UpdateGameTask(DashboardFragment fragment, ProfileModel profileModel) {
-            super(fragment.getContext(), profileModel, ACTION_EXACT);
+            super(fragment.getContext(), profileModel, ACTION_RECENT);
 
             mFragmentWeakReference = new WeakReference<>(fragment);
             mProfileModel = profileModel;
