@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
     android:padding="8dp">
-
-    <ImageView
-        android:id="@+id/iv_logo"
-        android:layout_width="152dp"
-        android:layout_height="72dp"
-        android:contentDescription="@string/game_logo_description"
-        android:src="@drawable/game_logo_empty" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="152dp"
+            android:layout_height="72dp"
+            android:contentDescription="@string/game_logo_description"
+            android:src="@drawable/game_logo_empty" />
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Game name" />
 
@@ -35,12 +39,13 @@
             android:id="@+id/tv_last_play"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             tools:text="Last play: 12 hours ago"
             tools:visibility="visible" />
@@ -49,12 +54,13 @@
             android:id="@+id/tv_playtime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toBottomOf="@id/tv_last_play"
             tools:text="Playtime: 48 hours"
             tools:visibility="visible" />
@@ -63,12 +69,13 @@
             android:id="@+id/tv_achievements"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toBottomOf="@id/tv_playtime"
             tools:text="Achievements: 100"
             tools:visibility="visible" />
@@ -87,15 +94,16 @@
         <ProgressBar
             android:id="@+id/pb_progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:max="100"
             android:progress="75"
             android:progressTint="@color/accentColor"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
             tools:visibility="visible" />
     </android.support.constraint.ConstraintLayout>
-</LinearLayout>
+</FrameLayout>

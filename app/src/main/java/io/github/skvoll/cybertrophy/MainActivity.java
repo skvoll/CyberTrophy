@@ -25,13 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private int devToolsCounter = 0;
+    private int mDevToolsCounter = 0;
 
     private BottomNavigationView mBtnNavigation;
     private FragmentManager mFragmentManager;
     private Fragment mDashboardFragment;
     private Fragment mGamesFragment;
     private Fragment mProfileFragment;
+    private Fragment mCurrentFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         mDashboardFragment = new DashboardFragment();
         mGamesFragment = new GamesFragment();
         mProfileFragment = new ProfileFragment();
+        mCurrentFragment = mDashboardFragment;
+
+        mFragmentManager.beginTransaction().add(R.id.fl_container,
+                mProfileFragment, String.valueOf(FRAGMENT_PROFILE)).commit();
+        mFragmentManager.beginTransaction().hide(mProfileFragment).add(R.id.fl_container,
+                mGamesFragment, String.valueOf(FRAGMENT_GAMES)).commit();
+        mFragmentManager.beginTransaction().hide(mGamesFragment).add(R.id.fl_container,
+                mDashboardFragment, String.valueOf(FRAGMENT_DASHBOARD)).commit();
 
         int selectedItem = FRAGMENT_DASHBOARD;
 
@@ -82,9 +91,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnNavigation.setSelectedItemId(selectedItem);
         mBtnNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        if (savedInstanceState == null) {
-            setFragment(selectedItem);
-        }
+        setFragment(selectedItem);
     }
 
     @Override
@@ -96,34 +103,45 @@ public class MainActivity extends AppCompatActivity {
 
     @NonNull
     private Boolean setFragment(int menuId) {
-        Fragment fragment;
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         switch (menuId) {
-            case R.id.menu_dashboard:
-                devToolsCounter = 0;
-                fragment = mDashboardFragment;
+            case FRAGMENT_DASHBOARD:
+                mDevToolsCounter = 0;
+                if (mCurrentFragment != mDashboardFragment) {
+                    fragmentTransaction.hide(mCurrentFragment).show(mDashboardFragment).commit();
+                }
+
+                mCurrentFragment = mDashboardFragment;
+
                 break;
-            case R.id.menu_games:
-                devToolsCounter = 0;
-                fragment = mGamesFragment;
+            case FRAGMENT_GAMES:
+                mDevToolsCounter = 0;
+                if (mCurrentFragment != mGamesFragment) {
+                    fragmentTransaction.hide(mCurrentFragment).show(mGamesFragment).commit();
+                }
+
+                mCurrentFragment = mGamesFragment;
+
                 break;
-            case R.id.menu_profile:
-                devToolsCounter++;
-                fragment = mProfileFragment;
+            case FRAGMENT_PROFILE:
+                mDevToolsCounter++;
+                if (mCurrentFragment != mProfileFragment) {
+                    fragmentTransaction.hide(mCurrentFragment).show(mProfileFragment).commit();
+                }
+
+                mCurrentFragment = mProfileFragment;
+
                 break;
             default:
                 return false;
         }
 
-        if (devToolsCounter > 3) {
-            devToolsCounter = 0;
+        if (mDevToolsCounter > 3) {
+            mDevToolsCounter = 0;
 
             startActivity(new Intent(this, DevToolsActivity.class));
         }
-
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-
-        fragmentTransaction.replace(R.id.fl_container, fragment).commit();
 
         return true;
     }

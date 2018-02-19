@@ -26,6 +26,8 @@ public class GamesFragment extends Fragment implements
 
     private static final String TAG = GamesFragment.class.getSimpleName();
 
+    private ProfileModel mProfileModel;
+
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
@@ -39,32 +41,13 @@ public class GamesFragment extends Fragment implements
             return null;
         }
 
-        ProfileModel profileModel = ProfileModel.getActive(getContext().getContentResolver());
+        mProfileModel = ProfileModel.getActive(getContext().getContentResolver());
 
-        if (profileModel == null) {
+        if (mProfileModel == null) {
             return null;
         }
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_games, container, false);
-
-        mTabLayout = rootView.findViewById(R.id.tl_tabs);
-        mViewPager = rootView.findViewById(R.id.vp_container);
-
-        mPagerAdapter = new PagerAdapter(getChildFragmentManager());
-        mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(profileModel.getId(), GameModel.IN_PROGRESS, this),
-                getString(R.string.games_list_tab_in_progress));
-        mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(profileModel.getId(), GameModel.INCOMPLETE, this),
-                getString(R.string.games_list_tab_incomplete));
-        mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(profileModel.getId(), GameModel.COMPLETE, this),
-                getString(R.string.games_list_tab_complete));
-
-        mViewPager.setAdapter(mPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_games, container, false);
     }
 
     @Override
@@ -77,15 +60,27 @@ public class GamesFragment extends Fragment implements
             currentItem = savedInstanceState.getInt(KEY_TAB, currentItem);
         }
 
+        mTabLayout = view.findViewById(R.id.tl_tabs);
+        mViewPager = view.findViewById(R.id.vp_container);
+
+        mPagerAdapter = new PagerAdapter(getChildFragmentManager());
+        mPagerAdapter.addFragment(
+                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.IN_PROGRESS, this),
+                getString(R.string.games_list_tab_in_progress));
+        mPagerAdapter.addFragment(
+                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.INCOMPLETE, this),
+                getString(R.string.games_list_tab_incomplete));
+        mPagerAdapter.addFragment(
+                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.COMPLETE, this),
+                getString(R.string.games_list_tab_complete));
+
+        mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(currentItem);
-    }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        outState.putInt(KEY_TAB, mViewPager.getCurrentItem());
+        view.findViewById(android.R.id.progress).setVisibility(View.GONE);
     }
 
     @Override
