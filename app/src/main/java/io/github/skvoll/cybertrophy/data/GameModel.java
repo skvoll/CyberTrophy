@@ -67,9 +67,10 @@ public final class GameModel extends Model {
                 + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
                 + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
+        String sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1";
 
         Cursor cursor = contentResolver.query(GameEntry.URI, null, selection,
-                selectionArgs, GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1");
+                selectionArgs, sortOrder);
 
         if (cursor == null) {
             return null;
@@ -146,11 +147,11 @@ public final class GameModel extends Model {
             ContentResolver contentResolver, ProfileModel profileModel, int status, int count) {
         String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
+        String sortOrder = GameEntry.COLUMN_NAME;
 
-        String sortOrder;
         if (status == NO_ACHIEVEMENTS) {
             selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " == 0";
-            sortOrder = GameEntry.COLUMN_NAME + " ASC";
+            sortOrder = GameEntry.COLUMN_NAME;
         } else {
             selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " != 0";
 
@@ -163,21 +164,20 @@ public final class GameModel extends Model {
                     break;
                 case INCOMPLETE:
                     selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == 0";
-                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
+                    sortOrder = GameEntry.COLUMN_NAME;
                     break;
                 case COMPLETE:
                     selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == "
                             + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
-                    sortOrder = GameEntry.COLUMN_NAME + " ASC";
-                    break;
-                default:
                     sortOrder = GameEntry.COLUMN_NAME;
                     break;
             }
         }
 
+        sortOrder += " LIMIT " + count;
+
         Cursor cursor = contentResolver.query(GameEntry.URI, null,
-                selection, selectionArgs, sortOrder + " LIMIT " + count);
+                selection, selectionArgs, sortOrder);
 
         if (cursor == null) {
             return new ArrayList<>();

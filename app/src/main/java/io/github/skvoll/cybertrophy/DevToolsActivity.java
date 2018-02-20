@@ -196,7 +196,7 @@ public class DevToolsActivity extends AppCompatActivity {
                         ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
                         if (profileModel != null) {
-                            sqLiteDatabase.execSQL("DELETE FROM " + DataContract.LogEntry.TABLE_NAME);
+                            sqLiteDatabase.execSQL("DELETE FROM " + DataContract.NotificationEntry.TABLE_NAME);
                             sqLiteDatabase.execSQL("DELETE FROM " + DataContract.AchievementEntry.TABLE_NAME);
                             sqLiteDatabase.execSQL("DELETE FROM " + DataContract.GameEntry.TABLE_NAME);
 

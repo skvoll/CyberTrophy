@@ -89,8 +89,12 @@ public class DashboardFragment extends Fragment implements
 
     private void setData(LoadDataTask.LoadDataTaskResult result) {
         mSrlRefresh.setRefreshing(false);
+        mRootView.findViewById(android.R.id.progress).setVisibility(View.GONE);
 
         if (result == null) {
+            mRootView.findViewById(R.id.sv_container).setVisibility(View.GONE);
+            mRootView.findViewById(android.R.id.empty).setVisibility(View.VISIBLE);
+
             return;
         }
 
@@ -130,8 +134,8 @@ public class DashboardFragment extends Fragment implements
             }
         });
 
-        mRootView.findViewById(android.R.id.progress).setVisibility(View.GONE);
-        mRootView.findViewById(R.id.srl_refresh).setVisibility(View.VISIBLE);
+        mRootView.findViewById(android.R.id.empty).setVisibility(View.GONE);
+        mRootView.findViewById(R.id.sv_container).setVisibility(View.VISIBLE);
     }
 
     private void setRecentAchievements(ArrayList<AchievementModel> achievementModels) {
@@ -218,12 +222,16 @@ public class DashboardFragment extends Fragment implements
     @Override
     public void onRefresh() {
         if (getContext() == null) {
+            mSrlRefresh.setRefreshing(false);
+
             return;
         }
 
         GameModel gameModel = GameModel.getCurrent(getContext().getContentResolver(), mProfileModel);
 
         if (gameModel == null) {
+            mSrlRefresh.setRefreshing(false);
+
             return;
         }
 

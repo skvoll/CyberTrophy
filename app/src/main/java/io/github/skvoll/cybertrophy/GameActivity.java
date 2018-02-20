@@ -22,6 +22,7 @@ import java.util.List;
 import io.github.skvoll.cybertrophy.achievements.list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 
 public class GameActivity extends AppCompatActivity implements

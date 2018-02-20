@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/lorem_ipsum"
+        android:text="@string/lorem_ipsum_full"
         android:textColor="@color/primaryTextColor" />
 
     <Button

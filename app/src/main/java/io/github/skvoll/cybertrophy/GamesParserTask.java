@@ -14,7 +14,7 @@ import java.util.HashMap;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.DataContract;
 import io.github.skvoll.cybertrophy.data.GameModel;
-import io.github.skvoll.cybertrophy.data.LogModel;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.AchievementRemovedNotification;
 import io.github.skvoll.cybertrophy.notifications.AchievementUnlockedNotification;
@@ -184,19 +184,24 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                     HashMap<String, AchievementModel> achievementModels = AchievementModel.getMapByGame(mContentResolver, gameModel);
 
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {
+                        AchievementModel achievementModel;
+
                         if (!achievementModels.containsKey(steamAchievement.name)) {
                             Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" has new achievement \"" + steamAchievement.displayName + "\".");
+
+                            new AchievementModel(gameModel, steamAchievement).save(mContentResolver);
 
                             if (mProfileModel.isInitialized()) {
                                 mNewAchievementNotification.addGame(gameModel).show();
                             }
 
-                            new AchievementModel(gameModel, steamAchievement).save(mContentResolver);
+                            // TODO: move in condition above
+                            NotificationModel.newAchievement(gameModel).save(mContentResolver);
 
                             continue;
                         }
 
-                        AchievementModel achievementModel = achievementModels.get(steamAchievement.name);
+                        achievementModel = achievementModels.get(steamAchievement.name);
 
                         if (steamAchievement.isUnlocked() != achievementModel.isUnlocked()) {
                             Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" achievement \"" + steamAchievement.displayName + "\" unlocked.");
@@ -205,7 +210,8 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                                 mAchievementUnlockedNotification.addAchievement(gameModel, achievementModel).show();
                             }
 
-                            LogModel.achievementUnlocked(achievementModel).save(mContentResolver);
+                            // TODO: move in condition above
+                            NotificationModel.achievementUnlocked(achievementModel).save(mContentResolver);
                         }
 
                         updateAchievement(achievementModel, steamAchievement);
@@ -219,6 +225,9 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                                 mAchievementRemovedNotification.addGame(gameModel).show();
                             }
 
+                            // TODO: move in condition above
+                            NotificationModel.achievementRemoved(gameModel).save(mContentResolver);
+
                             achievementModel.delete(mContentResolver);
                         }
                     }
@@ -229,10 +238,11 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                         if (mAction != ACTION_FIRST) {
                             if (mProfileModel.isInitialized()) {
                                 mGameCompleteNotification.addGame(gameModel).show();
-
-                                LogModel.gameComplete(gameModel).save(mContentResolver);
                             }
                         }
+
+                        // TODO: move in condition above
+                        NotificationModel.gameComplete(gameModel).save(mContentResolver);
                     }
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
@@ -249,6 +259,9 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                         }
                     }
 
+                    // TODO: move in condition above
+                    NotificationModel.newGame(gameModel).save(mContentResolver);
+
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {
                         AchievementModel achievementModel = new AchievementModel(gameModel, steamAchievement);
                         achievementModel.save(mContentResolver);
@@ -256,7 +269,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
 
-                    LogModel.newGame(gameModel).save(mContentResolver);
+                    NotificationModel.newGame(gameModel).save(mContentResolver);
                 }
 
                 retryAttempt = 0;
@@ -383,6 +396,9 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                 if (mProfileModel.isInitialized()) {
                     mGameRemovedNotification.addGame(gameModel).show();
                 }
+
+                // TODO: move to condition above
+                NotificationModel.gameRemoved(gameModel).save(mContentResolver);
 
                 deleteGame(gameModel);
             }

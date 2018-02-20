@@ -140,8 +140,10 @@ public final class AchievementModel extends Model {
                 break;
         }
 
-        Cursor cursor = contentResolver.query(AchievementEntry.URI, null, selection,
-                selectionArgs, sortOrder + " LIMIT " + count);
+        sortOrder += " LIMIT " + count;
+
+        Cursor cursor = contentResolver.query(AchievementEntry.URI, null,
+                selection, selectionArgs, sortOrder);
 
         if (cursor == null) {
             return new ArrayList<>();

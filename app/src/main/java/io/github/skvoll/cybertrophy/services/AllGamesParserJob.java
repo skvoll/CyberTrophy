@@ -6,7 +6,6 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.util.Log;
 import java.lang.ref.WeakReference;
 
 import io.github.skvoll.cybertrophy.GamesParserTask;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public final class AllGamesParserJob extends JobService {
@@ -103,14 +103,7 @@ public final class AllGamesParserJob extends JobService {
                 return;
             }
 
-            if (success) {
-                SharedPreferences sharedPreferences = service.getSharedPreferences("DEBUG", MODE_PRIVATE);
-                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-
-                sharedPreferencesEditor.putLong(TAG + "_LAST_PARSED", System.currentTimeMillis());
-
-                sharedPreferencesEditor.apply();
-            }
+            NotificationModel.debug(TAG, success ? "Successfully done." : "Failed.").save(service.getContentResolver());
 
             sIsRunning = false;
             service.jobFinished(mJobParameters, !success);

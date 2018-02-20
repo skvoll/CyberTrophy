@@ -32,8 +32,8 @@ public final class DataProvider extends ContentProvider {
         sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.AchievementEntry.TABLE_NAME, ACHIEVEMENTS);
         sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.AchievementEntry.TABLE_NAME + "/#", ACHIEVEMENTS_ID);
 
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.LogEntry.TABLE_NAME, LOG);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.LogEntry.TABLE_NAME + "/#", LOG_ID);
+        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.NotificationEntry.TABLE_NAME, LOG);
+        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.NotificationEntry.TABLE_NAME + "/#", LOG_ID);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -48,6 +48,7 @@ public final class DataProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] columns, String selection, String[] selectionArgs, String orderBy) {
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
+
         switch (sUriMatcher.match(uri)) {
             case PROFILES:
                 return database.query(DataContract.ProfileEntry.TABLE_NAME,
@@ -77,13 +78,13 @@ public final class DataProvider extends ContentProvider {
                 return database.query(DataContract.AchievementEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, null);
             case LOG:
-                return database.query(DataContract.LogEntry.TABLE_NAME,
+                return database.query(DataContract.NotificationEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, orderBy);
             case LOG_ID:
-                selection = DataContract.LogEntry._ID + " = ?";
+                selection = DataContract.NotificationEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                return database.query(DataContract.LogEntry.TABLE_NAME,
+                return database.query(DataContract.NotificationEntry.TABLE_NAME,
                         columns, selection, selectionArgs, null, null, null);
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for query");
@@ -108,7 +109,7 @@ public final class DataProvider extends ContentProvider {
                 break;
 
             case LOG:
-                id = database.insert(DataContract.LogEntry.TABLE_NAME, null, contentValues);
+                id = database.insert(DataContract.NotificationEntry.TABLE_NAME, null, contentValues);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for insert");
@@ -151,13 +152,13 @@ public final class DataProvider extends ContentProvider {
                         contentValues, whereClause, whereArgs);
 
             case LOG:
-                return database.update(DataContract.LogEntry.TABLE_NAME,
+                return database.update(DataContract.NotificationEntry.TABLE_NAME,
                         contentValues, whereClause, whereArgs);
             case LOG_ID:
-                whereClause = DataContract.LogEntry._ID + " = ?";
+                whereClause = DataContract.NotificationEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                return database.update(DataContract.LogEntry.TABLE_NAME,
+                return database.update(DataContract.NotificationEntry.TABLE_NAME,
                         contentValues, whereClause, whereArgs);
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for update");
@@ -192,12 +193,12 @@ public final class DataProvider extends ContentProvider {
                 return database.delete(DataContract.AchievementEntry.TABLE_NAME, whereClause, whereArgs);
 
             case LOG:
-                return database.delete(DataContract.LogEntry.TABLE_NAME, whereClause, whereArgs);
+                return database.delete(DataContract.NotificationEntry.TABLE_NAME, whereClause, whereArgs);
             case LOG_ID:
-                whereClause = DataContract.LogEntry._ID + " = ?";
+                whereClause = DataContract.NotificationEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                return database.delete(DataContract.LogEntry.TABLE_NAME, whereClause, whereArgs);
+                return database.delete(DataContract.NotificationEntry.TABLE_NAME, whereClause, whereArgs);
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for delete");
         }

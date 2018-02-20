@@ -224,13 +224,4 @@ public final class ProfileModel extends Model {
 
         return contentValues;
     }
-
-    @Override
-    public String toString() {
-        return getName() + "(" + getSteamId() + ")\n"
-                + "url: " + getUrl() + "\n"
-                + "real name: " + getRealName() + "\n"
-                + "active: " + isActive() + "\n"
-                + "initialized: " + isInitialized();
-    }
 }

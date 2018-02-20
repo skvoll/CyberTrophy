@@ -28,18 +28,28 @@
             android:id="@+id/srl_refresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:visibility="visible">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ScrollView
                 android:id="@+id/sv_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <include layout="@layout/fragment_dashboard_game" />
             </ScrollView>
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ImageView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="128dp"
+            android:contentDescription="@string/list_placeholder"
+            android:src="@drawable/placeholder"
+            android:tint="@color/secondaryColor"
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@android:id/progress"

@@ -107,26 +107,30 @@ public abstract class DataContract {
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static abstract class LogEntry implements BaseColumns {
+    public static abstract class NotificationEntry implements BaseColumns {
         public static final String TABLE_NAME = "log";
 
         public static final Uri URI = Uri.withAppendedPath(CONTENT_URI, TABLE_NAME);
 
         public static final String COLUMN_TIME = "time";
         public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_IS_VIEWED = "is_viewed";
+        public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_MESSAGE = "message";
+        public static final String COLUMN_IMAGE_URL = "image_url";
         public static final String COLUMN_PROFILE_ID = "_profile_id";
-        public static final String COLUMN_GAME_ID = "_game_id";
-        public static final String COLUMN_ACHIEVEMENT_ID = "_achievement_id";
+        public static final String COLUMN_OBJECT_ID = "_object_id";
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_TIME + " INTEGER NOT NULL,"
                 + COLUMN_TYPE + " INTEGER NOT NULL,"
+                + COLUMN_IS_VIEWED + " BOOLEAN NOT NULL DEFAULT 0,"
+                + COLUMN_TITLE + " TEXT DEFAULT NULL,"
                 + COLUMN_MESSAGE + " TEXT DEFAULT NULL,"
+                + COLUMN_IMAGE_URL + " TEXT DEFAULT NULL,"
                 + COLUMN_PROFILE_ID + " INTEGER DEFAULT NULL,"
-                + COLUMN_GAME_ID + " INTEGER DEFAULT NULL,"
-                + COLUMN_ACHIEVEMENT_ID + " INTEGER DEFAULT NULL)";
+                + COLUMN_OBJECT_ID + " INTEGER DEFAULT NULL)";
 
         public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

@@ -9,7 +9,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "database.db";
     // TODO: set to 1
-    private static final Integer DATABASE_VERSION = 22;
+    private static final Integer DATABASE_VERSION = 25;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -20,7 +20,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DataContract.ProfileEntry.SQL_CREATE_TABLE);
         sqLiteDatabase.execSQL(DataContract.GameEntry.SQL_CREATE_TABLE);
         sqLiteDatabase.execSQL(DataContract.AchievementEntry.SQL_CREATE_TABLE);
-        sqLiteDatabase.execSQL(DataContract.LogEntry.SQL_CREATE_TABLE);
+        sqLiteDatabase.execSQL(DataContract.NotificationEntry.SQL_CREATE_TABLE);
     }
 
     @Override
@@ -28,7 +28,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DataContract.ProfileEntry.SQL_DROP_TABLE);
         sqLiteDatabase.execSQL(DataContract.GameEntry.SQL_DROP_TABLE);
         sqLiteDatabase.execSQL(DataContract.AchievementEntry.SQL_DROP_TABLE);
-        sqLiteDatabase.execSQL(DataContract.LogEntry.SQL_DROP_TABLE);
+        sqLiteDatabase.execSQL(DataContract.NotificationEntry.SQL_DROP_TABLE);
         onCreate(sqLiteDatabase);
     }
 
@@ -37,7 +37,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DataContract.ProfileEntry.SQL_DROP_TABLE);
         sqLiteDatabase.execSQL(DataContract.GameEntry.SQL_DROP_TABLE);
         sqLiteDatabase.execSQL(DataContract.AchievementEntry.SQL_DROP_TABLE);
-        sqLiteDatabase.execSQL(DataContract.LogEntry.SQL_DROP_TABLE);
+        sqLiteDatabase.execSQL(DataContract.NotificationEntry.SQL_DROP_TABLE);
         onCreate(sqLiteDatabase);
     }
 }

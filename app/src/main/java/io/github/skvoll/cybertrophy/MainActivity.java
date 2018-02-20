@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.notifications.list.NotificationsListFragment;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 import io.github.skvoll.cybertrophy.services.AllGamesParserJob;
 import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_FRAGMENT = "FRAGMENT";
     public static final int FRAGMENT_DASHBOARD = R.id.menu_dashboard;
     public static final int FRAGMENT_GAMES = R.id.menu_games;
+    public static final int FRAGMENT_NOTIFICATIONS_LIST = R.id.menu_notifications_list;
     public static final int FRAGMENT_PROFILE = R.id.menu_profile;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
     private Fragment mDashboardFragment;
     private Fragment mGamesFragment;
+    private Fragment mNotificationsListFragment;
     private Fragment mProfileFragment;
     private Fragment mCurrentFragment;
 
@@ -67,12 +70,15 @@ public class MainActivity extends AppCompatActivity {
         mBtnNavigation = findViewById(R.id.bnv_navigation);
         mDashboardFragment = new DashboardFragment();
         mGamesFragment = new GamesFragment();
+        mNotificationsListFragment = new NotificationsListFragment();
         mProfileFragment = new ProfileFragment();
         mCurrentFragment = mDashboardFragment;
 
         mFragmentManager.beginTransaction().add(R.id.fl_container,
                 mProfileFragment, String.valueOf(FRAGMENT_PROFILE)).commit();
         mFragmentManager.beginTransaction().hide(mProfileFragment).add(R.id.fl_container,
+                mNotificationsListFragment, String.valueOf(FRAGMENT_GAMES)).commit();
+        mFragmentManager.beginTransaction().hide(mNotificationsListFragment).add(R.id.fl_container,
                 mGamesFragment, String.valueOf(FRAGMENT_GAMES)).commit();
         mFragmentManager.beginTransaction().hide(mGamesFragment).add(R.id.fl_container,
                 mDashboardFragment, String.valueOf(FRAGMENT_DASHBOARD)).commit();
@@ -122,6 +128,15 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 mCurrentFragment = mGamesFragment;
+
+                break;
+            case FRAGMENT_NOTIFICATIONS_LIST:
+                mDevToolsCounter = 0;
+                if (mCurrentFragment != mNotificationsListFragment) {
+                    fragmentTransaction.hide(mCurrentFragment).show(mNotificationsListFragment).commit();
+                }
+
+                mCurrentFragment = mNotificationsListFragment;
 
                 break;
             case FRAGMENT_PROFILE:
