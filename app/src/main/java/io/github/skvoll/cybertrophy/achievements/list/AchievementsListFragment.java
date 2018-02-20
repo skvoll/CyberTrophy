@@ -74,7 +74,7 @@ public class AchievementsListFragment extends Fragment implements
             return null;
         }
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievements_list, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.base_list, container, false);
 
         mSrlRefresh = rootView.findViewById(R.id.srl_refresh);
         mRvList = rootView.findViewById(android.R.id.list);

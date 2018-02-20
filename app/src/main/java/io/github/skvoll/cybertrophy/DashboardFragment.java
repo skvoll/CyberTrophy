@@ -230,7 +230,7 @@ public class DashboardFragment extends Fragment implements
         GameModel gameModel = GameModel.getCurrent(getContext().getContentResolver(), mProfileModel);
 
         if (gameModel == null) {
-            mSrlRefresh.setRefreshing(false);
+            setData(null);
 
             return;
         }

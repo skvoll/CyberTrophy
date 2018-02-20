@@ -55,7 +55,7 @@ public class NotificationsListFragment extends Fragment implements
             return null;
         }
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_notifications_list, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.base_list, container, false);
 
         mSrlRefresh = rootView.findViewById(R.id.srl_refresh);
         mRvList = rootView.findViewById(android.R.id.list);
@@ -66,7 +66,6 @@ public class NotificationsListFragment extends Fragment implements
         mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
         mSrlRefresh.setOnRefreshListener(this);
 
-        mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvList.setAdapter(new NotificationsListAdapter(getContext(), new ArrayList<NotificationModel>()));
 

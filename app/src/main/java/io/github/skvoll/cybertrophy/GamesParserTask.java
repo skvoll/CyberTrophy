@@ -268,8 +268,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                     }
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
-
-                    NotificationModel.newGame(gameModel).save(mContentResolver);
                 }
 
                 retryAttempt = 0;

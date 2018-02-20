@@ -108,7 +108,7 @@ public abstract class DataContract {
     }
 
     public static abstract class NotificationEntry implements BaseColumns {
-        public static final String TABLE_NAME = "log";
+        public static final String TABLE_NAME = "notifications";
 
         public static final Uri URI = Uri.withAppendedPath(CONTENT_URI, TABLE_NAME);
 

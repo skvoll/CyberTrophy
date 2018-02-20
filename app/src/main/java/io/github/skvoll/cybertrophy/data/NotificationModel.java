@@ -6,8 +6,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.text.format.DateUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import io.github.skvoll.cybertrophy.data.DataContract.NotificationEntry;
 
@@ -154,17 +156,17 @@ public final class NotificationModel extends Model {
     }
 
     public static ArrayList<NotificationModel> getByProfile(
-            ContentResolver contentResolver, ProfileModel profileModel, int count) {
+            ContentResolver contentResolver, ProfileModel profileModel, int count, boolean addSeparator) {
 
         String selection = NotificationEntry.COLUMN_PROFILE_ID + " = ?";
-        selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " = NULL";
+        selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " IS NULL";
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
         String sortOrder = NotificationEntry.COLUMN_TIME + " DESC";
 
         sortOrder += " LIMIT " + count;
 
         Cursor cursor = contentResolver.query(NotificationEntry.URI, null,
-                null, null, sortOrder);
+                selection, selectionArgs, sortOrder);
 
         if (cursor == null) {
             return new ArrayList<>();
@@ -177,9 +179,22 @@ public final class NotificationModel extends Model {
         }
 
         ArrayList<NotificationModel> notificationModels = new ArrayList<>(cursor.getCount());
+        String currentSeparator = null, separator;
 
         while (!cursor.isAfterLast()) {
-            notificationModels.add(new NotificationModel(cursor));
+            NotificationModel notificationModel = new NotificationModel(cursor);
+
+            if (addSeparator) {
+                separator = DateUtils.getRelativeTimeSpanString(
+                        notificationModel.getTime() * 1000L).toString();
+
+                if (currentSeparator == null || !Objects.equals(currentSeparator, separator)) {
+                    currentSeparator = separator;
+                    notificationModels.add(separator(currentSeparator));
+                }
+            }
+
+            notificationModels.add(notificationModel);
 
             cursor.moveToNext();
         }
@@ -191,7 +206,7 @@ public final class NotificationModel extends Model {
 
     public static ArrayList<NotificationModel> getByProfile(
             ContentResolver contentResolver, ProfileModel profileModel) {
-        return getByProfile(contentResolver, profileModel, Integer.MAX_VALUE);
+        return getByProfile(contentResolver, profileModel, Integer.MAX_VALUE, true);
     }
 
     @Override

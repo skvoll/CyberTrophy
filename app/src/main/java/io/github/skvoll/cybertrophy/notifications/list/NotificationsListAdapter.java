@@ -1,14 +1,18 @@
 package io.github.skvoll.cybertrophy.notifications.list;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import io.github.skvoll.cybertrophy.GlideApp;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
 
@@ -22,20 +26,101 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position).getType();
+    }
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new LogViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_notifications_list_item, parent, false));
+        switch (viewType) {
+            case NotificationModel.TYPE_CATEGORY_SEPARATOR:
+                return new SeparatorViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.fragment_notifications_list_separator, parent, false));
+            default:
+                return new NotificationViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.fragment_notifications_list_item, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         final NotificationModel notificationModel = mItems.get(position);
 
-        LogViewHolder logViewHolder = (LogViewHolder) viewHolder;
+        NotificationViewHolder notificationViewHolder;
 
-        logViewHolder.tvTitle.setText(notificationModel.getTitle());
-        logViewHolder.tvMessage.setText(notificationModel.getMessage());
-        logViewHolder.tvTime.setText(notificationModel.getProfileId() + "");
+        switch (notificationModel.getType()) {
+            case NotificationModel.TYPE_CATEGORY_SEPARATOR:
+                SeparatorViewHolder separatorViewHolder = (SeparatorViewHolder) viewHolder;
+                separatorViewHolder.tvTitle.setText(notificationModel.getTitle());
+                break;
+            case NotificationModel.TYPE_DEBUG:
+                notificationViewHolder = (NotificationViewHolder) viewHolder;
+
+                if (notificationModel.isViewed()) {
+                    notificationViewHolder.cvItem.setAlpha(0.5f);
+                } else {
+                    notificationViewHolder.cvItem.setAlpha(1);
+                }
+
+                notificationViewHolder.ivImage.setVisibility(View.GONE);
+                notificationViewHolder.ivIcon.setVisibility(View.VISIBLE);
+
+                notificationViewHolder.ivIcon.setImageDrawable(
+                        mContext.getResources().getDrawable(R.drawable.ic_notifications_black_24dp));
+
+                // TODO: not working
+                notificationViewHolder.ivIcon.setColorFilter(
+                        mContext.getResources().getColor(R.color.secondaryColor),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
+                notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
+                notificationViewHolder.tvMessage.setText(notificationModel.getMessage());
+                notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
+                        notificationModel.getTime() * 1000L).toString());
+                break;
+            case NotificationModel.TYPE_NEW_GAME:
+            case NotificationModel.TYPE_GAME_REMOVED:
+            case NotificationModel.TYPE_NEW_ACHIEVEMENT:
+            case NotificationModel.TYPE_ACHIEVEMENT_REMOVED:
+            case NotificationModel.TYPE_GAME_COMPLETE:
+                notificationViewHolder = (NotificationViewHolder) viewHolder;
+
+                if (notificationModel.isViewed()) {
+                    notificationViewHolder.cvItem.setAlpha(0.5f);
+                } else {
+                    notificationViewHolder.cvItem.setAlpha(1);
+                }
+
+                notificationViewHolder.ivImage.setVisibility(View.GONE);
+                notificationViewHolder.ivIcon.setVisibility(View.VISIBLE);
+
+                GlideApp.with(mContext).load(notificationModel.getImageUrl())
+                        .placeholder(R.drawable.ic_notifications_black_24dp)
+                        .into(notificationViewHolder.ivIcon);
+
+                notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
+                notificationViewHolder.tvMessage.setText(
+                        getMessage(notificationModel.getType()));
+                notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
+                        notificationModel.getTime() * 1000L).toString());
+
+
+                break;
+            case NotificationModel.TYPE_ACHIEVEMENT_UNLOCKED:
+                notificationViewHolder = (NotificationViewHolder) viewHolder;
+                notificationViewHolder.ivImage.setVisibility(View.VISIBLE);
+                notificationViewHolder.ivIcon.setVisibility(View.GONE);
+
+                GlideApp.with(mContext).load(notificationModel.getImageUrl())
+                        .placeholder(R.drawable.achievement_icon_empty)
+                        .into(notificationViewHolder.ivImage);
+
+                notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
+                notificationViewHolder.tvMessage.setText(mContext.getResources()
+                        .getQuantityText(R.plurals.notification_achievements_unlocked, 1));
+                notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
+                        notificationModel.getTime() * 1000L).toString());
+                break;
+        }
     }
 
     @Override
@@ -43,14 +128,53 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
         return mItems.size();
     }
 
-    private static final class LogViewHolder extends RecyclerView.ViewHolder {
+    private CharSequence getMessage(int type) {
+        switch (type) {
+            case NotificationModel.TYPE_NEW_GAME:
+                return mContext.getResources()
+                        .getQuantityText(R.plurals.notification_new_games_in_library, 1);
+            case NotificationModel.TYPE_GAME_REMOVED:
+                return mContext.getResources()
+                        .getQuantityText(R.plurals.notification_games_removed_from_library, 1);
+            case NotificationModel.TYPE_NEW_ACHIEVEMENT:
+                return mContext.getResources()
+                        .getQuantityText(R.plurals.notification_new_achievements, 1);
+            case NotificationModel.TYPE_ACHIEVEMENT_REMOVED:
+                return mContext.getResources()
+                        .getQuantityText(R.plurals.notification_achievements_removed, 1);
+            case NotificationModel.TYPE_GAME_COMPLETE:
+                return mContext.getResources()
+                        .getQuantityText(R.plurals.notification_games_complete, 1);
+            default:
+                return mContext.getResources().getString(R.string.empty);
+        }
+    }
+
+    private static final class SeparatorViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTitle;
+
+        SeparatorViewHolder(View itemView) {
+            super(itemView);
+
+            tvTitle = itemView.findViewById(R.id.tv_title);
+        }
+    }
+
+    private static final class NotificationViewHolder extends RecyclerView.ViewHolder {
+        CardView cvItem;
+        ImageView ivImage;
+        ImageView ivIcon;
         TextView tvTitle;
         TextView tvMessage;
         TextView tvTime;
 
-        LogViewHolder(View itemView) {
+        NotificationViewHolder(View itemView) {
             super(itemView);
 
+            cvItem = (CardView) itemView;
+
+            ivImage = itemView.findViewById(R.id.iv_image);
+            ivIcon = itemView.findViewById(R.id.iv_icon);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvMessage = itemView.findViewById(R.id.tv_message);
             tvTime = itemView.findViewById(R.id.tv_time);
