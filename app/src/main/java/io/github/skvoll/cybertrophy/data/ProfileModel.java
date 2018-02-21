@@ -20,7 +20,7 @@ import io.github.skvoll.cybertrophy.VolleySingleton;
 import io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 import io.github.skvoll.cybertrophy.steam.SteamProfile;
 
-public final class ProfileModel extends Model {
+public final class ProfileModel extends Model<ProfileModel> {
     private static final String TAG = ProfileModel.class.getSimpleName();
 
     private static String sBackgroundImagePattern = "url\\(\\s\\'(.*)\\'\\s\\);";
@@ -131,8 +131,10 @@ public final class ProfileModel extends Model {
     }
 
     @Override
-    void setId(Long id) {
+    ProfileModel setId(Long id) {
         mId = id;
+
+        return this;
     }
 
     public Long getSteamId() {
@@ -175,8 +177,10 @@ public final class ProfileModel extends Model {
         return mIsInitialized == 1;
     }
 
-    public void setInitialized(boolean isInitialized) {
+    public ProfileModel setInitialized(boolean isInitialized) {
         mIsInitialized = isInitialized ? 1 : 0;
+
+        return this;
     }
 
     public Boolean isActive() {

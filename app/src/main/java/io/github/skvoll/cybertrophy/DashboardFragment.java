@@ -319,6 +319,15 @@ public class DashboardFragment extends Fragment implements
         }
 
         @Override
+        protected Boolean doInBackground(Long... appIds) {
+            if (!mProfileModel.isInitialized()) {
+                return false;
+            }
+
+            return super.doInBackground(appIds);
+        }
+
+        @Override
         protected void onPostExecute(Boolean success) {
             if (mFragmentWeakReference == null) {
                 return;

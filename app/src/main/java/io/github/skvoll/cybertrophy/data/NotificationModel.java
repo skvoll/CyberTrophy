@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import io.github.skvoll.cybertrophy.data.DataContract.NotificationEntry;
 
-public final class NotificationModel extends Model {
+public final class NotificationModel extends Model<NotificationModel> {
     public static final int TYPE_CATEGORY_SEPARATOR = 1;
     public static final int TYPE_DEBUG = 1000;
     public static final int TYPE_MESSAGE = 1001;
@@ -34,8 +34,9 @@ public final class NotificationModel extends Model {
     private String mImageUrl;
     private Long mProfileId;
     private Long mObjectId;
+    private Integer mObjectsCount;
 
-    private NotificationModel(int type) {
+    public NotificationModel(int type) {
         mTime = System.currentTimeMillis() / 1000;
         mType = type;
         mIsViewed = 0;
@@ -52,6 +53,7 @@ public final class NotificationModel extends Model {
         mImageUrl = cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_IMAGE_URL));
         mProfileId = cursor.getLong(cursor.getColumnIndex(NotificationEntry.COLUMN_PROFILE_ID));
         mObjectId = cursor.getLong(cursor.getColumnIndex(NotificationEntry.COLUMN_OBJECT_ID));
+        mObjectsCount = cursor.getInt(cursor.getColumnIndex(NotificationEntry.COLUMN_OBJECTS_COUNT));
     }
 
     @NonNull
@@ -67,8 +69,7 @@ public final class NotificationModel extends Model {
     public static NotificationModel debug(String title, String message) {
         NotificationModel notificationModel = new NotificationModel(TYPE_DEBUG);
 
-        notificationModel.setTitle(title);
-        notificationModel.setMessage(message);
+        notificationModel.setTitle(title).setMessage(message);
 
         return notificationModel;
     }
@@ -77,8 +78,7 @@ public final class NotificationModel extends Model {
     public static NotificationModel message(String title, String message) {
         NotificationModel notificationModel = new NotificationModel(TYPE_MESSAGE);
 
-        notificationModel.setTitle(title);
-        notificationModel.setMessage(message);
+        notificationModel.setTitle(title).setMessage(message);
 
         return notificationModel;
     }
@@ -87,10 +87,11 @@ public final class NotificationModel extends Model {
     public static NotificationModel newGame(GameModel gameModel) {
         NotificationModel notificationModel = new NotificationModel(TYPE_NEW_GAME);
 
-        notificationModel.setTitle(gameModel.getName());
-        notificationModel.setImageUrl(gameModel.getIconUrl());
-        notificationModel.setProfileId(gameModel.getProfileId());
-        notificationModel.setObjectId(gameModel.getId());
+        notificationModel.setTitle(gameModel.getName())
+                .setImageUrl(gameModel.getIconUrl())
+                .setProfileId(gameModel.getProfileId())
+                .setObjectId(gameModel.getId())
+                .setObjectsCount(1);
 
         return notificationModel;
     }
@@ -99,10 +100,11 @@ public final class NotificationModel extends Model {
     public static NotificationModel gameRemoved(GameModel gameModel) {
         NotificationModel notificationModel = new NotificationModel(TYPE_GAME_REMOVED);
 
-        notificationModel.setTitle(gameModel.getName());
-        notificationModel.setImageUrl(gameModel.getIconUrl());
-        notificationModel.setProfileId(gameModel.getProfileId());
-        notificationModel.setObjectId(gameModel.getId());
+        notificationModel.setTitle(gameModel.getName())
+                .setImageUrl(gameModel.getIconUrl())
+                .setProfileId(gameModel.getProfileId())
+                .setObjectId(gameModel.getId())
+                .setObjectsCount(1);
 
         return notificationModel;
     }
@@ -111,10 +113,11 @@ public final class NotificationModel extends Model {
     public static NotificationModel newAchievement(GameModel gameModel) {
         NotificationModel notificationModel = new NotificationModel(TYPE_NEW_ACHIEVEMENT);
 
-        notificationModel.setTitle(gameModel.getName());
-        notificationModel.setImageUrl(gameModel.getIconUrl());
-        notificationModel.setProfileId(gameModel.getProfileId());
-        notificationModel.setObjectId(gameModel.getId());
+        notificationModel.setTitle(gameModel.getName())
+                .setImageUrl(gameModel.getIconUrl())
+                .setProfileId(gameModel.getProfileId())
+                .setObjectId(gameModel.getId())
+                .setObjectsCount(1);
 
         return notificationModel;
     }
@@ -123,10 +126,11 @@ public final class NotificationModel extends Model {
     public static NotificationModel achievementRemoved(GameModel gameModel) {
         NotificationModel notificationModel = new NotificationModel(TYPE_ACHIEVEMENT_REMOVED);
 
-        notificationModel.setTitle(gameModel.getName());
-        notificationModel.setImageUrl(gameModel.getIconUrl());
-        notificationModel.setProfileId(gameModel.getProfileId());
-        notificationModel.setObjectId(gameModel.getId());
+        notificationModel.setTitle(gameModel.getName())
+                .setImageUrl(gameModel.getIconUrl())
+                .setProfileId(gameModel.getProfileId())
+                .setObjectId(gameModel.getId())
+                .setObjectsCount(1);
 
         return notificationModel;
     }
@@ -135,10 +139,11 @@ public final class NotificationModel extends Model {
     public static NotificationModel achievementUnlocked(AchievementModel achievementModel) {
         NotificationModel notificationModel = new NotificationModel(TYPE_ACHIEVEMENT_UNLOCKED);
 
-        notificationModel.setTitle(achievementModel.getName());
-        notificationModel.setImageUrl(achievementModel.getIconUrl());
-        notificationModel.setProfileId(achievementModel.getProfileId());
-        notificationModel.setObjectId(achievementModel.getId());
+        notificationModel.setTitle(achievementModel.getName())
+                .setImageUrl(achievementModel.getIconUrl())
+                .setProfileId(achievementModel.getProfileId())
+                .setObjectId(achievementModel.getId())
+                .setObjectsCount(1);
 
         return notificationModel;
     }
@@ -147,18 +152,19 @@ public final class NotificationModel extends Model {
     public static NotificationModel gameComplete(GameModel gameModel) {
         NotificationModel notificationModel = new NotificationModel(TYPE_GAME_COMPLETE);
 
-        notificationModel.setTitle(gameModel.getName());
-        notificationModel.setImageUrl(gameModel.getIconUrl());
-        notificationModel.setProfileId(gameModel.getProfileId());
-        notificationModel.setObjectId(gameModel.getId());
+        notificationModel.setTitle(gameModel.getName())
+                .setImageUrl(gameModel.getIconUrl())
+                .setProfileId(gameModel.getProfileId())
+                .setObjectId(gameModel.getId())
+                .setObjectsCount(1);
 
         return notificationModel;
     }
 
     public static ArrayList<NotificationModel> getByProfile(
             ContentResolver contentResolver, ProfileModel profileModel, int count, boolean addSeparator) {
-
         String selection = NotificationEntry.COLUMN_PROFILE_ID + " = ?";
+        selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " = 0";
         selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " IS NULL";
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
         String sortOrder = NotificationEntry.COLUMN_TIME + " DESC";
@@ -224,72 +230,100 @@ public final class NotificationModel extends Model {
     }
 
     @Override
-    public void setId(Long id) {
-        mId = mId;
+    public NotificationModel setId(Long id) {
+        mId = id;
+
+        return this;
     }
 
     public Long getTime() {
         return mTime;
     }
 
-    public void setTime(Long time) {
+    public NotificationModel setTime(Long time) {
         mTime = time;
+
+        return this;
     }
 
     public Integer getType() {
         return mType;
     }
 
-    public void setType(Integer type) {
+    public NotificationModel setType(Integer type) {
         mType = type;
+
+        return this;
     }
 
     public boolean isViewed() {
         return mIsViewed == 1;
     }
 
-    public void setViewed(boolean viewed) {
+    public NotificationModel setViewed(boolean viewed) {
         mIsViewed = viewed ? 1 : 0;
+
+        return this;
     }
 
     public String getTitle() {
         return mTitle;
     }
 
-    public void setTitle(String title) {
+    public NotificationModel setTitle(String title) {
         mTitle = title;
+
+        return this;
     }
 
     public String getMessage() {
         return mMessage;
     }
 
-    public void setMessage(String message) {
+    public NotificationModel setMessage(String message) {
         mMessage = message;
+
+        return this;
     }
 
     public String getImageUrl() {
         return mImageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public NotificationModel setImageUrl(String imageUrl) {
         mImageUrl = imageUrl;
+
+        return this;
     }
 
     public Long getProfileId() {
         return mProfileId;
     }
 
-    public void setProfileId(Long profileId) {
+    public NotificationModel setProfileId(Long profileId) {
         mProfileId = profileId;
+
+        return this;
     }
 
     public Long getObjectId() {
         return mObjectId;
     }
 
-    public void setObjectId(Long objectId) {
+    public NotificationModel setObjectId(Long objectId) {
         mObjectId = objectId;
+
+        return this;
+    }
+
+    public Integer getObjectsCount() {
+        return mObjectsCount;
+    }
+
+    public NotificationModel setObjectsCount(Integer objectsCount) {
+        mObjectsCount = objectsCount;
+
+        return this;
     }
 
     @Override
@@ -304,7 +338,17 @@ public final class NotificationModel extends Model {
         contentValues.put(NotificationEntry.COLUMN_IMAGE_URL, mImageUrl);
         contentValues.put(NotificationEntry.COLUMN_PROFILE_ID, mProfileId);
         contentValues.put(NotificationEntry.COLUMN_OBJECT_ID, mObjectId);
+        contentValues.put(NotificationEntry.COLUMN_OBJECTS_COUNT, mObjectsCount);
 
         return contentValues;
+    }
+
+    @Override
+    public void save(ContentResolver contentResolver) {
+        if (getType() == TYPE_CATEGORY_SEPARATOR) {
+            return;
+        }
+
+        super.save(contentResolver);
     }
 }

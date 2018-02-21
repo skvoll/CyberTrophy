@@ -14,7 +14,7 @@ import io.github.skvoll.cybertrophy.steam.SteamGame;
 import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 import static io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 
-public final class GameModel extends Model {
+public final class GameModel extends Model<GameModel> {
     public static final int ALL = 0;
     public static final int INCOMPLETE = 1;
     public static final int IN_PROGRESS = 2;
@@ -229,8 +229,10 @@ public final class GameModel extends Model {
     }
 
     @Override
-    void setId(Long id) {
+    GameModel setId(Long id) {
         mId = id;
+
+        return this;
     }
 
     public Long getProfileId() {
@@ -245,16 +247,20 @@ public final class GameModel extends Model {
         return mName;
     }
 
-    public void setName(String name) {
+    public GameModel setName(String name) {
         mName = name;
+
+        return this;
     }
 
     public Integer getPlaytimeForever() {
         return mPlaytimeForever;
     }
 
-    public void setPlaytimeForever(Integer playtimeForever) {
+    public GameModel setPlaytimeForever(Integer playtimeForever) {
         mPlaytimeForever = playtimeForever;
+
+        return this;
     }
 
     public String getIconUrl() {
@@ -269,24 +275,30 @@ public final class GameModel extends Model {
         return mLastPlay;
     }
 
-    public void setLastPlay(Long lastPlay) {
+    public GameModel setLastPlay(Long lastPlay) {
         mLastPlay = lastPlay;
+
+        return this;
     }
 
     public Integer getAchievementsTotalCount() {
         return mAchievementsTotalCount;
     }
 
-    public void setAchievementsTotalCount(Integer achievementsTotalCount) {
+    public GameModel setAchievementsTotalCount(Integer achievementsTotalCount) {
         mAchievementsTotalCount = achievementsTotalCount;
+
+        return this;
     }
 
     public Integer getAchievementsUnlockedCount() {
         return mAchievementsUnlockedCount;
     }
 
-    public void setAchievementsUnlockedCount(Integer achievementsUnlockedCount) {
+    public GameModel setAchievementsUnlockedCount(Integer achievementsUnlockedCount) {
         mAchievementsUnlockedCount = achievementsUnlockedCount;
+
+        return this;
     }
 
     public Boolean isIncomplete() {

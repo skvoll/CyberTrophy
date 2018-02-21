@@ -5,12 +5,12 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 
-abstract class Model {
+abstract class Model<T> {
     public abstract Uri getUri(Long id);
 
     public abstract Long getId();
 
-    abstract void setId(Long id);
+    abstract T setId(Long id);
 
     public abstract ContentValues toContentValues();
 

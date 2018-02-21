@@ -13,7 +13,7 @@ import java.util.HashMap;
 import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 import io.github.skvoll.cybertrophy.steam.SteamAchievement;
 
-public final class AchievementModel extends Model {
+public final class AchievementModel extends Model<AchievementModel> {
     public static final int ALL = 0;
     public static final int LOCKED = 1;
     public static final int UNLOCKED = 2;
@@ -195,8 +195,10 @@ public final class AchievementModel extends Model {
     }
 
     @Override
-    void setId(Long id) {
+    AchievementModel setId(Long id) {
         mId = id;
+
+        return this;
     }
 
     public Long getProfileId() {
@@ -219,24 +221,30 @@ public final class AchievementModel extends Model {
         return mName;
     }
 
-    public void setName(String name) {
+    public AchievementModel setName(String name) {
         mName = name;
+
+        return this;
     }
 
     public Boolean isHidden() {
         return mIsHidden == 1;
     }
 
-    public void setHidden(Boolean isHidden) {
+    public AchievementModel setHidden(Boolean isHidden) {
         mIsHidden = isHidden ? 1 : 0;
+
+        return this;
     }
 
     public String getDescription() {
         return mDescription;
     }
 
-    public void setDescription(String description) {
+    public AchievementModel setDescription(String description) {
         mDescription = description;
+
+        return this;
     }
 
     public String getIconUrl() {
@@ -251,24 +259,30 @@ public final class AchievementModel extends Model {
         return mPercent;
     }
 
-    public void setPercent(BigDecimal percent) {
+    public AchievementModel setPercent(BigDecimal percent) {
         mPercent = percent;
+
+        return this;
     }
 
     public Boolean isUnlocked() {
         return mIsUnlocked == 1;
     }
 
-    public void setUnlocked(Boolean isUnlocked) {
+    public AchievementModel setUnlocked(Boolean isUnlocked) {
         mIsUnlocked = isUnlocked ? 1 : 0;
+
+        return this;
     }
 
     public Integer getUnlockTime() {
         return mUnlockTime;
     }
 
-    public void setUnlockTime(Integer unlockTime) {
+    public AchievementModel setUnlockTime(Integer unlockTime) {
         mUnlockTime = unlockTime;
+
+        return this;
     }
 
     @Override

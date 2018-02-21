@@ -57,7 +57,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 notificationViewHolder = (NotificationViewHolder) viewHolder;
 
                 if (notificationModel.isViewed()) {
-                    notificationViewHolder.cvItem.setAlpha(0.5f);
+                    notificationViewHolder.cvItem.setAlpha(0.75f);
                 } else {
                     notificationViewHolder.cvItem.setAlpha(1);
                 }
@@ -85,7 +85,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 notificationViewHolder = (NotificationViewHolder) viewHolder;
 
                 if (notificationModel.isViewed()) {
-                    notificationViewHolder.cvItem.setAlpha(0.5f);
+                    notificationViewHolder.cvItem.setAlpha(0.75f);
                 } else {
                     notificationViewHolder.cvItem.setAlpha(1);
                 }
@@ -107,6 +107,13 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 break;
             case NotificationModel.TYPE_ACHIEVEMENT_UNLOCKED:
                 notificationViewHolder = (NotificationViewHolder) viewHolder;
+
+                if (notificationModel.isViewed()) {
+                    notificationViewHolder.cvItem.setAlpha(0.75f);
+                } else {
+                    notificationViewHolder.cvItem.setAlpha(1);
+                }
+
                 notificationViewHolder.ivImage.setVisibility(View.VISIBLE);
                 notificationViewHolder.ivIcon.setVisibility(View.GONE);
 
@@ -120,6 +127,10 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
                         notificationModel.getTime() * 1000L).toString());
                 break;
+        }
+
+        if (!notificationModel.isViewed()) {
+            notificationModel.setViewed(true).save(mContext.getContentResolver());
         }
     }
 
