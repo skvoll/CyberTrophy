@@ -88,7 +88,7 @@ public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         gameViewHolder.pbProgress.setProgress(gameModel.getAchievementsUnlockedCount());
 
         switch (gameModel.getStatus()) {
-            case GameModel.INCOMPLETE:
+            case GameModel.STATUS_INCOMPLETE:
                 if (playTime > 0) {
                     gameViewHolder.tvLastPLay.setVisibility(View.VISIBLE);
                     gameViewHolder.tvPlaytime.setVisibility(View.VISIBLE);
@@ -100,14 +100,14 @@ public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 gameViewHolder.tvProgress.setVisibility(View.GONE);
                 gameViewHolder.pbProgress.setVisibility(View.GONE);
                 break;
-            case GameModel.IN_PROGRESS:
+            case GameModel.STATUS_IN_PROGRESS:
                 gameViewHolder.tvLastPLay.setVisibility(View.VISIBLE);
                 gameViewHolder.tvPlaytime.setVisibility(View.GONE);
                 gameViewHolder.tvAchievements.setVisibility(View.GONE);
                 gameViewHolder.tvProgress.setVisibility(View.VISIBLE);
                 gameViewHolder.pbProgress.setVisibility(View.VISIBLE);
                 break;
-            case GameModel.COMPLETE:
+            case GameModel.STATUS_COMPLETE:
                 gameViewHolder.tvLastPLay.setVisibility(View.GONE);
                 gameViewHolder.tvPlaytime.setVisibility(View.VISIBLE);
                 gameViewHolder.tvAchievements.setVisibility(View.VISIBLE);

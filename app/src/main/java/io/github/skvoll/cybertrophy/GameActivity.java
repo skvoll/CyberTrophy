@@ -22,7 +22,6 @@ import java.util.List;
 import io.github.skvoll.cybertrophy.achievements.list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
-import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 
 public class GameActivity extends AppCompatActivity implements
@@ -86,11 +85,11 @@ public class GameActivity extends AppCompatActivity implements
         }
 
         switch (mGameModel.getStatus()) {
-            case GameModel.INCOMPLETE:
+            case GameModel.STATUS_INCOMPLETE:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementModel.LOCKED,
+                                AchievementModel.STATUS_LOCKED,
                                 this
                         ),
                         null
@@ -98,11 +97,11 @@ public class GameActivity extends AppCompatActivity implements
 
                 mTabLayout.setVisibility(View.GONE);
                 break;
-            case GameModel.IN_PROGRESS:
+            case GameModel.STATUS_IN_PROGRESS:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementModel.LOCKED,
+                                AchievementModel.STATUS_LOCKED,
                                 this
                         ),
                         getString(R.string.achievements_list_locked)
@@ -110,17 +109,17 @@ public class GameActivity extends AppCompatActivity implements
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementModel.UNLOCKED,
+                                AchievementModel.STATUS_UNLOCKED,
                                 this
                         ),
                         getString(R.string.achievements_list_unlocked)
                 );
                 break;
-            case GameModel.COMPLETE:
+            case GameModel.STATUS_COMPLETE:
                 mPagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
-                                AchievementModel.UNLOCKED,
+                                AchievementModel.STATUS_UNLOCKED,
                                 this
                         ),
                         null

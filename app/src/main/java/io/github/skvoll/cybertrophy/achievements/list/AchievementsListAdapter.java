@@ -99,7 +99,9 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                             achievementModel.getUnlockTime() * 1000L));
                     achievementFullViewHolder.vProgress.getLayoutParams().width = 0;
                 } else {
-                    achievementFullViewHolder.tvInfo.setText(String.format("%s%%", achievementModel.getPercent()));
+                    achievementFullViewHolder.tvInfo.setText(
+                            mContext.getResources().getString(R.string.achievement_rarity,
+                            getRarityString(achievementModel.getRatity()), achievementModel.getPercent()));
                     achievementFullViewHolder.vProgress.getLayoutParams().width
                             = Math.round(mMaxWidth * (achievementModel.getPercent().floatValue() / 100f));
                 }
@@ -144,6 +146,21 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    private String getRarityString(int rarity) {
+        switch (rarity) {
+            case AchievementModel.RARITY_COMMON:
+                return mContext.getResources().getString(R.string.rarity_common);
+            case AchievementModel.RARITY_RARE:
+                return mContext.getResources().getString(R.string.rarity_rare);
+            case AchievementModel.RARITY_EPIC:
+                return mContext.getResources().getString(R.string.rarity_epic);
+            case AchievementModel.RARITY_LEGENDARY:
+                return mContext.getResources().getString(R.string.rarity_legendary);
+            default:
+                return mContext.getResources().getString(R.string.empty);
+        }
     }
 
     private static final class AchievementFullViewHolder extends RecyclerView.ViewHolder {

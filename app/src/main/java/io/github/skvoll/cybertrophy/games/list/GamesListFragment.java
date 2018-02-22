@@ -61,7 +61,7 @@ public class GamesListFragment extends Fragment implements
         }
 
         mProfileId = getArguments().getLong(KEY_PROFILE_ID, -1);
-        mGameStatus = getArguments().getInt(KEY_GAME_STATUS, GameModel.ALL);
+        mGameStatus = getArguments().getInt(KEY_GAME_STATUS, GameModel.STATUS_ALL);
 
         if (mProfileId == -1) {
             throw new IllegalArgumentException();

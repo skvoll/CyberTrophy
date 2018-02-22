@@ -1,9 +1,9 @@
 package io.github.skvoll.cybertrophy.notifications.list;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
         Date date = new Date();
         date.setTime(notificationModel.getTime() * 1000L);
         DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance(
-                DateFormat.MEDIUM, DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
+                DateFormat.MEDIUM, DateFormat.SHORT, Resources.getSystem().getConfiguration().locale);
 
         NotificationViewHolder notificationViewHolder;
 

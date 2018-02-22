@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:paddingBottom="@dimen/default_vertical_indent"
+    android:paddingEnd="@dimen/default_horizontal_indent"
+    android:paddingStart="@dimen/default_horizontal_indent"
+    android:paddingTop="@dimen/default_vertical_indent"
     tools:context="io.github.skvoll.cybertrophy.AuthActivity">
 
     <TextView

@@ -65,13 +65,13 @@ public class GamesFragment extends Fragment implements
 
         mPagerAdapter = new PagerAdapter(getChildFragmentManager());
         mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.IN_PROGRESS, this),
+                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.STATUS_IN_PROGRESS, this),
                 getString(R.string.games_list_tab_in_progress));
         mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.INCOMPLETE, this),
+                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.STATUS_INCOMPLETE, this),
                 getString(R.string.games_list_tab_incomplete));
         mPagerAdapter.addFragment(
-                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.COMPLETE, this),
+                GamesListFragment.newInstance(mProfileModel.getId(), GameModel.STATUS_COMPLETE, this),
                 getString(R.string.games_list_tab_complete));
 
         mViewPager.setAdapter(mPagerAdapter);

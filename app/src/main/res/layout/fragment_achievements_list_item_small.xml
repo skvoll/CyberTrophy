@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="72dp"
-    android:layout_height="72dp"
+    android:layout_width="@dimen/achievement_icon_size"
+    android:layout_height="@dimen/achievement_icon_size"
     android:layout_marginEnd="4dp"
     android:layout_marginStart="4dp">
 
@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/iv_icon_mask"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="@dimen/achievement_icon_size"
+        android:layout_height="@dimen/achievement_icon_size"
         android:contentDescription="@string/achievement_icon_description"
         android:src="@drawable/achievement_icon_hidden"
         android:visibility="gone" />

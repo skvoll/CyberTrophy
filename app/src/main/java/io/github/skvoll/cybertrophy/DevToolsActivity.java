@@ -126,9 +126,9 @@ public class DevToolsActivity extends AppCompatActivity {
             public void run() {
                 ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
                 ArrayList<GameModel> gameModels = GameModel.getByProfile(
-                        getContentResolver(), profileModel, GameModel.IN_PROGRESS, 2);
+                        getContentResolver(), profileModel, GameModel.STATUS_IN_PROGRESS, 2);
                 ArrayList<AchievementModel> achievementModels = AchievementModel.getByGame(
-                        getContentResolver(), gameModels.get(0), AchievementModel.LOCKED, 2);
+                        getContentResolver(), gameModels.get(0), AchievementModel.STATUS_LOCKED, 2);
                 boolean isFirst = Math.random() < 0.5;
                 switch (notificationName) {
                     case "AchievementRemoved":

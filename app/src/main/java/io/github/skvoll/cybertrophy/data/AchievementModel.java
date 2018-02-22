@@ -14,9 +14,13 @@ import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 import io.github.skvoll.cybertrophy.steam.SteamAchievement;
 
 public final class AchievementModel extends Model<AchievementModel> {
-    public static final int ALL = 0;
-    public static final int LOCKED = 1;
-    public static final int UNLOCKED = 2;
+    public static final int STATUS_ALL = 0;
+    public static final int STATUS_LOCKED = 1;
+    public static final int STATUS_UNLOCKED = 2;
+    public static final int RARITY_COMMON = 0;
+    public static final int RARITY_RARE = 1;
+    public static final int RARITY_EPIC = 2;
+    public static final int RARITY_LEGENDARY = 4;
 
     private Long mId;
     private Long mProfileId;
@@ -127,11 +131,11 @@ public final class AchievementModel extends Model<AchievementModel> {
         String sortOrder;
 
         switch (status) {
-            case LOCKED:
+            case STATUS_LOCKED:
                 selection += " AND " + AchievementEntry.COLUMN_IS_UNLOCKED + " = 0";
                 sortOrder = AchievementEntry.COLUMN_PERCENT + " DESC";
                 break;
-            case UNLOCKED:
+            case STATUS_UNLOCKED:
                 selection += " AND " + AchievementEntry.COLUMN_IS_UNLOCKED + " = 1";
                 sortOrder = AchievementEntry.COLUMN_UNLOCK_TIME + " DESC";
                 break;
@@ -177,7 +181,7 @@ public final class AchievementModel extends Model<AchievementModel> {
 
     public static ArrayList<AchievementModel> getByGame(
             ContentResolver contentResolver, GameModel gameModel) {
-        return getByGame(contentResolver, gameModel, ALL);
+        return getByGame(contentResolver, gameModel, STATUS_ALL);
     }
 
     @Override
@@ -283,6 +287,18 @@ public final class AchievementModel extends Model<AchievementModel> {
         mUnlockTime = unlockTime;
 
         return this;
+    }
+
+    public Integer getRatity() {
+        if (mPercent.compareTo(new BigDecimal(5)) == -1) {
+            return RARITY_LEGENDARY;
+        } else if (mPercent.compareTo(new BigDecimal(30)) == -1) {
+            return RARITY_EPIC;
+        } else if (mPercent.compareTo(new BigDecimal(70)) == -1) {
+            return RARITY_RARE;
+        } else {
+            return RARITY_COMMON;
+        }
     }
 
     @Override

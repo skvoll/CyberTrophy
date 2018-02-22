@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         mProfileFragment = new ProfileFragment();
         mCurrentFragment = mDashboardFragment;
 
+        for (Fragment fragment : mFragmentManager.getFragments()) {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+        }
+
         mFragmentManager.beginTransaction().add(R.id.fl_container,
                 mProfileFragment, String.valueOf(FRAGMENT_PROFILE)).commit();
         mFragmentManager.beginTransaction().hide(mProfileFragment).add(R.id.fl_container,

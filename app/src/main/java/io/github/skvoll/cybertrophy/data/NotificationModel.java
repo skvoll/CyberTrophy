@@ -3,6 +3,7 @@ package io.github.skvoll.cybertrophy.data;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -200,7 +201,8 @@ public final class NotificationModel extends Model<NotificationModel> {
                 } else {
                     Date date = new Date();
                     date.setTime(notificationModel.getTime() * 1000L);
-                    DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.FULL);
+                    DateFormat dateFormat = SimpleDateFormat.getDateInstance(
+                            DateFormat.FULL, Resources.getSystem().getConfiguration().locale);
 
                     separator = dateFormat.format(date);
                 }
@@ -228,7 +230,7 @@ public final class NotificationModel extends Model<NotificationModel> {
 
     public static Integer getUnviewedCountByProfile(
             ContentResolver contentResolver, ProfileModel profileModel) {
-        String selection =  "(" + NotificationEntry.COLUMN_PROFILE_ID + " = ?";
+        String selection = "(" + NotificationEntry.COLUMN_PROFILE_ID + " = ?";
         selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " = 0";
         selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " IS NULL)";
         selection += " AND " + NotificationEntry.COLUMN_IS_VIEWED + " = 0";

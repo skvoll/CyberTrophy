@@ -61,7 +61,7 @@ public class AchievementsListFragment extends Fragment implements
         }
 
         mGameId = getArguments().getLong(KEY_GAME_ID, -1);
-        mAchievementsStatus = getArguments().getInt(KEY_ACHIEVEMENTS_STATUS, AchievementModel.ALL);
+        mAchievementsStatus = getArguments().getInt(KEY_ACHIEVEMENTS_STATUS, AchievementModel.STATUS_ALL);
 
         if (mGameId == -1) {
             throw new IllegalArgumentException();

@@ -3,6 +3,7 @@ package io.github.skvoll.cybertrophy;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -82,9 +83,8 @@ public class AchievementPreviewFragment extends Fragment {
         final ImageView ivIcon = rootView.findViewById(R.id.iv_icon);
         final ImageView ivIconMask = rootView.findViewById(R.id.iv_icon_mask);
         final TextView tvName = rootView.findViewById(R.id.tv_name);
-        final LinearLayout llUnlockDate = rootView.findViewById(R.id.ll_unlock_date_wrapper);
         final TextView tvUnlockDate = rootView.findViewById(R.id.tv_unlock_date);
-        final TextView tvPercentage = rootView.findViewById(R.id.tv_percentage);
+        final TextView tvRarity = rootView.findViewById(R.id.tv_rarity);
         final Button btnShowInfo = rootView.findViewById(R.id.btn_show_info);
 
         final ImageButton btnGuidesSteam = rootView.findViewById(R.id.btn_guides_steam);
@@ -101,7 +101,7 @@ public class AchievementPreviewFragment extends Fragment {
         Date date = new Date();
         date.setTime(mAchievementModel.getUnlockTime() * 1000L);
         DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT,
-                DateFormat.SHORT, getResources().getConfiguration().locale);
+                DateFormat.SHORT, Resources.getSystem().getConfiguration().locale);
 
         final String unlockDate = dateFormat.format(date);
 
@@ -142,11 +142,12 @@ public class AchievementPreviewFragment extends Fragment {
         }
 
         if (!mAchievementModel.isUnlocked()) {
-            llUnlockDate.setVisibility(View.GONE);
+            tvUnlockDate.setVisibility(View.GONE);
         }
 
         tvUnlockDate.setText(unlockDate);
-        tvPercentage.setText(String.format("%s%%", mAchievementModel.getPercent()));
+        tvRarity.setText(getResources().getString(R.string.achievement_rarity,
+                getRarityString(mAchievementModel.getRatity()), mAchievementModel.getPercent()));
 
         btnGuidesSteam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +171,21 @@ public class AchievementPreviewFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private String getRarityString(int rarity) {
+        switch (rarity) {
+            case AchievementModel.RARITY_COMMON:
+                return getResources().getString(R.string.rarity_common);
+            case AchievementModel.RARITY_RARE:
+                return getResources().getString(R.string.rarity_rare);
+            case AchievementModel.RARITY_EPIC:
+                return getResources().getString(R.string.rarity_epic);
+            case AchievementModel.RARITY_LEGENDARY:
+                return getResources().getString(R.string.rarity_legendary);
+            default:
+                return getResources().getString(R.string.empty);
+        }
     }
 
     private void guidesSearchSteam(Long appId, String achievementName) {

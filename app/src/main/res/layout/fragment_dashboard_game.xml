@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_game"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="4dp">
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/card_horizontal_indent"
+        android:layout_marginStart="@dimen/card_horizontal_indent"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="2dp">
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:paddingBottom="8dp"
+                android:paddingEnd="@dimen/default_horizontal_indent"
+                android:paddingStart="@dimen/default_horizontal_indent"
+                android:paddingTop="8dp">
 
                 <TextView
                     android:id="@+id/tv_game_name"
@@ -72,8 +74,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:text="@string/dashboard_title_recent_achievements"
+        android:paddingBottom="8dp"
+        android:paddingEnd="@dimen/default_horizontal_indent"
+        android:paddingStart="@dimen/default_horizontal_indent"
+        android:paddingTop="8dp"
+        android:text="@string/dashboard_subtitle_recent_achievements"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@color/secondaryColor" />
 
@@ -93,16 +98,20 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:text="@string/dashboard_title_locked_achievements"
+        android:paddingBottom="8dp"
+        android:paddingEnd="@dimen/default_horizontal_indent"
+        android:paddingStart="@dimen/default_horizontal_indent"
+        android:paddingTop="8dp"
+        android:text="@string/dashboard_subtitle_locked_achievements"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@color/secondaryColor" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="2dp">
+        android:layout_marginEnd="@dimen/card_horizontal_indent"
+        android:layout_marginStart="@dimen/card_horizontal_indent"
+        app:cardUseCompatPadding="true">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_locked_achievements"

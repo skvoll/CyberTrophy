@@ -6,6 +6,11 @@
     <string name="empty" />
     <string name="ok">OK</string>
 
+    <string name="rarity_common">Common</string>
+    <string name="rarity_rare">Rare</string>
+    <string name="rarity_epic">Epic</string>
+    <string name="rarity_legendary">Legendary</string>
+
     <plurals name="notification_new_games_in_library">
         <item quantity="one">New game in library</item>
         <item quantity="other">%d new games in library</item>
@@ -67,14 +72,14 @@
     <string name="profile_avatar_description">Profile avatar</string>
     <string name="profile_background_description">Profile background</string>
 
-    <string name="dashboard_title_recent_achievements">Recent achievements</string>
-    <string name="dashboard_title_locked_achievements">Locked achievements</string>
     <string name="dashboard_game_achievements_progress">%d/%d achievements</string>
+    <string name="dashboard_subtitle_recent_achievements">Recent achievements</string>
+    <string name="dashboard_subtitle_locked_achievements">Locked achievements</string>
 
     <string name="achievement_title_hidden">Hidden</string>
+    <string name="achievement_rarity">%s (%.1f%%)</string>
+    <string name="achievement_subtitle_guides">Guides</string>
     <string name="achievement_show_info_button">Show info</string>
-    <string name="achievement_unlock_date_icon">achievement unlock date</string>
-    <string name="achievement_percentage_icon">achievement percentage</string>
     <string name="achievement_guides_steam_btn">achievement guides in steam</string>
     <string name="achievement_guides_youtube_btn">achievement guides in youtube</string>
     <string name="achievement_guides_google_btn">achievement guides in google</string>

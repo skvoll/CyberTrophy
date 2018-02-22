@@ -119,7 +119,6 @@ public class DashboardFragment extends Fragment implements
         tvGameProgress.setText(getResources().getString(R.string.dashboard_game_achievements_progress,
                 gameModel.getAchievementsUnlockedCount(),
                 gameModel.getAchievementsTotalCount()));
-        pbGameProgress.setScaleY(2f);
         pbGameProgress.setMax(gameModel.getAchievementsTotalCount());
         pbGameProgress.setProgress(gameModel.getAchievementsUnlockedCount());
 
@@ -270,9 +269,9 @@ public class DashboardFragment extends Fragment implements
             }
 
             ArrayList<AchievementModel> recentAchievementModels = AchievementModel.getByGame(
-                    mContentResolver, gameModel, AchievementModel.UNLOCKED, 3);
+                    mContentResolver, gameModel, AchievementModel.STATUS_UNLOCKED, 3);
             ArrayList<AchievementModel> lockedAchievementModels = AchievementModel.getByGame(
-                    mContentResolver, gameModel, AchievementModel.LOCKED);
+                    mContentResolver, gameModel, AchievementModel.STATUS_LOCKED);
 
             return new LoadDataTaskResult(gameModel, recentAchievementModels, lockedAchievementModels);
         }

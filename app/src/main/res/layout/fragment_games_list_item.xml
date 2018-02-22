@@ -9,7 +9,10 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingBottom="8dp"
+    android:paddingEnd="@dimen/default_horizontal_indent"
+    android:paddingStart="@dimen/default_horizontal_indent"
+    android:paddingTop="8dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,8 +20,8 @@
 
         <ImageView
             android:id="@+id/iv_logo"
-            android:layout_width="152dp"
-            android:layout_height="72dp"
+            android:layout_width="@dimen/game_logo_width"
+            android:layout_height="@dimen/game_logo_height"
             android:contentDescription="@string/game_logo_description"
             android:src="@drawable/game_logo_empty" />
 
@@ -26,7 +29,7 @@
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
@@ -39,7 +42,7 @@
             android:id="@+id/tv_last_play"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
@@ -54,7 +57,7 @@
             android:id="@+id/tv_playtime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
@@ -69,7 +72,7 @@
             android:id="@+id/tv_achievements"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
@@ -96,7 +99,7 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
             android:max="100"
             android:progress="75"
             android:progressTint="@color/accentColor"

@@ -12,19 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:paddingBottom="@dimen/default_vertical_indent"
+        android:paddingEnd="@dimen/default_horizontal_indent"
+        android:paddingStart="@dimen/default_horizontal_indent"
+        android:paddingTop="@dimen/default_vertical_indent">
 
         <ImageView
             android:id="@+id/iv_icon"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="@dimen/achievement_icon_size"
+            android:layout_height="@dimen/achievement_icon_size"
             android:contentDescription="@string/achievement_icon_description"
             android:src="@drawable/achievement_icon_empty" />
 
         <ImageView
             android:id="@+id/iv_icon_mask"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="@dimen/achievement_icon_size"
+            android:layout_height="@dimen/achievement_icon_size"
             android:contentDescription="@string/achievement_icon_description"
             android:src="@drawable/achievement_icon_hidden"
             android:visibility="gone" />
@@ -33,13 +36,37 @@
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:layout_marginEnd="@dimen/default_horizontal_indent"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primaryTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             tools:text="Achievement name" />
+
+        <TextView
+            android:id="@+id/tv_rarity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_horizontal_indent"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            tools:text="Common (75%)" />
+
+        <TextView
+            android:id="@+id/tv_unlock_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_horizontal_indent"
+            android:layout_marginStart="@dimen/default_horizontal_indent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_rarity"
+            tools:text="01.01.1970 00:00" />
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
@@ -47,81 +74,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:paddingBottom="8dp"
+        android:paddingEnd="@dimen/default_horizontal_indent"
+        android:paddingStart="@dimen/default_horizontal_indent"
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
             android:text="@string/empty_achievement_description"
-            android:textColor="@color/primaryTextColor" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/primaryTextColor"
+            tools:text="@string/lorem_ipsum" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="12dp"
-            android:baselineAligned="false">
-
-            <LinearLayout
-                android:id="@+id/ll_unlock_date_wrapper"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="@string/achievement_unlock_date_icon"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_today_black_24dp"
-                    android:tint="@color/primaryTextColor" />
-
-                <TextView
-                    android:id="@+id/tv_unlock_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/primaryTextColor"
-                    tools:text="01.01.1970 00:00" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="@string/achievement_percentage_icon"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_insert_chart_black_24dp"
-                    android:tint="@color/primaryTextColor" />
-
-                <TextView
-                    android:id="@+id/tv_percentage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/primaryTextColor"
-                    tools:text="75%" />
-            </LinearLayout>
-        </LinearLayout>
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/achievement_subtitle_guides"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/secondaryColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:baselineAligned="false"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content">
 
             <Space
                 android:layout_width="0dp"
@@ -151,6 +130,8 @@
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:contentDescription="@string/achievement_guides_youtube_btn"
                 android:scaleType="fitXY"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
                 android:src="@drawable/ic_youtube_black_24dp"
                 android:tint="@color/primaryTextColor" />
 
@@ -166,6 +147,8 @@
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:contentDescription="@string/achievement_guides_google_btn"
                 android:scaleType="fitXY"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
                 android:src="@drawable/ic_google_black_24dp"
                 android:tint="@color/primaryTextColor" />
 

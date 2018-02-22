@@ -15,11 +15,11 @@ import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 import static io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 
 public final class GameModel extends Model<GameModel> {
-    public static final int ALL = 0;
-    public static final int INCOMPLETE = 1;
-    public static final int IN_PROGRESS = 2;
-    public static final int COMPLETE = 3;
-    public static final int NO_ACHIEVEMENTS = 4;
+    public static final int STATUS_ALL = 0;
+    public static final int STATUS_INCOMPLETE = 1;
+    public static final int STATUS_IN_PROGRESS = 2;
+    public static final int STATUS_COMPLETE = 3;
+    public static final int STATUS_NO_ACHIEVEMENTS = 4;
 
     private static String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
     private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
@@ -149,24 +149,24 @@ public final class GameModel extends Model<GameModel> {
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
         String sortOrder = GameEntry.COLUMN_NAME;
 
-        if (status == NO_ACHIEVEMENTS) {
+        if (status == STATUS_NO_ACHIEVEMENTS) {
             selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " == 0";
             sortOrder = GameEntry.COLUMN_NAME;
         } else {
             selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT + " != 0";
 
             switch (status) {
-                case IN_PROGRESS:
+                case STATUS_IN_PROGRESS:
                     selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
                             + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
                             + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
                     sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC";
                     break;
-                case INCOMPLETE:
+                case STATUS_INCOMPLETE:
                     selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == 0";
                     sortOrder = GameEntry.COLUMN_NAME;
                     break;
-                case COMPLETE:
+                case STATUS_COMPLETE:
                     selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " == "
                             + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
                     sortOrder = GameEntry.COLUMN_NAME;
@@ -211,7 +211,7 @@ public final class GameModel extends Model<GameModel> {
 
     public static ArrayList<GameModel> getByProfile(
             ContentResolver contentResolver, ProfileModel profileModel) {
-        return getByProfile(contentResolver, profileModel, ALL);
+        return getByProfile(contentResolver, profileModel, STATUS_ALL);
     }
 
     @Override
@@ -315,11 +315,11 @@ public final class GameModel extends Model<GameModel> {
 
     public int getStatus() {
         if (isComplete()) {
-            return COMPLETE;
+            return STATUS_COMPLETE;
         } else if (isInProgress()) {
-            return IN_PROGRESS;
+            return STATUS_IN_PROGRESS;
         } else {
-            return INCOMPLETE;
+            return STATUS_INCOMPLETE;
         }
     }
 
