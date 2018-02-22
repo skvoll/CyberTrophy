@@ -63,6 +63,7 @@
     <string name="game_logo_description">Game logo</string>
     <string name="achievement_icon_description">Achievement icon</string>
     <string name="notification_icon_description">Notification icon</string>
+    <string name="notification_indicator_description">New notification indicator</string>
     <string name="profile_avatar_description">Profile avatar</string>
     <string name="profile_background_description">Profile background</string>
 

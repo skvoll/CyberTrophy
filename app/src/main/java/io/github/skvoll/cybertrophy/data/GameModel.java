@@ -61,16 +61,10 @@ public final class GameModel extends Model<GameModel> {
         mAchievementsUnlockedCount = steamGame.getAchievementsUnlockedCount();
     }
 
-    public static GameModel getCurrent(ContentResolver contentResolver, ProfileModel profileModel) {
-        String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
-        selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
-                + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
-                + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
-        String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
-        String sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1";
-
-        Cursor cursor = contentResolver.query(GameEntry.URI, null, selection,
-                selectionArgs, sortOrder);
+    public static GameModel getById(ContentResolver contentResolver, Long id) {
+        Uri uri = ContentUris.withAppendedId(GameEntry.URI, id);
+        Cursor cursor = contentResolver.query(uri,
+                null, null, null, null);
 
         if (cursor == null) {
             return null;
@@ -89,10 +83,16 @@ public final class GameModel extends Model<GameModel> {
         return gameModel;
     }
 
-    public static GameModel getById(ContentResolver contentResolver, Long id) {
-        Uri uri = ContentUris.withAppendedId(GameEntry.URI, id);
-        Cursor cursor = contentResolver.query(uri,
-                null, null, null, null);
+    public static GameModel getCurrent(ContentResolver contentResolver, ProfileModel profileModel) {
+        String selection = GameEntry.COLUMN_PROFILE_ID + " = ?";
+        selection += " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT + " > 0"
+                + " AND " + GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT
+                + " < " + GameEntry.COLUMN_ACHIEVEMENTS_TOTAL_COUNT;
+        String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
+        String sortOrder = GameEntry.COLUMN_LAST_PLAY + " DESC LIMIT 1";
+
+        Cursor cursor = contentResolver.query(GameEntry.URI, null, selection,
+                selectionArgs, sortOrder);
 
         if (cursor == null) {
             return null;

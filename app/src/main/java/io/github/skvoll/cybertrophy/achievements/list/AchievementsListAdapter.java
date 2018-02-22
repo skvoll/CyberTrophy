@@ -122,6 +122,8 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                 } else {
                     if (achievementModel.isHidden()) {
                         achievementSmallViewHolder.ivIconMask.setVisibility(View.VISIBLE);
+                    } else {
+                        achievementSmallViewHolder.ivIconMask.setVisibility(View.GONE);
                     }
 
                     GlideApp.with(mContext).load(achievementModel.getIconGrayUrl())

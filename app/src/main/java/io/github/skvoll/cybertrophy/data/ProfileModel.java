@@ -68,9 +68,9 @@ public final class ProfileModel extends Model<ProfileModel> {
         mIsActive = 1;
     }
 
-    public static ProfileModel getActive(ContentResolver contentResolver) {
-        String selection = ProfileEntry.COLUMN_IS_ACTIVE + " = ?";
-        String[] selectionArgs = new String[]{"1"};
+    public static ProfileModel getById(ContentResolver contentResolver, Long id) {
+        String selection = ProfileEntry._ID + " = ?";
+        String[] selectionArgs = new String[]{id.toString()};
 
         Cursor cursor = contentResolver.query(ProfileEntry.URI, null,
                 selection, selectionArgs, null);
@@ -92,9 +92,9 @@ public final class ProfileModel extends Model<ProfileModel> {
         return profileModel;
     }
 
-    public static ProfileModel getById(ContentResolver contentResolver, Long id) {
-        String selection = ProfileEntry._ID + " = ?";
-        String[] selectionArgs = new String[]{id.toString()};
+    public static ProfileModel getActive(ContentResolver contentResolver) {
+        String selection = ProfileEntry.COLUMN_IS_ACTIVE + " = ?";
+        String[] selectionArgs = new String[]{"1"};
 
         Cursor cursor = contentResolver.query(ProfileEntry.URI, null,
                 selection, selectionArgs, null);

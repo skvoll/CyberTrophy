@@ -1,7 +1,10 @@
 package io.github.skvoll.cybertrophy;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,9 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import java.lang.ref.WeakReference;
+
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
-import io.github.skvoll.cybertrophy.notifications.list.NotificationsListFragment;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
+import io.github.skvoll.cybertrophy.notifications.list.NotificationsListFragment;
 import io.github.skvoll.cybertrophy.services.AllGamesParserJob;
 import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 import io.github.skvoll.cybertrophy.services.RecentGamesParserJob;
@@ -29,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private int mDevToolsCounter = 0;
 
-    private BottomNavigationView mBtnNavigation;
+    private ProfileModel mProfileModel;
+
+    private BottomNavigationView mBnvNavigation;
     private FragmentManager mFragmentManager;
     private Fragment mDashboardFragment;
     private Fragment mGamesFragment;
@@ -53,21 +61,21 @@ public class MainActivity extends AppCompatActivity {
 
         setup();
 
-        ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+        mProfileModel = ProfileModel.getActive(getContentResolver());
 
-        if (profileModel == null) {
+        if (mProfileModel == null) {
             startActivity(new Intent(this, AuthActivity.class));
             finish();
 
             return;
         }
 
-        if (!profileModel.isInitialized()) {
+        if (!mProfileModel.isInitialized()) {
             startService(new Intent(this, FirstGamesParserService.class));
         }
 
         mFragmentManager = getSupportFragmentManager();
-        mBtnNavigation = findViewById(R.id.bnv_navigation);
+        mBnvNavigation = findViewById(R.id.bnv_navigation);
         mDashboardFragment = new DashboardFragment();
         mGamesFragment = new GamesFragment();
         mNotificationsListFragment = new NotificationsListFragment();
@@ -94,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
             selectedItem = bundle.getInt(KEY_FRAGMENT, FRAGMENT_DASHBOARD);
         }
 
-        mBtnNavigation.setSelectedItemId(selectedItem);
-        mBtnNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mBnvNavigation.setSelectedItemId(selectedItem);
+        mBnvNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         setFragment(selectedItem);
     }
@@ -104,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(KEY_FRAGMENT, mBtnNavigation.getSelectedItemId());
+        outState.putInt(KEY_FRAGMENT, mBnvNavigation.getSelectedItemId());
     }
 
     @NonNull
@@ -131,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case FRAGMENT_NOTIFICATIONS_LIST:
+                CheckNotificationsTask.isOpened = true;
                 mDevToolsCounter = 0;
                 if (mCurrentFragment != mNotificationsListFragment) {
                     fragmentTransaction.hide(mCurrentFragment).show(mNotificationsListFragment).commit();
@@ -158,7 +167,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, DevToolsActivity.class));
         }
 
+        (new CheckNotificationsTask(this, mProfileModel)).execute();
+
         return true;
+    }
+
+    private void setNotificationIcon(@DrawableRes int iconResource) {
+        MenuItem menuItem = mBnvNavigation.getMenu().findItem(FRAGMENT_NOTIFICATIONS_LIST);
+
+        if (menuItem == null) {
+            return;
+        }
+
+        menuItem.setIcon(getDrawable(iconResource));
     }
 
     private void setup() {
@@ -169,5 +190,50 @@ public class MainActivity extends AppCompatActivity {
                 + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
         Log.d(TAG, RecentGamesParserJob.class.getSimpleName() + " has "
                 + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
+    }
+
+    private static class CheckNotificationsTask extends AsyncTask<Void, Void, Integer> {
+        static boolean isOpened = false;
+
+        private WeakReference<MainActivity> mMainActivityWeakReference;
+        private ProfileModel mProfileModel;
+
+        CheckNotificationsTask(MainActivity mainActivity, ProfileModel profileModel) {
+            mMainActivityWeakReference = new WeakReference<>(mainActivity);
+            mProfileModel = profileModel;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            MainActivity mainActivity = mMainActivityWeakReference.get();
+
+            if (mainActivity == null) {
+                return null;
+            }
+
+            ContentResolver contentResolver = mainActivity.getContentResolver();
+
+            return NotificationModel.getUnviewedCountByProfile(contentResolver, mProfileModel);
+        }
+
+        @Override
+        protected void onPostExecute(Integer unviewedNotificationsCount) {
+            MainActivity mainActivity = mMainActivityWeakReference.get();
+
+            if (mainActivity == null) {
+                return;
+            }
+
+            if (unviewedNotificationsCount > 0) {
+                if (isOpened) {
+                    mainActivity.setNotificationIcon(R.drawable.ic_notifications_black_24dp);
+                } else {
+                    mainActivity.setNotificationIcon(R.drawable.ic_notifications_active_black_24dp);
+                }
+            } else {
+                isOpened = false;
+                mainActivity.setNotificationIcon(R.drawable.ic_notifications_none_black_24dp);
+            }
+        }
     }
 }

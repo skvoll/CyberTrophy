@@ -53,12 +53,22 @@
 
                 <TextView
                     android:id="@+id/tv_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     tools:text="@string/lorem_ipsum_short" />
+
+                <ImageView
+                    android:id="@+id/iv_new_indicator"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/new_notification_indicator"
+                    android:contentDescription="@string/notification_indicator_description"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
             </LinearLayout>
 
             <TextView

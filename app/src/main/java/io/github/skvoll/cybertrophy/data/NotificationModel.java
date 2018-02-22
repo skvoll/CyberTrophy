@@ -8,7 +8,10 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 import io.github.skvoll.cybertrophy.data.DataContract.NotificationEntry;
@@ -167,7 +170,7 @@ public final class NotificationModel extends Model<NotificationModel> {
         selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " = 0";
         selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " IS NULL";
         String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
-        String sortOrder = NotificationEntry.COLUMN_TIME + " DESC";
+        String sortOrder = NotificationEntry._ID + " DESC";
 
         sortOrder += " LIMIT " + count;
 
@@ -191,8 +194,16 @@ public final class NotificationModel extends Model<NotificationModel> {
             NotificationModel notificationModel = new NotificationModel(cursor);
 
             if (addSeparator) {
-                separator = DateUtils.getRelativeTimeSpanString(
-                        notificationModel.getTime() * 1000L).toString();
+                if (currentSeparator == null) {
+                    separator = DateUtils.getRelativeTimeSpanString(
+                            notificationModel.getTime() * 1000L).toString();
+                } else {
+                    Date date = new Date();
+                    date.setTime(notificationModel.getTime() * 1000L);
+                    DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.FULL);
+
+                    separator = dateFormat.format(date);
+                }
 
                 if (currentSeparator == null || !Objects.equals(currentSeparator, separator)) {
                     currentSeparator = separator;
@@ -213,6 +224,34 @@ public final class NotificationModel extends Model<NotificationModel> {
     public static ArrayList<NotificationModel> getByProfile(
             ContentResolver contentResolver, ProfileModel profileModel) {
         return getByProfile(contentResolver, profileModel, Integer.MAX_VALUE, true);
+    }
+
+    public static Integer getUnviewedCountByProfile(
+            ContentResolver contentResolver, ProfileModel profileModel) {
+        String selection =  "(" + NotificationEntry.COLUMN_PROFILE_ID + " = ?";
+        selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " = 0";
+        selection += " OR " + NotificationEntry.COLUMN_PROFILE_ID + " IS NULL)";
+        selection += " AND " + NotificationEntry.COLUMN_IS_VIEWED + " = 0";
+        String[] selectionArgs = new String[]{String.valueOf(profileModel.getId())};
+
+        Cursor cursor = contentResolver.query(NotificationEntry.URI, null,
+                selection, selectionArgs, null);
+
+        if (cursor == null) {
+            return 0;
+        }
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            return 0;
+        }
+
+        Integer count = cursor.getCount();
+
+        cursor.close();
+
+        return count;
     }
 
     @Override

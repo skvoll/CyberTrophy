@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.github.skvoll.cybertrophy.GlideApp;
 import io.github.skvoll.cybertrophy.R;
@@ -20,7 +23,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     private Context mContext;
     private ArrayList<NotificationModel> mItems;
 
-    public NotificationsListAdapter(Context context, ArrayList<NotificationModel> notificationModels) {
+    NotificationsListAdapter(Context context, ArrayList<NotificationModel> notificationModels) {
         mContext = context;
         mItems = notificationModels;
     }
@@ -45,6 +48,10 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         final NotificationModel notificationModel = mItems.get(position);
+        Date date = new Date();
+        date.setTime(notificationModel.getTime() * 1000L);
+        DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance(
+                DateFormat.MEDIUM, DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
 
         NotificationViewHolder notificationViewHolder;
 
@@ -58,8 +65,10 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
 
                 if (notificationModel.isViewed()) {
                     notificationViewHolder.cvItem.setAlpha(0.75f);
+                    notificationViewHolder.ivNewIndicator.setVisibility(View.GONE);
                 } else {
                     notificationViewHolder.cvItem.setAlpha(1);
+                    notificationViewHolder.ivNewIndicator.setVisibility(View.VISIBLE);
                 }
 
                 notificationViewHolder.ivImage.setVisibility(View.GONE);
@@ -68,14 +77,11 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 notificationViewHolder.ivIcon.setImageDrawable(
                         mContext.getResources().getDrawable(R.drawable.ic_notifications_black_24dp));
 
-                // TODO: not working
-                notificationViewHolder.ivIcon.setColorFilter(
-                        mContext.getResources().getColor(R.color.secondaryColor),
-                        android.graphics.PorterDuff.Mode.MULTIPLY);
+                notificationViewHolder.ivIcon.getDrawable().setTint(
+                        mContext.getResources().getColor(R.color.secondaryColor));
                 notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
                 notificationViewHolder.tvMessage.setText(notificationModel.getMessage());
-                notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
-                        notificationModel.getTime() * 1000L).toString());
+                notificationViewHolder.tvTime.setText(dateFormat.format(date));
                 break;
             case NotificationModel.TYPE_NEW_GAME:
             case NotificationModel.TYPE_GAME_REMOVED:
@@ -86,8 +92,10 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
 
                 if (notificationModel.isViewed()) {
                     notificationViewHolder.cvItem.setAlpha(0.75f);
+                    notificationViewHolder.ivNewIndicator.setVisibility(View.GONE);
                 } else {
                     notificationViewHolder.cvItem.setAlpha(1);
+                    notificationViewHolder.ivNewIndicator.setVisibility(View.VISIBLE);
                 }
 
                 notificationViewHolder.ivImage.setVisibility(View.GONE);
@@ -100,18 +108,17 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
                 notificationViewHolder.tvMessage.setText(
                         getMessage(notificationModel.getType()));
-                notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
-                        notificationModel.getTime() * 1000L).toString());
-
-
+                notificationViewHolder.tvTime.setText(dateFormat.format(date));
                 break;
             case NotificationModel.TYPE_ACHIEVEMENT_UNLOCKED:
                 notificationViewHolder = (NotificationViewHolder) viewHolder;
 
                 if (notificationModel.isViewed()) {
                     notificationViewHolder.cvItem.setAlpha(0.75f);
+                    notificationViewHolder.ivNewIndicator.setVisibility(View.GONE);
                 } else {
                     notificationViewHolder.cvItem.setAlpha(1);
+                    notificationViewHolder.ivNewIndicator.setVisibility(View.VISIBLE);
                 }
 
                 notificationViewHolder.ivImage.setVisibility(View.VISIBLE);
@@ -124,8 +131,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
                 notificationViewHolder.tvMessage.setText(mContext.getResources()
                         .getQuantityText(R.plurals.notification_achievements_unlocked, 1));
-                notificationViewHolder.tvTime.setText(DateUtils.getRelativeTimeSpanString(
-                        notificationModel.getTime() * 1000L).toString());
+                notificationViewHolder.tvTime.setText(dateFormat.format(date));
                 break;
         }
 
@@ -175,6 +181,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
         CardView cvItem;
         ImageView ivImage;
         ImageView ivIcon;
+        ImageView ivNewIndicator;
         TextView tvTitle;
         TextView tvMessage;
         TextView tvTime;
@@ -186,6 +193,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
 
             ivImage = itemView.findViewById(R.id.iv_image);
             ivIcon = itemView.findViewById(R.id.iv_icon);
+            ivNewIndicator = itemView.findViewById(R.id.iv_new_indicator);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvMessage = itemView.findViewById(R.id.tv_message);
             tvTime = itemView.findViewById(R.id.tv_time);
