@@ -27,10 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingBottom="8dp"
+            android:paddingBottom="@dimen/default_vertical_indent"
             android:paddingEnd="@dimen/default_horizontal_indent"
             android:paddingStart="@dimen/default_horizontal_indent"
-            android:paddingTop="8dp">
+            android:paddingTop="@dimen/default_vertical_indent">
 
             <TextView
                 android:id="@+id/tv_achievement_name"

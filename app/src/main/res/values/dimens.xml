@@ -2,7 +2,8 @@
 <resources>
     <dimen name="default_horizontal_indent">16dp</dimen>
     <dimen name="default_vertical_indent">8dp</dimen>
-    <dimen name="card_horizontal_indent">8dp</dimen>
+    <dimen name="default_content_container_padding">8dp</dimen>
+    <dimen name="card_horizontal_indent">2dp</dimen>
     <dimen name="achievement_icon_size">72dp</dimen>
     <dimen name="game_logo_height">72dp</dimen>
     <dimen name="game_logo_width">152dp</dimen>

@@ -18,10 +18,10 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="8dp"
+        android:paddingBottom="@dimen/default_vertical_indent"
         android:paddingEnd="@dimen/default_horizontal_indent"
         android:paddingStart="@dimen/default_horizontal_indent"
-        android:paddingTop="8dp">
+        android:paddingTop="@dimen/default_vertical_indent">
 
         <ImageView
             android:id="@+id/iv_icon"
