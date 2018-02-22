@@ -6,14 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +32,7 @@ public class DashboardFragment extends Fragment implements
         AchievementsListFragment.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
     private ProfileModel mProfileModel;
-    private DrawerLayout mRootView;
+    private ViewGroup mRootView;
     private SwipeRefreshLayout mSrlRefresh;
 
     public DashboardFragment() {
@@ -53,23 +50,7 @@ public class DashboardFragment extends Fragment implements
             return null;
         }
 
-        mRootView = (DrawerLayout) inflater.inflate(R.layout.fragment_dashboard, container, false);
-        mRootView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mRootView.addDrawerListener(new ActionBarDrawerToggle(
-                getActivity(), mRootView, null, R.string.empty, R.string.empty) {
-
-            @Override
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-
-                mRootView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        });
+        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mSrlRefresh = mRootView.findViewById(R.id.srl_refresh);
         mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
@@ -204,13 +185,11 @@ public class DashboardFragment extends Fragment implements
             return;
         }
 
-        Fragment fragment = AchievementPreviewFragment.newInstance(achievementModel);
+        AchievementPreviewDialogFragment achievementPreviewDialogFragment
+                = AchievementPreviewDialogFragment.newInstance(achievementModel);
 
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_drawer, fragment).commit();
-
-        mRootView.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        mRootView.openDrawer(Gravity.END);
+        achievementPreviewDialogFragment.show(getActivity().getSupportFragmentManager(),
+                achievementPreviewDialogFragment.getTag());
     }
 
     @Override

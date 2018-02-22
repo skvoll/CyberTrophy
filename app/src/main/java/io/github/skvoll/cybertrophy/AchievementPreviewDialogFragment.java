@@ -1,5 +1,7 @@
 package io.github.skvoll.cybertrophy;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -7,12 +9,17 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,25 +32,26 @@ import java.util.Date;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
-public class AchievementPreviewFragment extends Fragment {
-    private static final String TAG = AchievementPreviewFragment.class.getSimpleName();
+public class AchievementPreviewDialogFragment extends BottomSheetDialogFragment {
+    private static final String TAG = AchievementPreviewDialogFragment.class.getSimpleName();
     private static final String KEY_ID = "ID";
 
     private Context mContext;
     private AchievementModel mAchievementModel;
     private GameModel mGameModel;
 
-    public AchievementPreviewFragment() {
+    public AchievementPreviewDialogFragment() {
     }
 
-    public static AchievementPreviewFragment newInstance(AchievementModel achievementModel) {
-        AchievementPreviewFragment achievementPreviewFragment = new AchievementPreviewFragment();
+    public static AchievementPreviewDialogFragment newInstance(AchievementModel achievementModel) {
+        AchievementPreviewDialogFragment achievementPreviewDialogFragment
+                = new AchievementPreviewDialogFragment();
 
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_ID, achievementModel.getId());
-        achievementPreviewFragment.setArguments(bundle);
+        achievementPreviewDialogFragment.setArguments(bundle);
 
-        return achievementPreviewFragment;
+        return achievementPreviewDialogFragment;
     }
 
     @Override
@@ -75,10 +83,13 @@ public class AchievementPreviewFragment extends Fragment {
         mGameModel = GameModel.getById(mContext.getContentResolver(), mAchievementModel.getGameId());
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_achievement_preview, container, false);
+    public void setupDialog(Dialog dialog, int style) {
+        super.setupDialog(dialog, style);
+
+        ViewGroup rootView = (ViewGroup) View.inflate(getContext(),
+                R.layout.fragment_achievement_preview_dialog, null);
 
         final ImageView ivIcon = rootView.findViewById(R.id.iv_icon);
         final ImageView ivIconMask = rootView.findViewById(R.id.iv_icon_mask);
@@ -121,7 +132,7 @@ public class AchievementPreviewFragment extends Fragment {
                 ivIconMask.setVisibility(View.VISIBLE);
 
                 tvName.setText(R.string.achievement_title_hidden);
-                llAchievementInfo.setVisibility(View.GONE);
+                llAchievementInfo.setVisibility(View.INVISIBLE);
                 btnShowInfo.setVisibility(View.VISIBLE);
 
                 btnShowInfo.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +181,7 @@ public class AchievementPreviewFragment extends Fragment {
             }
         });
 
-        return rootView;
+        dialog.setContentView(rootView);
     }
 
     private String getRarityString(int rarity) {

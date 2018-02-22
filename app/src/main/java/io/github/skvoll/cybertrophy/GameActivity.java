@@ -6,12 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,7 +29,6 @@ public class GameActivity extends AppCompatActivity implements
 
     private GameModel mGameModel;
 
-    private DrawerLayout mDrawerLayout;
     private ImageView mHeaderBackground;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -48,29 +44,11 @@ public class GameActivity extends AppCompatActivity implements
 
         getParams(savedInstanceState);
 
-        mDrawerLayout = findViewById(R.id.dl_drawer);
         mHeaderBackground = findViewById(R.id.iv_header_background);
         mToolbar = findViewById(R.id.tb_toolbar);
         mTabLayout = findViewById(R.id.tl_tabs);
         mViewPager = findViewById(R.id.vp_container);
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mDrawerLayout.addDrawerListener(new ActionBarDrawerToggle(
-                this, mDrawerLayout, null, R.string.empty, R.string.empty) {
-
-            @Override
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        });
 
         GlideApp.with(this).load(mGameModel.getLogoUrl())
                 .placeholder(R.drawable.game_logo_empty)
@@ -166,13 +144,11 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(AchievementModel achievementModel) {
-        Fragment fragment = AchievementPreviewFragment.newInstance(achievementModel);
+        AchievementPreviewDialogFragment achievementPreviewDialogFragment
+                = AchievementPreviewDialogFragment.newInstance(achievementModel);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_drawer, fragment).commit();
-
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        mDrawerLayout.openDrawer(Gravity.END);
+        achievementPreviewDialogFragment.show(getSupportFragmentManager(),
+                achievementPreviewDialogFragment.getTag());
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {

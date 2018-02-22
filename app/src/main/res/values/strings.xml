@@ -63,6 +63,7 @@
 
     <string name="title_currently_playing">Currently playing</string>
     <string name="title_games">Games</string>
+    <string name="title_notifications">Notifications</string>
 
     <string name="list_placeholder">List placeholder</string>
     <string name="game_logo_description">Game logo</string>

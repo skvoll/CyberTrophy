@@ -59,15 +59,6 @@
                     android:maxLines="1"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     tools:text="@string/lorem_ipsum_short" />
-
-                <ImageView
-                    android:id="@+id/iv_new_indicator"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:background="@drawable/new_notification_indicator"
-                    android:contentDescription="@string/notification_indicator_description"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
             </LinearLayout>
 
             <TextView
@@ -77,13 +68,36 @@
                 android:text="@string/lorem_ipsum"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                tools:text="12:00" />
+                android:gravity="center"
+                tools:ignore="UseCompoundDrawables">
+
+                <Space
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/iv_new_indicator"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/new_notification_indicator"
+                    android:contentDescription="@string/notification_indicator_description"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_marginStart="@dimen/default_vertical_indent"
+                    android:drawableStart="@drawable/new_notification_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                    tools:text="Jan 1, 1970 12:00AM" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
