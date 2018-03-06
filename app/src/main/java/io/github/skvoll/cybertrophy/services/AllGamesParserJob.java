@@ -103,8 +103,6 @@ public final class AllGamesParserJob extends JobService {
                 return;
             }
 
-            NotificationModel.debug(TAG, success ? "Successfully done." : "Failed.").save(service.getContentResolver());
-
             sIsRunning = false;
             service.jobFinished(mJobParameters, !success);
         }

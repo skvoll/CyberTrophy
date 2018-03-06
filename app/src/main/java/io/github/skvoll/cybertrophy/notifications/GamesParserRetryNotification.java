@@ -8,7 +8,7 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.services.GamesParserBroadcastReceiver;
 
 public final class GamesParserRetryNotification extends BaseNotification {
-    public static final int ID = 2002;
+    public static final int ID = 1002;
 
     public GamesParserRetryNotification(Context context) {
         super(context);

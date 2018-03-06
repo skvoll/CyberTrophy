@@ -23,6 +23,10 @@
         <item quantity="one">New achievement</item>
         <item quantity="other">New achievements</item>
     </plurals>
+    <plurals name="notification_new_achievements_w_count">
+        <item quantity="one">New achievement</item>
+        <item quantity="other">%d new achievements</item>
+    </plurals>
     <plurals name="notification_new_achievements_in_game">
         <item quantity="one">%d new achievement in %s</item>
         <item quantity="other">%d new achievements in %s</item>
@@ -31,6 +35,10 @@
     <plurals name="notification_achievements_removed">
         <item quantity="one">Achievement removed</item>
         <item quantity="other">Achievements removed</item>
+    </plurals>
+    <plurals name="notification_achievements_removed_w_count">
+        <item quantity="one">Achievement removed</item>
+        <item quantity="other">%d achievements removed</item>
     </plurals>
     <plurals name="notification_achievements_removed_from_game">
         <item quantity="one">%d achievement removed from %s</item>

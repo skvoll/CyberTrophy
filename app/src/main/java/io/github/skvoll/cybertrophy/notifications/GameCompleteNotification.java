@@ -12,9 +12,10 @@ import io.github.skvoll.cybertrophy.GameActivity;
 import io.github.skvoll.cybertrophy.MainActivity;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class GameCompleteNotification extends BaseNotification {
-    public static final int ID = 1022;
+    public static final int ID = 2022;
 
     private ArrayList<String> mGames = new ArrayList<>();
 
@@ -26,6 +27,8 @@ public final class GameCompleteNotification extends BaseNotification {
     }
 
     public GameCompleteNotification addGame(GameModel gameModel) {
+        NotificationModel.gameComplete(gameModel).save(mContext.getContentResolver());
+
         mGames.add(gameModel.getName());
 
         Intent intent;

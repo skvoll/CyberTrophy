@@ -111,8 +111,6 @@ public final class FirstGamesParserService extends Service {
                 return;
             }
 
-            NotificationModel.debug(TAG, success ? "Successfully done." : "Failed.").save(service.getContentResolver());
-
             if (success) {
                 mProfileModel.setInitialized(true);
                 mProfileModel.save(service.getContentResolver());

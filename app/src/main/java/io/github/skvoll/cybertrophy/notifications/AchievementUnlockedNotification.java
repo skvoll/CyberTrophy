@@ -11,9 +11,10 @@ import io.github.skvoll.cybertrophy.MainActivity;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class AchievementUnlockedNotification extends BaseNotification {
-    public static final int ID = 1021;
+    public static final int ID = 2021;
 
     private ArrayList<String> mGames = new ArrayList<>();
     private ArrayList<String> mAchievements = new ArrayList<>();
@@ -26,6 +27,8 @@ public final class AchievementUnlockedNotification extends BaseNotification {
     }
 
     public AchievementUnlockedNotification addAchievement(GameModel gameModel, AchievementModel achievementModel) {
+        NotificationModel.achievementUnlocked(achievementModel).save(mContext.getContentResolver());
+
         if (mGames.indexOf(gameModel.getName()) < 0) {
             mGames.add(gameModel.getName());
         }

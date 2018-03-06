@@ -107,7 +107,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
 
                 notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
                 notificationViewHolder.tvMessage.setText(
-                        getMessage(notificationModel.getType()));
+                        getMessage(notificationModel.getType(), notificationModel.getObjectsCount()));
                 notificationViewHolder.tvTime.setText(dateFormat.format(date));
                 break;
             case NotificationModel.TYPE_ACHIEVEMENT_UNLOCKED:
@@ -135,8 +135,14 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 break;
         }
 
+        // TODO: review
         if (!notificationModel.isViewed()) {
-            notificationModel.setViewed(true).save(mContext.getContentResolver());
+            (new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    notificationModel.setViewed(true).save(mContext.getContentResolver());
+                }
+            })).start();
         }
     }
 
@@ -145,23 +151,23 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
         return mItems.size();
     }
 
-    private CharSequence getMessage(int type) {
+    private String getMessage(int type, int quantity) {
         switch (type) {
             case NotificationModel.TYPE_NEW_GAME:
                 return mContext.getResources()
-                        .getQuantityText(R.plurals.notification_new_games_in_library, 1);
+                        .getQuantityString(R.plurals.notification_new_games_in_library, quantity);
             case NotificationModel.TYPE_GAME_REMOVED:
                 return mContext.getResources()
-                        .getQuantityText(R.plurals.notification_games_removed_from_library, 1);
+                        .getQuantityString(R.plurals.notification_games_removed_from_library, quantity);
             case NotificationModel.TYPE_NEW_ACHIEVEMENT:
                 return mContext.getResources()
-                        .getQuantityText(R.plurals.notification_new_achievements, 1);
+                        .getQuantityString(R.plurals.notification_new_achievements_w_count, quantity, quantity);
             case NotificationModel.TYPE_ACHIEVEMENT_REMOVED:
-                return mContext.getResources()
-                        .getQuantityText(R.plurals.notification_achievements_removed, 1);
+                return mContext.getResources().getQuantityString(
+                        R.plurals.notification_achievements_removed_w_count, quantity, quantity);
             case NotificationModel.TYPE_GAME_COMPLETE:
                 return mContext.getResources()
-                        .getQuantityText(R.plurals.notification_games_complete, 1);
+                        .getQuantityString(R.plurals.notification_games_complete, quantity);
             default:
                 return mContext.getResources().getString(R.string.empty);
         }

@@ -23,10 +23,10 @@ public final class NotificationModel extends Model<NotificationModel> {
     public static final int TYPE_MESSAGE = 1001;
     public static final int TYPE_NEW_GAME = 2001;
     public static final int TYPE_GAME_REMOVED = 2002;
-    public static final int TYPE_NEW_ACHIEVEMENT = 2003;
-    public static final int TYPE_ACHIEVEMENT_REMOVED = 2004;
-    public static final int TYPE_ACHIEVEMENT_UNLOCKED = 2011;
-    public static final int TYPE_GAME_COMPLETE = 2012;
+    public static final int TYPE_NEW_ACHIEVEMENT = 2011;
+    public static final int TYPE_ACHIEVEMENT_REMOVED = 2012;
+    public static final int TYPE_ACHIEVEMENT_UNLOCKED = 2021;
+    public static final int TYPE_GAME_COMPLETE = 2022;
     public static final int TYPE_NEWS = 3001;
 
     private Long mId;
@@ -195,10 +195,10 @@ public final class NotificationModel extends Model<NotificationModel> {
             NotificationModel notificationModel = new NotificationModel(cursor);
 
             if (addSeparator) {
-                if (currentSeparator == null) {
-                    separator = DateUtils.getRelativeTimeSpanString(
-                            notificationModel.getTime() * 1000L).toString();
-                } else {
+                separator = DateUtils.getRelativeTimeSpanString(
+                        notificationModel.getTime() * 1000L).toString();
+
+                if (currentSeparator != null && !Objects.equals(currentSeparator, separator)) {
                     Date date = new Date();
                     date.setTime(notificationModel.getTime() * 1000L);
                     DateFormat dateFormat = SimpleDateFormat.getDateInstance(

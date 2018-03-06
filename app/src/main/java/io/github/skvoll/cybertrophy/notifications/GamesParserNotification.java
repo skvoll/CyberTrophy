@@ -10,7 +10,7 @@ import io.github.skvoll.cybertrophy.services.GamesParserBroadcastReceiver;
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 public final class GamesParserNotification extends BaseNotification {
-    public static final int ID = 2001;
+    public static final int ID = 1001;
 
     public GamesParserNotification(Context context) {
         super(context);

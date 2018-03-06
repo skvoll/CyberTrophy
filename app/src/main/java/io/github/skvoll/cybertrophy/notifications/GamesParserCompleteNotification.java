@@ -8,7 +8,7 @@ import io.github.skvoll.cybertrophy.MainActivity;
 import io.github.skvoll.cybertrophy.R;
 
 public final class GamesParserCompleteNotification extends BaseNotification {
-    public static final int ID = 2003;
+    public static final int ID = 1003;
 
     public GamesParserCompleteNotification(Context context) {
         super(context);

@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import io.github.skvoll.cybertrophy.MainActivity;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class GameRemovedNotification extends BaseNotification {
-    public static final int ID = 1002;
+    public static final int ID = 2002;
 
     private ArrayList<String> mGames = new ArrayList<>();
 
@@ -25,6 +26,8 @@ public final class GameRemovedNotification extends BaseNotification {
     }
 
     public GameRemovedNotification addGame(GameModel gameModel) {
+        NotificationModel.gameRemoved(gameModel).save(mContext.getContentResolver());
+
         mGames.add(gameModel.getName());
 
         Intent intent = new Intent(mContext, MainActivity.class);

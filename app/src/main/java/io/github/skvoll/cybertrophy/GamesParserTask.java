@@ -195,9 +195,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                                 mNewAchievementNotification.addGame(gameModel).show();
                             }
 
-                            // TODO: move in condition above
-                            NotificationModel.newAchievement(gameModel).save(mContentResolver);
-
                             continue;
                         }
 
@@ -209,9 +206,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                             if (mProfileModel.isInitialized()) {
                                 mAchievementUnlockedNotification.addAchievement(gameModel, achievementModel).show();
                             }
-
-                            // TODO: move in condition above
-                            NotificationModel.achievementUnlocked(achievementModel).save(mContentResolver);
                         }
 
                         updateAchievement(achievementModel, steamAchievement);
@@ -225,9 +219,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                                 mAchievementRemovedNotification.addGame(gameModel).show();
                             }
 
-                            // TODO: move in condition above
-                            NotificationModel.achievementRemoved(gameModel).save(mContentResolver);
-
                             achievementModel.delete(mContentResolver);
                         }
                     }
@@ -240,9 +231,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                                 mGameCompleteNotification.addGame(gameModel).show();
                             }
                         }
-
-                        // TODO: move in condition above
-                        NotificationModel.gameComplete(gameModel).save(mContentResolver);
                     }
 
                     Log.d(TAG, "\"" + steamGame.name + "(" + steamGame.appId + ")\" saved.");
@@ -258,9 +246,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                             mNewGameNotification.addGame(gameModel).show();
                         }
                     }
-
-                    // TODO: move in condition above
-                    NotificationModel.newGame(gameModel).save(mContentResolver);
 
                     for (SteamAchievement steamAchievement : steamGame.getSteamAchievements().values()) {
                         AchievementModel achievementModel = new AchievementModel(gameModel, steamAchievement);
@@ -394,9 +379,6 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                 if (mProfileModel.isInitialized()) {
                     mGameRemovedNotification.addGame(gameModel).show();
                 }
-
-                // TODO: move to condition above
-                NotificationModel.gameRemoved(gameModel).save(mContentResolver);
 
                 deleteGame(gameModel);
             }

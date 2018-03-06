@@ -3,6 +3,7 @@ package io.github.skvoll.cybertrophy.notifications;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.LongSparseArray;
 
 import java.util.ArrayList;
 
@@ -10,12 +11,15 @@ import io.github.skvoll.cybertrophy.GameActivity;
 import io.github.skvoll.cybertrophy.MainActivity;
 import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class AchievementRemovedNotification extends BaseNotification {
-    public static final int ID = 1012;
+    public static final int ID = 2012;
 
     private ArrayList<String> mGames = new ArrayList<>();
     private int mAchievementsCount = 0;
+    private LongSparseArray<NotificationModel> mNotificationModels
+            = new LongSparseArray<>();
 
     public AchievementRemovedNotification(Context context) {
         super(context);
@@ -25,6 +29,17 @@ public final class AchievementRemovedNotification extends BaseNotification {
     }
 
     public AchievementRemovedNotification addGame(GameModel gameModel) {
+        NotificationModel notificationModel;
+        if (mNotificationModels.indexOfKey(gameModel.getId()) < 0) {
+            notificationModel = NotificationModel.achievementRemoved(gameModel);
+            notificationModel.save(mContext.getContentResolver());
+            mNotificationModels.append(gameModel.getId(), notificationModel);
+        } else {
+            notificationModel = mNotificationModels.get(gameModel.getId());
+            Integer objectsCount = notificationModel.getObjectsCount();
+            notificationModel.setObjectsCount(++objectsCount).save(mContext.getContentResolver());
+        }
+
         if (mGames.indexOf(gameModel.getName()) < 0) {
             mGames.add(gameModel.getName());
         }
