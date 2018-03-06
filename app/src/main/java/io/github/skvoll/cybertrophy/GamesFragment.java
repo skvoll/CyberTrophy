@@ -18,10 +18,11 @@ import java.util.List;
 
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.games.list.GamesListAdapter;
 import io.github.skvoll.cybertrophy.games.list.GamesListFragment;
 
 public class GamesFragment extends Fragment implements
-        GamesListFragment.OnItemClickListener {
+        GamesListAdapter.OnItemClickListener {
     public static final String KEY_TAB = "TAB";
 
     private static final String TAG = GamesFragment.class.getSimpleName();

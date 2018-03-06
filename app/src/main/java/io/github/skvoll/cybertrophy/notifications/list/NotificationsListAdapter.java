@@ -22,10 +22,13 @@ import io.github.skvoll.cybertrophy.data.NotificationModel;
 public final class NotificationsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private ArrayList<NotificationModel> mItems;
+    private OnItemClickListener mOnItemClickListener;
 
-    NotificationsListAdapter(Context context, ArrayList<NotificationModel> notificationModels) {
+    NotificationsListAdapter(Context context, ArrayList<NotificationModel> notificationModels,
+                             OnItemClickListener onItemClickListener) {
         mContext = context;
         mItems = notificationModels;
+        mOnItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -53,13 +56,13 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
         DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance(
                 DateFormat.MEDIUM, DateFormat.SHORT, Resources.getSystem().getConfiguration().locale);
 
-        NotificationViewHolder notificationViewHolder;
+        NotificationViewHolder notificationViewHolder = null;
 
         switch (notificationModel.getType()) {
             case NotificationModel.TYPE_CATEGORY_SEPARATOR:
                 SeparatorViewHolder separatorViewHolder = (SeparatorViewHolder) viewHolder;
                 separatorViewHolder.tvTitle.setText(notificationModel.getTitle());
-                break;
+                return;
             case NotificationModel.TYPE_DEBUG:
                 notificationViewHolder = (NotificationViewHolder) viewHolder;
 
@@ -135,6 +138,15 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                 break;
         }
 
+        if (notificationViewHolder != null) {
+            notificationViewHolder.cvItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClickListener.onClick(notificationModel);
+                }
+            });
+        }
+
         // TODO: review
         if (!notificationModel.isViewed()) {
             (new Thread(new Runnable() {
@@ -171,6 +183,10 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
             default:
                 return mContext.getResources().getString(R.string.empty);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onClick(NotificationModel notificationModel);
     }
 
     private static final class SeparatorViewHolder extends RecyclerView.ViewHolder {

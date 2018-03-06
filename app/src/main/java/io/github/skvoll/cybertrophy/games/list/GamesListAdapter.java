@@ -19,10 +19,10 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private ArrayList<GameModel> mItems;
-    private GamesListFragment.OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
 
     GamesListAdapter(Context context, ArrayList<GameModel> gameModels,
-                     GamesListFragment.OnItemClickListener onItemClickListener) {
+                     OnItemClickListener onItemClickListener) {
         mContext = context;
         mItems = gameModels;
         mOnItemClickListener = onItemClickListener;
@@ -127,6 +127,10 @@ public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public interface OnItemClickListener {
+        void onClick(GameModel gameModel);
     }
 
     private static final class GameViewHolder extends RecyclerView.ViewHolder {

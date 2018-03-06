@@ -26,7 +26,7 @@ public class AchievementsListFragment extends Fragment implements
     private static final String KEY_GAME_ID = "GAME_ID";
     private static final String KEY_ACHIEVEMENTS_STATUS = "ACHIEVEMENTS_STATUS";
 
-    private OnItemClickListener mOnItemClickListener;
+    private AchievementsListAdapter.OnItemClickListener mOnItemClickListener;
     private Long mGameId;
     private int mAchievementsStatus;
 
@@ -40,7 +40,7 @@ public class AchievementsListFragment extends Fragment implements
     }
 
     public static AchievementsListFragment newInstance(
-            Long gameId, int achievementsStatus, OnItemClickListener onItemClickListener) {
+            Long gameId, int achievementsStatus, AchievementsListAdapter.OnItemClickListener onItemClickListener) {
         AchievementsListFragment fragment = new AchievementsListFragment();
         fragment.setOnItemClickListener(onItemClickListener);
 
@@ -101,7 +101,7 @@ public class AchievementsListFragment extends Fragment implements
         (new LoadDataTask(this, mAchievementsStatus, mGameModel)).execute();
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(AchievementsListAdapter.OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
@@ -121,10 +121,6 @@ public class AchievementsListFragment extends Fragment implements
             mRvList.setVisibility(View.GONE);
             mIvPlaceholder.setVisibility(View.VISIBLE);
         }
-    }
-
-    public interface OnItemClickListener {
-        void onClick(AchievementModel achievementModel);
     }
 
     private static class LoadDataTask extends AsyncTask<Void, Void, ArrayList<AchievementModel>> {

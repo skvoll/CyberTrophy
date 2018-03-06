@@ -24,11 +24,11 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     private Context mContext;
     private ArrayList<AchievementModel> mItems;
     private int mType;
-    private AchievementsListFragment.OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
     private int mMaxWidth;
 
     public AchievementsListAdapter(Context context, ArrayList<AchievementModel> achievementModels,
-                                   AchievementsListFragment.OnItemClickListener onItemClickListener, int type) {
+                                   OnItemClickListener onItemClickListener, int type) {
         mContext = context;
         mItems = achievementModels;
         mType = type;
@@ -161,6 +161,10 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
             default:
                 return mContext.getResources().getString(R.string.empty);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onClick(AchievementModel achievementModel);
     }
 
     private static final class AchievementFullViewHolder extends RecyclerView.ViewHolder {

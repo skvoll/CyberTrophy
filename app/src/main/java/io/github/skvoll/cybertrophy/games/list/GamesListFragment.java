@@ -26,7 +26,7 @@ public class GamesListFragment extends Fragment implements
     private static final String KEY_PROFILE_ID = "PROFILE_ID";
     private static final String KEY_GAME_STATUS = "GAME_STATUS";
 
-    private OnItemClickListener mOnItemClickListener;
+    private GamesListAdapter.OnItemClickListener mOnItemClickListener;
     private Long mProfileId;
     private int mGameStatus;
 
@@ -40,7 +40,7 @@ public class GamesListFragment extends Fragment implements
     }
 
     public static GamesListFragment newInstance(
-            Long profileId, int gameStatus, OnItemClickListener onItemClickListener) {
+            Long profileId, int gameStatus, GamesListAdapter.OnItemClickListener onItemClickListener) {
         GamesListFragment fragment = new GamesListFragment();
         fragment.setOnItemClickListener(onItemClickListener);
 
@@ -101,7 +101,7 @@ public class GamesListFragment extends Fragment implements
         (new LoadDataTask(this, mGameStatus, mProfileModel)).execute();
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(GamesListAdapter.OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
@@ -121,10 +121,6 @@ public class GamesListFragment extends Fragment implements
             mRvList.setVisibility(View.GONE);
             mIvPlaceholder.setVisibility(View.VISIBLE);
         }
-    }
-
-    public interface OnItemClickListener {
-        void onClick(GameModel gameModel);
     }
 
     private static class LoadDataTask extends AsyncTask<Void, Void, ArrayList<GameModel>> {
