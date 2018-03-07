@@ -1,10 +1,10 @@
 package io.github.skvoll.cybertrophy;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -14,8 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import java.lang.ref.WeakReference;
-
+import io.github.skvoll.cybertrophy.data.DataContract;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private int mDevToolsCounter = 0;
 
     private ProfileModel mProfileModel;
+    private NotificationObserver mNotificationObserver;
 
     private BottomNavigationView mBnvNavigation;
     private FragmentManager mFragmentManager;
@@ -74,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
             startService(new Intent(this, FirstGamesParserService.class));
         }
 
+        mNotificationObserver = new NotificationObserver(new Handler());
+
+        getContentResolver().registerContentObserver(
+                DataContract.NotificationEntry.URI, true, mNotificationObserver);
+
         mFragmentManager = getSupportFragmentManager();
         mBnvNavigation = findViewById(R.id.bnv_navigation);
         mDashboardFragment = new DashboardFragment();
@@ -110,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         mBnvNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         setFragment(selectedItem);
+
+        mNotificationObserver.updateNotificationIcon(true);
     }
 
     @Override
@@ -117,6 +124,13 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putInt(KEY_FRAGMENT, mBnvNavigation.getSelectedItemId());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        getContentResolver().unregisterContentObserver(mNotificationObserver);
     }
 
     @NonNull
@@ -128,42 +142,43 @@ public class MainActivity extends AppCompatActivity {
                 mDevToolsCounter = 0;
                 if (mCurrentFragment != mDashboardFragment) {
                     fragmentTransaction.hide(mCurrentFragment).show(mDashboardFragment).commit();
-                }
 
-                mCurrentFragment = mDashboardFragment;
+                    mCurrentFragment = mDashboardFragment;
+                }
 
                 break;
             case FRAGMENT_GAMES:
                 mDevToolsCounter = 0;
                 if (mCurrentFragment != mGamesFragment) {
                     fragmentTransaction.hide(mCurrentFragment).show(mGamesFragment).commit();
-                }
 
-                mCurrentFragment = mGamesFragment;
+                    mCurrentFragment = mGamesFragment;
+                }
 
                 break;
             case FRAGMENT_NOTIFICATIONS_LIST:
-                CheckNotificationsTask.isOpened = true;
                 mDevToolsCounter = 0;
                 if (mCurrentFragment != mNotificationsListFragment) {
                     fragmentTransaction.hide(mCurrentFragment).show(mNotificationsListFragment).commit();
-                }
 
-                mCurrentFragment = mNotificationsListFragment;
+                    mCurrentFragment = mNotificationsListFragment;
+                }
 
                 break;
             case FRAGMENT_PROFILE:
                 mDevToolsCounter++;
                 if (mCurrentFragment != mProfileFragment) {
                     fragmentTransaction.hide(mCurrentFragment).show(mProfileFragment).commit();
-                }
 
-                mCurrentFragment = mProfileFragment;
+                    mCurrentFragment = mProfileFragment;
+                }
 
                 break;
             default:
                 return false;
         }
+
+        mNotificationObserver.updateNotificationIcon(false);
 
         if (mDevToolsCounter > 3) {
             mDevToolsCounter = 0;
@@ -171,19 +186,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, DevToolsActivity.class));
         }
 
-        (new CheckNotificationsTask(this, mProfileModel)).execute();
-
         return true;
-    }
-
-    private void setNotificationIcon(@DrawableRes int iconResource) {
-        MenuItem menuItem = mBnvNavigation.getMenu().findItem(FRAGMENT_NOTIFICATIONS_LIST);
-
-        if (menuItem == null) {
-            return;
-        }
-
-        menuItem.setIcon(getDrawable(iconResource));
     }
 
     private void setup() {
@@ -196,47 +199,43 @@ public class MainActivity extends AppCompatActivity {
                 + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
     }
 
-    private static class CheckNotificationsTask extends AsyncTask<Void, Void, Integer> {
-        static boolean isOpened = false;
+    private class NotificationObserver extends ContentObserver {
+        private int mUnviewedCount = 0;
 
-        private WeakReference<MainActivity> mMainActivityWeakReference;
-        private ProfileModel mProfileModel;
-
-        CheckNotificationsTask(MainActivity mainActivity, ProfileModel profileModel) {
-            mMainActivityWeakReference = new WeakReference<>(mainActivity);
-            mProfileModel = profileModel;
+        NotificationObserver(Handler handler) {
+            super(handler);
         }
 
         @Override
-        protected Integer doInBackground(Void... voids) {
-            MainActivity mainActivity = mMainActivityWeakReference.get();
-
-            if (mainActivity == null) {
-                return null;
-            }
-
-            ContentResolver contentResolver = mainActivity.getContentResolver();
-
-            return NotificationModel.getUnviewedCountByProfile(contentResolver, mProfileModel);
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange, null);
         }
 
         @Override
-        protected void onPostExecute(Integer unviewedNotificationsCount) {
-            MainActivity mainActivity = mMainActivityWeakReference.get();
+        public void onChange(boolean selfChange, Uri uri) {
+            updateNotificationIcon(true);
+        }
 
-            if (mainActivity == null) {
+        void updateNotificationIcon(boolean needUpdate) {
+            MenuItem menuItem = mBnvNavigation.getMenu().findItem(FRAGMENT_NOTIFICATIONS_LIST);
+
+            if (menuItem == null) {
                 return;
             }
 
-            if (unviewedNotificationsCount > 0) {
-                if (isOpened) {
-                    mainActivity.setNotificationIcon(R.drawable.ic_notifications_black_24dp);
+            if (needUpdate) {
+                mUnviewedCount = NotificationModel.getUnviewedCountByProfile(
+                        getContentResolver(), mProfileModel);
+            }
+
+            if (mUnviewedCount > 0) {
+                if (mCurrentFragment == mNotificationsListFragment) {
+                    menuItem.setIcon(getDrawable(R.drawable.ic_notifications_black_24dp));
                 } else {
-                    mainActivity.setNotificationIcon(R.drawable.ic_notifications_active_black_24dp);
+                    menuItem.setIcon(getDrawable(R.drawable.ic_notifications_active_black_24dp));
                 }
             } else {
-                isOpened = false;
-                mainActivity.setNotificationIcon(R.drawable.ic_notifications_none_black_24dp);
+                menuItem.setIcon(getDrawable(R.drawable.ic_notifications_none_black_24dp));
             }
         }
     }

@@ -1,8 +1,11 @@
 package io.github.skvoll.cybertrophy.achievements.list;
 
 import android.content.ContentResolver;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,8 +23,7 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
-public class AchievementsListFragment extends Fragment implements
-        SwipeRefreshLayout.OnRefreshListener {
+public class AchievementsListFragment extends Fragment {
     private static final String TAG = AchievementsListFragment.class.getSimpleName();
     private static final String KEY_GAME_ID = "GAME_ID";
     private static final String KEY_ACHIEVEMENTS_STATUS = "ACHIEVEMENTS_STATUS";
@@ -30,7 +32,8 @@ public class AchievementsListFragment extends Fragment implements
     private Long mGameId;
     private int mAchievementsStatus;
 
-    private SwipeRefreshLayout mSrlRefresh;
+    private AchievementsObserver mAchievementsObserver = new AchievementsObserver(new Handler());
+
     private RecyclerView mRvList;
     private View mIvPlaceholder;
     private View mLlProgress;
@@ -76,14 +79,12 @@ public class AchievementsListFragment extends Fragment implements
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.base_list, container, false);
 
-        mSrlRefresh = rootView.findViewById(R.id.srl_refresh);
+        SwipeRefreshLayout srlRefresh = rootView.findViewById(R.id.srl_refresh);
+        srlRefresh.setEnabled(false);
+
         mRvList = rootView.findViewById(android.R.id.list);
         mIvPlaceholder = rootView.findViewById(android.R.id.empty);
         mLlProgress = rootView.findViewById(android.R.id.progress);
-
-        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
-        mSrlRefresh.setOnRefreshListener(this);
 
         mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -91,14 +92,10 @@ public class AchievementsListFragment extends Fragment implements
                 mOnItemClickListener, AchievementsListAdapter.TYPE_FULL));
 
         mGameModel = GameModel.getById(getContext().getContentResolver(), mGameId);
-        (new LoadDataTask(this, mAchievementsStatus, mGameModel)).execute();
+
+        mAchievementsObserver.loadData();
 
         return rootView;
-    }
-
-    @Override
-    public void onRefresh() {
-        (new LoadDataTask(this, mAchievementsStatus, mGameModel)).execute();
     }
 
     public void setOnItemClickListener(AchievementsListAdapter.OnItemClickListener onItemClickListener) {
@@ -111,7 +108,6 @@ public class AchievementsListFragment extends Fragment implements
 
         mRvList.swapAdapter(adapter, false);
 
-        mSrlRefresh.setRefreshing(false);
         mLlProgress.setVisibility(View.GONE);
 
         if (adapter.getItemCount() > 0) {
@@ -162,6 +158,26 @@ public class AchievementsListFragment extends Fragment implements
             }
 
             fragment.setData(achievementModels);
+        }
+    }
+
+    private class AchievementsObserver extends ContentObserver {
+        AchievementsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            this.onChange(selfChange, null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            loadData();
+        }
+
+        void loadData() {
+            (new LoadDataTask(AchievementsListFragment.this, mAchievementsStatus, mGameModel)).execute();
         }
     }
 }

@@ -1,8 +1,11 @@
 package io.github.skvoll.cybertrophy.games.list;
 
 import android.content.ContentResolver;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,8 +23,9 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
-public class GamesListFragment extends Fragment implements
-        SwipeRefreshLayout.OnRefreshListener {
+import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
+
+public class GamesListFragment extends Fragment {
     private static final String TAG = GamesListFragment.class.getSimpleName();
     private static final String KEY_PROFILE_ID = "PROFILE_ID";
     private static final String KEY_GAME_STATUS = "GAME_STATUS";
@@ -30,7 +34,8 @@ public class GamesListFragment extends Fragment implements
     private Long mProfileId;
     private int mGameStatus;
 
-    private SwipeRefreshLayout mSrlRefresh;
+    private GamesObserver mGamesObserver = new GamesObserver(new Handler());
+
     private RecyclerView mRvList;
     private View mIvPlaceholder;
     private View mLlProgress;
@@ -56,6 +61,10 @@ public class GamesListFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getContext() == null) {
+            return;
+        }
+
         if (getArguments() == null) {
             throw new IllegalArgumentException();
         }
@@ -66,6 +75,9 @@ public class GamesListFragment extends Fragment implements
         if (mProfileId == -1) {
             throw new IllegalArgumentException();
         }
+
+        getContext().getContentResolver().registerContentObserver(
+                GameEntry.URI, true, mGamesObserver);
     }
 
     @Override
@@ -76,14 +88,12 @@ public class GamesListFragment extends Fragment implements
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.base_list, container, false);
 
-        mSrlRefresh = rootView.findViewById(R.id.srl_refresh);
+        SwipeRefreshLayout srlRefresh = rootView.findViewById(R.id.srl_refresh);
+        srlRefresh.setEnabled(false);
+
         mRvList = rootView.findViewById(android.R.id.list);
         mIvPlaceholder = rootView.findViewById(android.R.id.empty);
         mLlProgress = rootView.findViewById(android.R.id.progress);
-
-        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
-        mSrlRefresh.setOnRefreshListener(this);
 
         mRvList.addItemDecoration(new DividerItemDecoration(mRvList.getContext(), DividerItemDecoration.VERTICAL));
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -91,14 +101,21 @@ public class GamesListFragment extends Fragment implements
                 new ArrayList<GameModel>(), mOnItemClickListener));
 
         mProfileModel = ProfileModel.getById(getContext().getContentResolver(), mProfileId);
-        (new LoadDataTask(this, mGameStatus, mProfileModel)).execute();
+
+        mGamesObserver.loadData();
 
         return rootView;
     }
 
     @Override
-    public void onRefresh() {
-        (new LoadDataTask(this, mGameStatus, mProfileModel)).execute();
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (getContext() == null) {
+            return;
+        }
+
+        getContext().getContentResolver().unregisterContentObserver(mGamesObserver);
     }
 
     public void setOnItemClickListener(GamesListAdapter.OnItemClickListener onItemClickListener) {
@@ -111,7 +128,6 @@ public class GamesListFragment extends Fragment implements
 
         mRvList.swapAdapter(adapter, false);
 
-        mSrlRefresh.setRefreshing(false);
         mLlProgress.setVisibility(View.GONE);
 
         if (adapter.getItemCount() > 0) {
@@ -162,6 +178,26 @@ public class GamesListFragment extends Fragment implements
             }
 
             fragment.setData(gameModels);
+        }
+    }
+
+    private class GamesObserver extends ContentObserver {
+        GamesObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            this.onChange(selfChange, null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            loadData();
+        }
+
+        void loadData() {
+            (new LoadDataTask(GamesListFragment.this, mGameStatus, mProfileModel)).execute();
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.skvoll.cybertrophy.data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -8,6 +9,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+
+import static io.github.skvoll.cybertrophy.data.DataContract.AUTHORITY;
+import static io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
+import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
+import static io.github.skvoll.cybertrophy.data.DataContract.NotificationEntry;
+import static io.github.skvoll.cybertrophy.data.DataContract.ProfileEntry;
 
 public final class DataProvider extends ContentProvider {
     private static final String TAG = DataProvider.class.getSimpleName();
@@ -19,28 +26,34 @@ public final class DataProvider extends ContentProvider {
     private static final int ACHIEVEMENTS = 300;
     private static final int ACHIEVEMENTS_ID = 301;
 
-    private static final int LOG = 1000;
-    private static final int LOG_ID = 1001;
+    private static final int NOTIFICATION = 1000;
+    private static final int NOTIFICATION_ID = 1001;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.ProfileEntry.TABLE_NAME, PROFILES);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.ProfileEntry.TABLE_NAME + "/#", PROFILES_ID);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.GameEntry.TABLE_NAME, GAMES);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.GameEntry.TABLE_NAME + "/#", GAMES_ID);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.AchievementEntry.TABLE_NAME, ACHIEVEMENTS);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.AchievementEntry.TABLE_NAME + "/#", ACHIEVEMENTS_ID);
+        sUriMatcher.addURI(AUTHORITY, ProfileEntry.TABLE_NAME, PROFILES);
+        sUriMatcher.addURI(AUTHORITY, ProfileEntry.TABLE_NAME + "/#", PROFILES_ID);
+        sUriMatcher.addURI(AUTHORITY, GameEntry.TABLE_NAME, GAMES);
+        sUriMatcher.addURI(AUTHORITY, GameEntry.TABLE_NAME + "/#", GAMES_ID);
+        sUriMatcher.addURI(AUTHORITY, AchievementEntry.TABLE_NAME, ACHIEVEMENTS);
+        sUriMatcher.addURI(AUTHORITY, AchievementEntry.TABLE_NAME + "/#", ACHIEVEMENTS_ID);
 
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.NotificationEntry.TABLE_NAME, LOG);
-        sUriMatcher.addURI(DataContract.AUTHORITY, DataContract.NotificationEntry.TABLE_NAME + "/#", LOG_ID);
+        sUriMatcher.addURI(AUTHORITY, NotificationEntry.TABLE_NAME, NOTIFICATION);
+        sUriMatcher.addURI(AUTHORITY, NotificationEntry.TABLE_NAME + "/#", NOTIFICATION_ID);
     }
 
     private DatabaseHelper mDatabaseHelper;
+    private ContentResolver mContentResolver;
 
     @Override
     public boolean onCreate() {
+        if (getContext() == null) {
+            return false;
+        }
+
         mDatabaseHelper = new DatabaseHelper(getContext());
+        mContentResolver = getContext().getContentResolver();
 
         return true;
     }
@@ -48,160 +61,177 @@ public final class DataProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] columns, String selection, String[] selectionArgs, String orderBy) {
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
+        String tableName;
 
         switch (sUriMatcher.match(uri)) {
             case PROFILES:
-                return database.query(DataContract.ProfileEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, orderBy);
+                tableName = ProfileEntry.TABLE_NAME;
+                break;
             case PROFILES_ID:
-                selection = DataContract.ProfileEntry._ID + " = ?";
+                tableName = ProfileEntry.TABLE_NAME;
+                selection = ProfileEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.query(DataContract.ProfileEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, null);
+                break;
             case GAMES:
-                return database.query(DataContract.GameEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, orderBy);
+                tableName = GameEntry.TABLE_NAME;
+                break;
             case GAMES_ID:
-                selection = DataContract.GameEntry._ID + " = ?";
+                tableName = GameEntry.TABLE_NAME;
+                selection = GameEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.query(DataContract.GameEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, null);
+                break;
             case ACHIEVEMENTS:
-                return database.query(DataContract.AchievementEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, orderBy);
+                tableName = AchievementEntry.TABLE_NAME;
+                break;
             case ACHIEVEMENTS_ID:
-                selection = DataContract.AchievementEntry._ID + " = ?";
+                tableName = AchievementEntry.TABLE_NAME;
+                selection = AchievementEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.query(DataContract.AchievementEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, null);
-            case LOG:
-                return database.query(DataContract.NotificationEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, orderBy);
-            case LOG_ID:
-                selection = DataContract.NotificationEntry._ID + " = ?";
+                break;
+            case NOTIFICATION:
+                tableName = NotificationEntry.TABLE_NAME;
+                break;
+            case NOTIFICATION_ID:
+                tableName = NotificationEntry.TABLE_NAME;
+                selection = NotificationEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.query(DataContract.NotificationEntry.TABLE_NAME,
-                        columns, selection, selectionArgs, null, null, null);
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for query");
         }
+
+        return database.query(tableName, columns, selection, selectionArgs,
+                null, null, orderBy);
     }
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
-        long id;
+        String tableName;
 
         switch (sUriMatcher.match(uri)) {
             case PROFILES:
-                id = database.insert(DataContract.ProfileEntry.TABLE_NAME, null, contentValues);
+                tableName = ProfileEntry.TABLE_NAME;
                 break;
             case GAMES:
-                id = database.insert(DataContract.GameEntry.TABLE_NAME, null, contentValues);
+                tableName = GameEntry.TABLE_NAME;
                 break;
             case ACHIEVEMENTS:
-                id = database.insert(DataContract.AchievementEntry.TABLE_NAME, null, contentValues);
+                tableName = AchievementEntry.TABLE_NAME;
                 break;
 
-            case LOG:
-                id = database.insert(DataContract.NotificationEntry.TABLE_NAME, null, contentValues);
+            case NOTIFICATION:
+                tableName = NotificationEntry.TABLE_NAME;
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for insert");
         }
 
-        return ContentUris.withAppendedId(uri, id);
+        long id = database.insert(tableName, null, contentValues);
+        Uri resultUri = ContentUris.withAppendedId(uri, id);
+
+        mContentResolver.notifyChange(resultUri, null);
+
+        return resultUri;
     }
 
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String whereClause, String[] whereArgs) {
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
+        String tableName;
+
         switch (sUriMatcher.match(uri)) {
             case PROFILES:
-                return database.update(DataContract.ProfileEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
+                tableName = ProfileEntry.TABLE_NAME;
+                break;
             case PROFILES_ID:
-                whereClause = DataContract.ProfileEntry._ID + " = ?";
+                tableName = ProfileEntry.TABLE_NAME;
+                whereClause = ProfileEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.update(DataContract.ProfileEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
+                break;
             case GAMES:
-                return database.update(DataContract.GameEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
+                tableName = GameEntry.TABLE_NAME;
+                break;
             case GAMES_ID:
-                whereClause = DataContract.GameEntry._ID + " = ?";
+                tableName = GameEntry.TABLE_NAME;
+                whereClause = GameEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.update(DataContract.GameEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
+                break;
             case ACHIEVEMENTS:
-                return database.update(DataContract.AchievementEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
+                tableName = AchievementEntry.TABLE_NAME;
+                break;
             case ACHIEVEMENTS_ID:
-                whereClause = DataContract.AchievementEntry._ID + " = ?";
+                tableName = AchievementEntry.TABLE_NAME;
+                whereClause = AchievementEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                break;
 
-                return database.update(DataContract.AchievementEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
-
-            case LOG:
-                return database.update(DataContract.NotificationEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
-            case LOG_ID:
-                whereClause = DataContract.NotificationEntry._ID + " = ?";
+            case NOTIFICATION:
+                tableName = NotificationEntry.TABLE_NAME;
+                break;
+            case NOTIFICATION_ID:
+                tableName = NotificationEntry.TABLE_NAME;
+                whereClause = NotificationEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.update(DataContract.NotificationEntry.TABLE_NAME,
-                        contentValues, whereClause, whereArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for update");
         }
+
+        mContentResolver.notifyChange(uri, null);
+
+        return database.update(tableName, contentValues, whereClause, whereArgs);
     }
 
     @Override
     public int delete(@NonNull Uri uri, String whereClause, String[] whereArgs) {
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
+        String tableName;
+
         switch (sUriMatcher.match(uri)) {
             case PROFILES:
-                return database.delete(DataContract.ProfileEntry.TABLE_NAME, whereClause, whereArgs);
+                tableName = ProfileEntry.TABLE_NAME;
+                break;
             case PROFILES_ID:
-                whereClause = DataContract.ProfileEntry._ID + " = ?";
+                tableName = ProfileEntry.TABLE_NAME;
+                whereClause = ProfileEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.delete(DataContract.ProfileEntry.TABLE_NAME, whereClause, whereArgs);
+                break;
             case GAMES:
-                return database.delete(DataContract.GameEntry.TABLE_NAME, whereClause, whereArgs);
+                tableName = GameEntry.TABLE_NAME;
+                break;
             case GAMES_ID:
-                whereClause = DataContract.GameEntry._ID + " = ?";
+                tableName = GameEntry.TABLE_NAME;
+                whereClause = GameEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.delete(DataContract.GameEntry.TABLE_NAME, whereClause, whereArgs);
+                break;
             case ACHIEVEMENTS:
-                return database.delete(DataContract.AchievementEntry.TABLE_NAME, whereClause, whereArgs);
+                tableName = AchievementEntry.TABLE_NAME;
+                break;
             case ACHIEVEMENTS_ID:
-                whereClause = DataContract.AchievementEntry._ID + " = ?";
+                tableName = AchievementEntry.TABLE_NAME;
+                whereClause = AchievementEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                break;
 
-                return database.delete(DataContract.AchievementEntry.TABLE_NAME, whereClause, whereArgs);
-
-            case LOG:
-                return database.delete(DataContract.NotificationEntry.TABLE_NAME, whereClause, whereArgs);
-            case LOG_ID:
-                whereClause = DataContract.NotificationEntry._ID + " = ?";
+            case NOTIFICATION:
+                tableName = NotificationEntry.TABLE_NAME;
+                break;
+            case NOTIFICATION_ID:
+                tableName = NotificationEntry.TABLE_NAME;
+                whereClause = NotificationEntry._ID + " = ?";
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                return database.delete(DataContract.NotificationEntry.TABLE_NAME, whereClause, whereArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for delete");
         }
+
+        mContentResolver.notifyChange(uri, null);
+
+        return database.delete(tableName, whereClause, whereArgs);
     }
 
     @Override
