@@ -6,20 +6,11 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -200,9 +191,13 @@ public class AchievementPreviewDialogFragment extends BottomSheetDialogFragment 
     }
 
     private void guidesSearchSteam(Long appId, String achievementName) {
-        openChromeCustomTab(Uri.parse(
-                "http://steamcommunity.com/app/" + appId + "/guides/?searchText=" + achievementName + "&browsefilter=trend&browsesort=creationorder&requiredtags%5B%5D=Achievements"
-        ));
+        ChromeCustomTab.show(mContext,
+                "http://steamcommunity.com/app/"
+                        + appId
+                        + "/guides/?searchText="
+                        + achievementName
+                        + "&browsefilter=trend&browsesort=creationorder&requiredtags%5B%5D=Achievements"
+        );
     }
 
     private void guidesSearchYoutube(String gameName, String achievementName) {
@@ -216,23 +211,13 @@ public class AchievementPreviewDialogFragment extends BottomSheetDialogFragment 
 
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            openChromeCustomTab(Uri.parse(
-                    "https://www.youtube.com/results?search_query=" + query
-            ));
+            ChromeCustomTab.show(mContext, "https://www.youtube.com/results?search_query=" + query);
         }
     }
 
     private void guidesSearchGoogle(String gameName, String achievementName) {
         String query = gameName + " " + achievementName + " achievement";
 
-        openChromeCustomTab(Uri.parse(
-                "https://www.google.ru/search?q=" + query
-        ));
-    }
-
-    private void openChromeCustomTab(Uri uri) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(mContext, uri);
+        ChromeCustomTab.show(mContext, "https://www.google.ru/search?q=" + query);
     }
 }

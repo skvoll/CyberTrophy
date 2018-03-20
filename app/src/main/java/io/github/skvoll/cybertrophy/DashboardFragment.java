@@ -214,7 +214,11 @@ public class DashboardFragment extends Fragment implements
             return;
         }
 
-        (new UpdateGameTask(this, mProfileModel)).execute();
+        if (mProfileModel.isInitialized()) {
+            (new UpdateGameTask(this, mProfileModel)).execute();
+        } else {
+            (new LoadDataTask(this)).execute(mProfileModel);
+        }
     }
 
     private static class LoadDataTask extends AsyncTask<ProfileModel, Void, LoadDataTask.LoadDataTaskResult> {
