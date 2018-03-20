@@ -23,7 +23,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import io.github.skvoll.cybertrophy.achievements.list.AchievementsListAdapter;
-import io.github.skvoll.cybertrophy.achievements.list.AchievementsListFragment;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
@@ -208,6 +207,8 @@ public class DashboardFragment extends Fragment implements
         GameModel gameModel = GameModel.getCurrent(getContext().getContentResolver(), mProfileModel);
 
         if (gameModel == null) {
+            mSrlRefresh.setRefreshing(false);
+
             setData(null);
 
             return;

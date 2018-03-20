@@ -81,8 +81,10 @@ public class NotificationsListFragment extends Fragment implements
         mSrlRefresh.setOnRefreshListener(this);
 
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvList.setAdapter(new NotificationsListAdapter(
-                getContext(), new ArrayList<NotificationModel>(), this));
+        mRvList.setAdapter(new NotificationsListAdapter(getContext(),
+                new ArrayList<NotificationModel>(),
+                this,
+                mNotificationObserver));
 
         mNotificationObserver.loadData();
 
@@ -106,8 +108,8 @@ public class NotificationsListFragment extends Fragment implements
     }
 
     void setData(ArrayList<NotificationModel> notificationModels) {
-        NotificationsListAdapter adapter
-                = new NotificationsListAdapter(getContext(), notificationModels, this);
+        NotificationsListAdapter adapter = new NotificationsListAdapter(getContext(),
+                notificationModels, this, mNotificationObserver);
 
         mRvList.swapAdapter(adapter, false);
 
@@ -216,7 +218,8 @@ public class NotificationsListFragment extends Fragment implements
         }
     }
 
-    private class NotificationObserver extends ContentObserver {
+    private class NotificationObserver extends ContentObserver implements
+            NotificationsListAdapter.OnItemRenderListener {
         NotificationObserver(Handler handler) {
             super(handler);
         }
@@ -233,6 +236,19 @@ public class NotificationsListFragment extends Fragment implements
 
         void loadData() {
             (new LoadDataTask(NotificationsListFragment.this, mProfileModel)).execute();
+        }
+
+        @Override
+        public void onRender(NotificationModel notificationModel) {
+            if (getContext() == null) {
+                return;
+            }
+
+            if (notificationModel.isViewed()) {
+                return;
+            }
+
+            notificationModel.setViewed(true).save(getContext().getContentResolver(), this);
         }
     }
 }

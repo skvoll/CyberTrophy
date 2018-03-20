@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -385,11 +386,11 @@ public final class NotificationModel extends Model<NotificationModel> {
     }
 
     @Override
-    public void save(ContentResolver contentResolver) {
+    public void save(ContentResolver contentResolver, ContentObserver contentObserver) {
         if (getType() == TYPE_CATEGORY_SEPARATOR) {
             return;
         }
 
-        super.save(contentResolver);
+        super.save(contentResolver, contentObserver);
     }
 }

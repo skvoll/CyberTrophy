@@ -23,12 +23,15 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     private Context mContext;
     private ArrayList<NotificationModel> mItems;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemRenderListener mOnItemRenderListener;
 
     NotificationsListAdapter(Context context, ArrayList<NotificationModel> notificationModels,
-                             OnItemClickListener onItemClickListener) {
+                             OnItemClickListener onItemClickListener,
+                             OnItemRenderListener onItemRenderListener) {
         mContext = context;
         mItems = notificationModels;
         mOnItemClickListener = onItemClickListener;
+        mOnItemRenderListener = onItemRenderListener;
     }
 
     @Override
@@ -147,15 +150,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
             });
         }
 
-        // TODO: review
-        if (!notificationModel.isViewed()) {
-            (new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    notificationModel.setViewed(true).save(mContext.getContentResolver());
-                }
-            })).start();
-        }
+        mOnItemRenderListener.onRender(notificationModel);
     }
 
     @Override
@@ -187,6 +182,10 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
 
     public interface OnItemClickListener {
         void onClick(NotificationModel notificationModel);
+    }
+
+    public interface OnItemRenderListener {
+        void onRender(NotificationModel notificationModel);
     }
 
     private static final class SeparatorViewHolder extends RecyclerView.ViewHolder {

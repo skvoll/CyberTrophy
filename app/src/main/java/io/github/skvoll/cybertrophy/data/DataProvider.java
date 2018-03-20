@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -106,6 +107,10 @@ public final class DataProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
+        return insert(uri, contentValues, null);
+    }
+
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues, ContentObserver contentObserver) {
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
         String tableName;
@@ -131,13 +136,18 @@ public final class DataProvider extends ContentProvider {
         long id = database.insert(tableName, null, contentValues);
         Uri resultUri = ContentUris.withAppendedId(uri, id);
 
-        mContentResolver.notifyChange(resultUri, null);
+        mContentResolver.notifyChange(resultUri, contentObserver);
 
         return resultUri;
     }
 
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String whereClause, String[] whereArgs) {
+        return update(uri, contentValues, whereClause, whereArgs, null);
+    }
+
+    public int update(@NonNull Uri uri, ContentValues contentValues,
+                      String whereClause, String[] whereArgs, ContentObserver contentObserver) {
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
         String tableName;
@@ -180,13 +190,18 @@ public final class DataProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for update");
         }
 
-        mContentResolver.notifyChange(uri, null);
+        mContentResolver.notifyChange(uri, contentObserver);
 
         return database.update(tableName, contentValues, whereClause, whereArgs);
     }
 
     @Override
     public int delete(@NonNull Uri uri, String whereClause, String[] whereArgs) {
+        return delete(uri, whereClause, whereArgs, null);
+    }
+
+    public int delete(@NonNull Uri uri, String whereClause,
+                      String[] whereArgs, ContentObserver contentObserver) {
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
         String tableName;
@@ -229,7 +244,7 @@ public final class DataProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for delete");
         }
 
-        mContentResolver.notifyChange(uri, null);
+        mContentResolver.notifyChange(uri, contentObserver);
 
         return database.delete(tableName, whereClause, whereArgs);
     }
