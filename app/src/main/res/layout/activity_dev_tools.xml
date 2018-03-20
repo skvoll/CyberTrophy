@@ -23,12 +23,12 @@
                 android:paddingTop="@dimen/default_vertical_indent"
                 android:text="Notifications"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grayTextColor" />
+                android:textColor="@color/textGray" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grayTextColor" />
+                android:background="@color/textGray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,16 +41,16 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/grayTextColor"
-                    android:foregroundTint="@color/grayTextColor" />
+                    android:backgroundTint="@color/textGray"
+                    android:foregroundTint="@color/textGray" />
 
                 <CheckBox
                     android:id="@+id/cd_notification_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/grayTextColor"
+                    android:buttonTint="@color/textGray"
                     android:text="Delay"
-                    android:textColor="@color/grayTextColor" />
+                    android:textColor="@color/textGray" />
 
                 <Button
                     android:id="@+id/btn_notification_check"
@@ -74,12 +74,12 @@
                 android:paddingTop="@dimen/default_vertical_indent"
                 android:text="Data"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grayTextColor" />
+                android:textColor="@color/textGray" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/grayTextColor" />
+                android:background="@color/textGray" />
 
             <Button
                 android:id="@+id/btn_wipe_data"

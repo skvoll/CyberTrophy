@@ -52,8 +52,8 @@ public class DashboardFragment extends Fragment implements
         mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mSrlRefresh = mRootView.findViewById(R.id.srl_refresh);
-        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
+        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondary));
+        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primary));
         mSrlRefresh.setOnRefreshListener(this);
 
         RecyclerView rvLockedAchievements = mRootView.findViewById(R.id.rv_locked_achievements);

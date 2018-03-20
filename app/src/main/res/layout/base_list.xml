@@ -29,7 +29,7 @@
         android:layout_margin="128dp"
         android:contentDescription="@string/list_placeholder"
         android:src="@drawable/placeholder"
-        android:tint="@color/secondaryColor"
+        android:tint="@color/secondary"
         android:visibility="gone" />
 
     <FrameLayout

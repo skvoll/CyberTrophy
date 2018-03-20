@@ -102,7 +102,7 @@
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:max="100"
             android:progress="75"
-            android:progressTint="@color/accentColor"
+            android:progressTint="@color/accent"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

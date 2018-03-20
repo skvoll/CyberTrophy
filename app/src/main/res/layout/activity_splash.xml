@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_mono"
         android:text="@string/company_name"
-        android:textColor="@color/primaryLightColor"
+        android:textColor="@color/primaryLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

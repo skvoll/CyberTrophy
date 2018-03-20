@@ -2,13 +2,13 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/secondary</item>
 
-        <item name="android:navigationBarColor">@color/primaryDarkColor</item>
+        <item name="android:navigationBarColor">@color/primaryDark</item>
 
-        <item name="android:windowBackground">@color/primaryLightColor</item>
+        <item name="android:windowBackground">@color/primaryLight</item>
 
         <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
     </style>
@@ -19,11 +19,11 @@
     </style>
 
     <style name="AppTheme.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/secondaryDarkColor</item>
+        <item name="android:textColor">@color/secondaryDark</item>
     </style>
 
     <style name="AppTheme.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/secondaryDarkColor</item>
+        <item name="android:textColor">@color/secondaryDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -36,8 +36,12 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="AppTheme.GameScreen" parent="AppTheme.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textColor">@color/secondaryText</item>
     </style>
 
     <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">

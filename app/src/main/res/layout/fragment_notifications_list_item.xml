@@ -47,7 +47,7 @@
                     android:contentDescription="@string/notification_icon_description"
                     android:src="@drawable/ic_notifications_black_24dp"
                     android:visibility="gone"
-                    tools:tint="@color/secondaryColor"
+                    tools:tint="@color/secondary"
                     tools:visibility="visible" />
 
                 <TextView

@@ -76,8 +76,8 @@ public class NotificationsListFragment extends Fragment implements
         mIvPlaceholder = rootView.findViewById(android.R.id.empty);
         mLlProgress = rootView.findViewById(android.R.id.progress);
 
-        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondaryColor));
-        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primaryColor));
+        mSrlRefresh.setColorSchemeColors(getResources().getColor(R.color.secondary));
+        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.primary));
         mSrlRefresh.setOnRefreshListener(this);
 
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));

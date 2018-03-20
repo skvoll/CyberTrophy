@@ -64,7 +64,7 @@ public class AuthActivity extends AppCompatActivity {
         final String realm = getString(R.string.app_name);
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+        webView.setBackgroundColor(getResources().getColor(R.color.primary));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

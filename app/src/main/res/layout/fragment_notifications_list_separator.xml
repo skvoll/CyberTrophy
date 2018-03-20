@@ -14,6 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:textColor="@color/secondaryColor"
+        android:textColor="@color/secondary"
         tools:text="3 days ago" />
 </FrameLayout>

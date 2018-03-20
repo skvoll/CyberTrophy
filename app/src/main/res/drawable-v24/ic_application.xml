@@ -16,7 +16,7 @@
         <path
             android:name="ribbon"
             android:pathData="M12,15 L54,83 L92,15 z"
-            android:strokeColor="@color/secondaryColor"
+            android:strokeColor="@color/secondary"
             android:strokeLineJoin="round"
             android:strokeWidth="8" />
     </group>

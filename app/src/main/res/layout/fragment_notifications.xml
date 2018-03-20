@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/title_notifications"
-            app:titleTextColor="@color/primaryTextColor" />
+            app:titleTextColor="@color/primaryText" />
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/base_list" />

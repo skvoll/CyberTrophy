@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryLightColor"
+    android:background="@color/primaryLight"
     android:orientation="vertical"
     tools:context="io.github.skvoll.cybertrophy.AchievementPreviewDialogFragment">
 
@@ -39,7 +39,7 @@
             android:layout_marginEnd="@dimen/default_horizontal_indent"
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="@color/primaryText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             tools:text="Achievement name" />
@@ -51,7 +51,7 @@
             android:layout_marginEnd="@dimen/default_horizontal_indent"
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="@color/primaryText"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             tools:text="Common (75%)" />
@@ -63,7 +63,7 @@
             android:layout_marginEnd="@dimen/default_horizontal_indent"
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="@color/primaryText"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_rarity"
             tools:text="01.01.1970 00:00" />
@@ -90,7 +90,7 @@
                 android:minHeight="128dp"
                 android:text="@string/empty_achievement_description"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@color/primaryText"
                 tools:text="@string/lorem_ipsum" />
 
             <TextView
@@ -100,7 +100,7 @@
                 android:paddingTop="@dimen/default_vertical_indent"
                 android:text="@string/achievement_subtitle_guides"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textColor="@color/secondaryColor" />
+                android:textColor="@color/secondary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                     android:contentDescription="@string/achievement_guides_steam_btn"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_steam_black_24"
-                    android:tint="@color/primaryTextColor" />
+                    android:tint="@color/primaryText" />
 
                 <Space
                     android:layout_width="0dp"
@@ -136,7 +136,7 @@
                     android:contentDescription="@string/achievement_guides_youtube_btn"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_youtube_black_24dp"
-                    android:tint="@color/primaryTextColor" />
+                    android:tint="@color/primaryText" />
 
                 <Space
                     android:layout_width="0dp"
@@ -151,7 +151,7 @@
                     android:contentDescription="@string/achievement_guides_google_btn"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_google_black_24dp"
-                    android:tint="@color/primaryTextColor" />
+                    android:tint="@color/primaryText" />
 
                 <Space
                     android:layout_width="0dp"
@@ -170,7 +170,7 @@
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:layout_marginTop="@dimen/default_vertical_indent"
             android:text="@string/achievement_show_info_button"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="@color/primaryText"
             android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

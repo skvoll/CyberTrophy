@@ -11,7 +11,7 @@
         android:id="@android:id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primaryLightColor"
+        android:background="@color/primaryLight"
         tools:visibility="gone">
 
         <ProgressBar
@@ -23,7 +23,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.v7.widget.Toolbar
@@ -31,14 +31,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/title_games"
-            app:titleTextColor="@color/primaryTextColor" />
+            app:titleTextColor="@color/primaryText" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tl_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabSelectedTextColor="@color/secondaryColor"
-            app:tabTextColor="@color/grayTextColor" />
+            app:tabSelectedTextColor="@color/secondary"
+            app:tabTextColor="@color/textGray" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

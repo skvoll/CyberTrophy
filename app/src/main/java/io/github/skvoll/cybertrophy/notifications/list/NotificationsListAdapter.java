@@ -84,7 +84,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
                         mContext.getResources().getDrawable(R.drawable.ic_notifications_black_24dp));
 
                 notificationViewHolder.ivIcon.getDrawable().setTint(
-                        mContext.getResources().getColor(R.color.secondaryColor));
+                        mContext.getResources().getColor(R.color.secondary));
                 notificationViewHolder.tvTitle.setText(notificationModel.getTitle());
                 notificationViewHolder.tvMessage.setText(notificationModel.getMessage());
                 notificationViewHolder.tvTime.setText(dateFormat.format(date));

@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
                 .placeholder(R.drawable.profile_avatar_empty).into(ivProfileAvatar);
         GlideApp.with(getContext()).load(profileModel.getBackgroundImage())
                 .centerCrop()
-                .placeholder(R.color.primaryColor).into(ivProfileBackground);
+                .placeholder(R.color.primary).into(ivProfileBackground);
         tvProfileName.setText(profileModel.getName());
 
         return mRootView;

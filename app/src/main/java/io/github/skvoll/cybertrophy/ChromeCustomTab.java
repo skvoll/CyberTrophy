@@ -16,8 +16,8 @@ public final class ChromeCustomTab {
 
         mBuilder = new CustomTabsIntent.Builder();
 
-        mBuilder.setToolbarColor(mContext.getResources().getColor(R.color.primaryColor));
-        mBuilder.setSecondaryToolbarColor(mContext.getResources().getColor(R.color.primaryDarkColor));
+        mBuilder.setToolbarColor(mContext.getResources().getColor(R.color.primary));
+        mBuilder.setSecondaryToolbarColor(mContext.getResources().getColor(R.color.primaryDark));
 
         mBuilder.setStartAnimations(mContext, R.anim.slide_in_right, R.anim.slide_out_right);
         mBuilder.setExitAnimations(mContext, R.anim.slide_in_left, R.anim.slide_out_left);

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/title_currently_playing"
-            app:titleTextColor="@color/primaryTextColor" />
+            app:titleTextColor="@color/primaryText" />
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
@@ -50,7 +50,7 @@
             android:layout_margin="128dp"
             android:contentDescription="@string/list_placeholder"
             android:src="@drawable/placeholder"
-            android:tint="@color/secondaryColor"
+            android:tint="@color/secondary"
             android:visibility="gone" />
 
         <FrameLayout

@@ -48,7 +48,7 @@ public abstract class BaseNotification {
                     CHANNEL_DEFAULT, CHANNEL_DEFAULT, NotificationManager.IMPORTANCE_LOW);
             channelDefault.setLockscreenVisibility(VISIBILITY_PUBLIC);
             channelDefault.enableLights(true);
-            channelDefault.setLightColor(context.getColor(R.color.accentColor));
+            channelDefault.setLightColor(context.getColor(R.color.accent));
             notificationChannels.add(channelDefault);
 
             NotificationChannel channelServices = new NotificationChannel(
