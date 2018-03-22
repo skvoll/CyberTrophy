@@ -27,4 +27,7 @@
     <color name="amber500">#FFC107</color>
 
     <color name="textGray">#C0C0C0</color>
+
+    <color name="steamHeader">#171A22</color>
+    <color name="steamBackground">#1C2939</color>
 </resources>

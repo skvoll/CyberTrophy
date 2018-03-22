@@ -1,30 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/default_vertical_indent"
-    android:paddingEnd="@dimen/default_horizontal_indent"
-    android:paddingStart="@dimen/default_horizontal_indent"
-    android:paddingTop="@dimen/default_vertical_indent"
     tools:context="io.github.skvoll.cybertrophy.AuthActivity">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/lorem_ipsum_full"
-        android:textColor="@color/primaryText" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_sign_in"
-        style="@style/AppTheme.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="0dp"
-        android:paddingBottom="24dp"
-        android:paddingTop="24dp"
-        android:stateListAnimator="@null"
-        android:text="@string/sign_in_through_steam" />
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center|bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/powered_by"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textColor="@color/secondary" />
+
+            <ImageView
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:contentDescription="@string/steam_logo_description"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_steam_black_24"
+                android:tint="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_sign_in"
+                style="@style/AppTheme.Button.Colored.Bordered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginStart="24dp"
+                android:text="@string/sign_in" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_disclaimer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_secondary"
+            android:gravity="center"
+            android:text="@string/disclaimer"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/secondary" />
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

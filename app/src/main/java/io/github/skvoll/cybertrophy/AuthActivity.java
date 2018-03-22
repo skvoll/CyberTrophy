@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,27 +32,38 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showDisclaimer();
+        showSignIn();
     }
 
     @Override
     public void onBackPressed() {
         if (mIsAuthShown) {
-            showDisclaimer();
+            showSignIn();
         } else {
             super.onBackPressed();
         }
     }
 
-    private void showDisclaimer() {
+    private void showSignIn() {
         mIsAuthShown = false;
 
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_auth);
 
         findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAuth();
+            }
+        });
+
+        findViewById(R.id.tv_disclaimer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DisclaimerFragment disclaimerFragment = new DisclaimerFragment();
+
+                disclaimerFragment.show(getSupportFragmentManager(), disclaimerFragment.getTag());
             }
         });
     }
@@ -64,7 +76,7 @@ public class AuthActivity extends AppCompatActivity {
         final String realm = getString(R.string.app_name);
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setBackgroundColor(getResources().getColor(R.color.primary));
+        webView.setBackgroundColor(getResources().getColor(R.color.steamBackground));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -80,6 +92,8 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
 
+        getWindow().setStatusBarColor(getResources().getColor(R.color.steamHeader));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.steamBackground));
         setContentView(webView);
 
         webView.loadUrl(SteamApi.getAuthUrl(realm));

@@ -31,9 +31,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.SplashScreen" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar.Transparent" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Transparent" parent="AppTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.SplashScreen" parent="AppTheme.NoActionBar.Transparent">
         <item name="android:windowBackground">@drawable/activity_splash_background</item>
-        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="AppTheme.GameScreen" parent="AppTheme.NoActionBar">
@@ -42,6 +51,11 @@
 
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/secondaryText</item>
+    </style>
+
+    <style name="AppTheme.Button.Colored.Bordered" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:background">@drawable/button_bordered_secondary_background</item>
     </style>
 
     <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">

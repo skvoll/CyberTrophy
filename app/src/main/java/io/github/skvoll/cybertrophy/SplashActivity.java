@@ -12,19 +12,17 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
 
-        final ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+        final Intent intent;
 
-        Intent intent;
-
-        if (profileModel == null) {
+        if (ProfileModel.getActive(getContentResolver()) == null) {
             intent = new Intent(SplashActivity.this, AuthActivity.class);
         } else {
             intent = new Intent(SplashActivity.this, MainActivity.class);
         }
 
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         finish();
     }
 }
