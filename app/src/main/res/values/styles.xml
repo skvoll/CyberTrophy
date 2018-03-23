@@ -45,6 +45,10 @@
         <item name="android:windowBackground">@drawable/activity_splash_background</item>
     </style>
 
+    <style name="AppTheme.AuthScreen" parent="AppTheme.NoActionBar.Transparent">
+        <item name="android:windowBackground">@drawable/window_background_gradient_ltr</item>
+    </style>
+
     <style name="AppTheme.GameScreen" parent="AppTheme.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
     </style>

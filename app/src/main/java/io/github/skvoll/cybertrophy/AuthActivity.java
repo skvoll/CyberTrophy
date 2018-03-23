@@ -8,12 +8,16 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.util.LongSparseArray;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 
@@ -26,7 +30,8 @@ import io.github.skvoll.cybertrophy.steam.SteamProfile;
 public class AuthActivity extends AppCompatActivity {
     private static final String TAG = AuthActivity.class.getSimpleName();
 
-    private boolean mIsAuthShown = false;
+    private boolean mIsSteam = false;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,63 +42,77 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mIsAuthShown) {
+        if (mIsSteam) {
             showSignIn();
+        } else if (mBottomSheetBehavior != null && mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         } else {
             super.onBackPressed();
         }
     }
 
     private void showSignIn() {
-        mIsAuthShown = false;
+        mIsSteam = false;
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_auth);
 
+        final LinearLayout llContainer = findViewById(R.id.ll_container);
+        mBottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bs_disclaimer));
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                llContainer.setAlpha(1.0f - slideOffset);
+            }
+        });
+
         findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAuth();
+                showSteam();
             }
         });
 
         findViewById(R.id.tv_disclaimer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DisclaimerFragment disclaimerFragment = new DisclaimerFragment();
-
-                disclaimerFragment.show(getSupportFragmentManager(), disclaimerFragment.getTag());
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
     }
 
     @SuppressLint("setJavaScriptEnabled")
-    private void showAuth() {
-        mIsAuthShown = true;
+    private void showSteam() {
+        mIsSteam = true;
 
         final WebView webView = new WebView(this);
         final String realm = getString(R.string.app_name);
+
+        getWindow().setStatusBarColor(getResources().getColor(R.color.steamHeader));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.steamBackground));
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setBackgroundColor(getResources().getColor(R.color.steamBackground));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                setTitle(url);
                 Uri uri = Uri.parse(url);
 
                 if (uri.getAuthority().equals(realm.toLowerCase())) {
                     webView.stopLoading();
+                    setContentView(null);
+
                     String steamId = Uri.parse(uri.getQueryParameter("openid.identity")).getLastPathSegment();
 
                     saveProfile(Long.valueOf(steamId));
                 }
             }
         });
-
-        getWindow().setStatusBarColor(getResources().getColor(R.color.steamHeader));
-        getWindow().setNavigationBarColor(getResources().getColor(R.color.steamBackground));
         setContentView(webView);
 
         webView.loadUrl(SteamApi.getAuthUrl(realm));

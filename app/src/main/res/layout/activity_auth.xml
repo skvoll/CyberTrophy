@@ -6,6 +6,7 @@
     tools:context="io.github.skvoll.cybertrophy.AuthActivity">
 
     <LinearLayout
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -49,17 +50,51 @@
                 android:layout_marginStart="24dp"
                 android:text="@string/sign_in" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bs_disclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="48dp"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <TextView
             android:id="@+id/tv_disclaimer"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@drawable/ripple_secondary"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="@drawable/ripple_secondary"
             android:gravity="center"
             android:text="@string/disclaimer"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@color/secondary" />
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:nestedScrollingEnabled="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/default_vertical_indent"
+                android:paddingEnd="@dimen/default_horizontal_indent"
+                android:paddingStart="@dimen/default_horizontal_indent"
+                android:paddingTop="@dimen/default_vertical_indent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lorem_ipsum_full"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
