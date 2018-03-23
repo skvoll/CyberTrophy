@@ -13,11 +13,13 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.util.LongSparseArray;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 
@@ -90,11 +92,11 @@ public class AuthActivity extends AppCompatActivity {
     private void showSteam() {
         mIsSteam = true;
 
-        final WebView webView = new WebView(this);
-        final String realm = getString(R.string.app_name);
-
         getWindow().setStatusBarColor(getResources().getColor(R.color.steamHeader));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.steamBackground));
+
+        final WebView webView = new WebView(this);
+        final String realm = getString(R.string.app_name);
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setBackgroundColor(getResources().getColor(R.color.steamBackground));
@@ -105,7 +107,7 @@ public class AuthActivity extends AppCompatActivity {
 
                 if (uri.getAuthority().equals(realm.toLowerCase())) {
                     webView.stopLoading();
-                    setContentView(null);
+                    showLoading();
 
                     String steamId = Uri.parse(uri.getQueryParameter("openid.identity")).getLastPathSegment();
 
@@ -116,6 +118,26 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(webView);
 
         webView.loadUrl(SteamApi.getAuthUrl(realm));
+    }
+
+    private void showLoading() {
+        mIsSteam = false;
+
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+
+        FrameLayout frameLayout = new FrameLayout(this);
+        ProgressBar progressBar = new ProgressBar(this);
+
+        FrameLayout.LayoutParams llLayoutParams = new FrameLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        llLayoutParams.gravity = Gravity.CENTER;
+        progressBar.setLayoutParams(llLayoutParams);
+
+        frameLayout.addView(progressBar);
+        setContentView(frameLayout);
     }
 
     private void saveProfile(final Long steamId) {
