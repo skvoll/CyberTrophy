@@ -3,27 +3,14 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/secondary</item>
 
-        <item name="android:navigationBarColor">@color/primaryDark</item>
+        <item name="android:navigationBarColor">@color/primary_dark</item>
 
-        <item name="android:windowBackground">@color/primaryLight</item>
+        <item name="android:windowBackground">@color/primary_light</item>
 
         <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
-    </style>
-
-    <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.PositiveButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.NegativeButtonStyle</item>
-    </style>
-
-    <style name="AppTheme.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/secondaryDark</item>
-    </style>
-
-    <style name="AppTheme.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/secondaryDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -46,11 +33,24 @@
     </style>
 
     <style name="AppTheme.AuthScreen" parent="AppTheme.NoActionBar.Transparent">
-        <item name="android:windowBackground">@drawable/window_background_gradient_ltr</item>
+        <item name="android:windowBackground">@drawable/window_background</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.AlertDialog.PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.AlertDialog.NegativeButtonStyle</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/secondary_dark</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/secondary_dark</item>
     </style>
 
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/secondaryText</item>
+        <item name="android:textColor">@color/secondary_text_light</item>
     </style>
 
     <style name="AppTheme.Button.Colored.Bordered" parent="Widget.AppCompat.Button.Colored">

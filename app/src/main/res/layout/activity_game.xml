@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:tabSelectedTextColor="@color/secondary"
-            app:tabTextColor="@color/textGray" />
+            app:tabTextColor="@color/light_gray" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

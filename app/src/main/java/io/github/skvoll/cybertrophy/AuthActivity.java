@@ -92,14 +92,14 @@ public class AuthActivity extends AppCompatActivity {
     private void showSteam() {
         mIsSteam = true;
 
-        getWindow().setStatusBarColor(getResources().getColor(R.color.steamHeader));
-        getWindow().setNavigationBarColor(getResources().getColor(R.color.steamBackground));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.steam_header));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.steam_background));
 
         final WebView webView = new WebView(this);
         final String realm = getString(R.string.app_name);
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setBackgroundColor(getResources().getColor(R.color.steamBackground));
+        webView.setBackgroundColor(getResources().getColor(R.color.steam_background));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
