@@ -49,10 +49,6 @@
         <item name="android:windowBackground">@drawable/window_background_gradient_ltr</item>
     </style>
 
-    <style name="AppTheme.GameScreen" parent="AppTheme.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/secondaryText</item>
     </style>

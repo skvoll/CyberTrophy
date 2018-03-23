@@ -33,7 +33,7 @@
         <activity
             android:name=".GameActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.GameScreen" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DevToolsActivity"
             android:screenOrientation="portrait" />
