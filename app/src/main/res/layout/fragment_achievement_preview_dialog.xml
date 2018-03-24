@@ -39,7 +39,7 @@
             android:layout_marginEnd="@dimen/default_horizontal_indent"
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/primary_text_light"
+            android:textColor="@color/primary_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             tools:text="Achievement name" />
@@ -51,7 +51,7 @@
             android:layout_marginEnd="@dimen/default_horizontal_indent"
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@color/primary_text_light"
+            android:textColor="@color/primary_text"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             tools:text="Common (75%)" />
@@ -63,7 +63,7 @@
             android:layout_marginEnd="@dimen/default_horizontal_indent"
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@color/primary_text_light"
+            android:textColor="@color/primary_text"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_rarity"
             tools:text="01.01.1970 00:00" />
@@ -90,7 +90,7 @@
                 android:minHeight="128dp"
                 android:text="@string/empty_achievement_description"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/primary_text_light"
+                android:textColor="@color/primary_text"
                 tools:text="@string/lorem_ipsum" />
 
             <TextView
@@ -121,7 +121,7 @@
                     android:contentDescription="@string/achievement_guides_steam_btn"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_steam_black_24"
-                    android:tint="@color/primary_text_light" />
+                    android:tint="@color/primary_text" />
 
                 <Space
                     android:layout_width="0dp"
@@ -136,7 +136,7 @@
                     android:contentDescription="@string/achievement_guides_youtube_btn"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_youtube_black_24dp"
-                    android:tint="@color/primary_text_light" />
+                    android:tint="@color/primary_text" />
 
                 <Space
                     android:layout_width="0dp"
@@ -151,7 +151,7 @@
                     android:contentDescription="@string/achievement_guides_google_btn"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_google_black_24dp"
-                    android:tint="@color/primary_text_light" />
+                    android:tint="@color/primary_text" />
 
                 <Space
                     android:layout_width="0dp"
@@ -170,7 +170,7 @@
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:layout_marginTop="@dimen/default_vertical_indent"
             android:text="@string/achievement_show_info_button"
-            android:textColor="@color/primary_text_light"
+            android:textColor="@color/primary_text"
             android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

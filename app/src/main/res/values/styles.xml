@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/secondary</item>
 
-        <item name="android:navigationBarColor">@color/primary_dark</item>
+        <item name="android:statusBarColor">@color/transparent_25</item>
+        <item name="android:navigationBarColor">@color/transparent_25</item>
 
-        <item name="android:windowBackground">@color/primary_light</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/window_background</item>
 
         <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.ActionBar" parent="AppTheme">
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Transparent" parent="AppTheme.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.Transparent" parent="AppTheme">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.SplashScreen" parent="AppTheme.NoActionBar.Transparent">
+    <style name="AppTheme.SplashScreen" parent="AppTheme">
         <item name="android:windowBackground">@drawable/activity_splash_background</item>
     </style>
 
-    <style name="AppTheme.AuthScreen" parent="AppTheme.NoActionBar.Transparent">
-        <item name="android:windowBackground">@drawable/window_background</item>
+    <style name="AppTheme.AuthScreen" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/window_background_flip_horizontal</item>
     </style>
 
     <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.AlertDialog.PositiveButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.AlertDialog.NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.AlertDialog.PositiveButtonStyle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.AlertDialog.NegativeButtonStyle
+        </item>
     </style>
 
     <style name="AppTheme.AlertDialog.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
@@ -50,7 +46,7 @@
     </style>
 
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/secondary_text_light</item>
+        <item name="android:textColor">@color/secondary_text</item>
     </style>
 
     <style name="AppTheme.Button.Colored.Bordered" parent="Widget.AppCompat.Button.Colored">

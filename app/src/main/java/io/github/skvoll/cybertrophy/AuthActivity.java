@@ -69,7 +69,7 @@ public class AuthActivity extends AppCompatActivity {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                llContainer.setAlpha(1.0f - slideOffset);
+                llContainer.setAlpha(1.0f - (slideOffset * 2));
             }
         });
 

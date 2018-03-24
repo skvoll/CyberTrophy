@@ -7,39 +7,13 @@
     android:orientation="vertical"
     tools:context="io.github.skvoll.cybertrophy.GamesFragment">
 
-    <FrameLayout
-        android:id="@android:id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primary_light"
-        tools:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
-
-    <android.support.design.widget.AppBarLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tl_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tb_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="@string/title_games"
-            app:titleTextColor="@color/primary_text_light" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tl_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabSelectedTextColor="@color/secondary"
-            app:tabTextColor="@color/light_gray" />
-    </android.support.design.widget.AppBarLayout>
+        android:background="@color/transparent_25"
+        app:tabSelectedTextColor="@color/secondary"
+        app:tabTextColor="@color/light_gray" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_container"

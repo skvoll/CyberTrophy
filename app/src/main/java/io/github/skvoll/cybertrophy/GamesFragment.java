@@ -80,8 +80,6 @@ public class GamesFragment extends Fragment implements
         mViewPager.setCurrentItem(currentItem);
 
         mTabLayout.setupWithViewPager(mViewPager);
-
-        view.findViewById(android.R.id.progress).setVisibility(View.GONE);
     }
 
     @Override

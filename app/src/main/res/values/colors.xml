@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary_light">@color/blue_gray700</color>
     <color name="primary">@color/blue_gray800</color>
-    <color name="primary_light">@color/blue_gray800</color>
     <color name="primary_dark">@color/blue_gray900</color>
-    <color name="primary_text_light">@color/white</color>
-    <color name="primary_text_dark">@color/white</color>
-    <color name="secondary">@color/teal200</color>
+    <color name="primary_text">@color/white</color>
+
     <color name="secondary_light">@color/teal100</color>
+    <color name="secondary">@color/teal200</color>
     <color name="secondary_dark">@color/teal300</color>
-    <color name="secondary_text_light">@color/black</color>
-    <color name="secondary_text_dark">@color/black</color>
+    <color name="secondary_text">@color/white</color>
+
     <color name="accent">@color/greenA700</color>
-    <color name="accent_text_light">@color/black</color>
-    <color name="accent_text_dark">@color/black</color>
+    <color name="accent_text">@color/black</color>
 
     <color name="steam_header">#171A22</color>
     <color name="steam_background">#1C2939</color>
 
-    <color name="blue_gray800">#37474F</color>
     <color name="blue_gray700">#455A64</color>
+    <color name="blue_gray800">#37474F</color>
     <color name="blue_gray900">#263238</color>
-    <color name="teal200">#80CBC4</color>
     <color name="teal100">#B2DFDB</color>
+    <color name="teal200">#80CBC4</color>
     <color name="teal300">#4DB6AC</color>
     <color name="greenA700">#00C853</color>
     <color name="amber500">#FFC107</color>
 
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="transparent_25">#44000000</color>
+    <color name="white">@android:color/white</color>
+    <color name="black">@android:color/black</color>
     <color name="light_gray">#C0C0C0</color>
 </resources>

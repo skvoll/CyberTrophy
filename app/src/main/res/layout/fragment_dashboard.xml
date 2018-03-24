@@ -1,69 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="io.github.skvoll.cybertrophy.DashboardFragment">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tb_toolbar"
+        <ScrollView
+            android:id="@+id/sv_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="@string/title_currently_playing"
-            app:titleTextColor="@color/primary_text_light" />
-    </android.support.design.widget.AppBarLayout>
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/default_content_container_padding"
+            android:paddingTop="@dimen/default_content_container_padding"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <include layout="@layout/fragment_dashboard_game" />
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="128dp"
+        android:contentDescription="@string/list_placeholder"
+        android:src="@drawable/placeholder"
+        android:tint="@color/secondary"
+        android:visibility="gone" />
 
     <FrameLayout
+        android:id="@android:id/progress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:visibility="gone">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/srl_refresh"
-            android:layout_width="match_parent"
+        <ProgressBar
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <ScrollView
-                android:id="@+id/sv_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="@dimen/default_content_container_padding"
-                android:paddingTop="@dimen/default_content_container_padding"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <include layout="@layout/fragment_dashboard_game" />
-            </ScrollView>
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-        <ImageView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="128dp"
-            android:contentDescription="@string/list_placeholder"
-            android:src="@drawable/placeholder"
-            android:tint="@color/secondary"
-            android:visibility="gone" />
-
-        <FrameLayout
-            android:id="@android:id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            tools:visibility="gone">
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-        </FrameLayout>
+            android:layout_gravity="center" />
     </FrameLayout>
-</LinearLayout>
+</FrameLayout>

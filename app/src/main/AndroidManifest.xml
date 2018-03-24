@@ -28,15 +28,14 @@
             android:theme="@style/AppTheme.AuthScreen" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GameActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DevToolsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar" />
 
         <provider
             android:name=".data.DataProvider"
