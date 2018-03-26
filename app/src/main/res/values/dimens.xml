@@ -7,4 +7,14 @@
     <dimen name="achievement_icon_size">72dp</dimen>
     <dimen name="game_logo_height">72dp</dimen>
     <dimen name="game_logo_width">152dp</dimen>
+
+    <!-- material -->
+    <dimen name="control_inset_material">4dp</dimen>
+    <dimen name="control_padding_material">4dp</dimen>
+    <dimen name="button_elevation_material">2dp</dimen>
+    <dimen name="button_pressed_z_material">4dp</dimen>
+    <dimen name="button_inset_vertical_material">6dp</dimen>
+    <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>
+    <dimen name="button_padding_vertical_material">@dimen/control_padding_material</dimen>
+    <dimen name="button_padding_horizontal_material">8dp</dimen>
 </resources>

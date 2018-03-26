@@ -162,7 +162,7 @@
 
         <Button
             android:id="@+id/btn_show_info"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/AppTheme.Button.Borderless.Colored"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/default_vertical_indent"
@@ -170,7 +170,6 @@
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:layout_marginTop="@dimen/default_vertical_indent"
             android:text="@string/achievement_show_info_button"
-            android:textColor="@color/primary_text"
             android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

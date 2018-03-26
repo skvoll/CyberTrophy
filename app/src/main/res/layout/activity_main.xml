@@ -17,9 +17,6 @@
         android:id="@+id/bnv_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent_25"
         android:theme="@style/AppTheme.BottomNavigationView"
-        app:itemIconTint="@color/bnv_item_color"
-        app:itemTextColor="@color/bnv_item_color"
         app:menu="@menu/activity_main_menu" />
 </LinearLayout>

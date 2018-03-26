@@ -4,11 +4,13 @@
     <color name="primary">@color/blue_gray800</color>
     <color name="primary_dark">@color/blue_gray900</color>
     <color name="primary_text">@color/white</color>
+    <color name="primary_text_inverse">@color/black</color>
 
     <color name="secondary_light">@color/teal100</color>
     <color name="secondary">@color/teal200</color>
     <color name="secondary_dark">@color/teal300</color>
-    <color name="secondary_text">@color/white</color>
+    <color name="secondary_text">@color/black</color>
+    <color name="secondary_text_inverse">@color/white</color>
 
     <color name="accent">@color/greenA700</color>
     <color name="accent_text">@color/black</color>
@@ -26,7 +28,6 @@
     <color name="amber500">#FFC107</color>
 
     <color name="transparent">@android:color/transparent</color>
-    <color name="transparent_25">#44000000</color>
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
     <color name="light_gray">#C0C0C0</color>

@@ -24,8 +24,7 @@
         </activity>
         <activity
             android:name=".AuthActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.AuthScreen" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />

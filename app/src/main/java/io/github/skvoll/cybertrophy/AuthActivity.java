@@ -69,7 +69,7 @@ public class AuthActivity extends AppCompatActivity {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                llContainer.setAlpha(1.0f - (slideOffset * 2));
+                llContainer.setAlpha(1.0f - (slideOffset * 1.5f));
             }
         });
 
@@ -195,7 +195,7 @@ public class AuthActivity extends AppCompatActivity {
             intent.putExtra(MainActivity.KEY_FRAGMENT, MainActivity.FRAGMENT_PROFILE);
 
             activity.startActivity(intent);
-
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
             activity.finish();
         }
     }

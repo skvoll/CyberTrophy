@@ -6,14 +6,15 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/secondary</item>
 
-        <item name="android:statusBarColor">@color/transparent_25</item>
-        <item name="android:navigationBarColor">@color/transparent_25</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/window_background</item>
 
-        <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
+        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
+        <item name="buttonStyle">@style/AppTheme.Button.Borderless</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="AppTheme">
@@ -26,35 +27,44 @@
         <item name="android:windowBackground">@drawable/activity_splash_background</item>
     </style>
 
-    <style name="AppTheme.AuthScreen" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/window_background_flip_horizontal</item>
+    <style name="AppTheme.Toolbar" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="android:textColor">@color/secondary</item>
     </style>
 
-    <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.AlertDialog.PositiveButtonStyle
-        </item>
-        <item name="buttonBarNegativeButtonStyle">@style/AppTheme.AlertDialog.NegativeButtonStyle
-        </item>
-    </style>
-
-    <style name="AppTheme.AlertDialog.NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/secondary_dark</item>
-    </style>
-
-    <style name="AppTheme.AlertDialog.PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/secondary_dark</item>
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:background">@drawable/button_background</item>
     </style>
 
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:background">@drawable/button_colored_background</item>
     </style>
 
-    <style name="AppTheme.Button.Colored.Bordered" parent="Widget.AppCompat.Button.Colored">
+    <style name="AppTheme.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:background">@drawable/button_borderless_background</item>
+    </style>
+
+    <style name="AppTheme.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textColor">@color/secondary</item>
-        <item name="android:background">@drawable/button_bordered_secondary_background</item>
+        <item name="android:background">@drawable/button_borderless_colored_background</item>
+    </style>
+
+    <style name="AppTheme.Button.Bordered" parent="AppTheme.Button.Borderless">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:background">@drawable/button_bordered_background</item>
+    </style>
+
+    <style name="AppTheme.Button.Bordered.Colored" parent="AppTheme.Button.Colored">
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:background">@drawable/button_bordered_colored_background</item>
     </style>
 
     <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
-        <item name="colorControlHighlight">#33FFFFFF</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="itemIconTint">@color/bnv_item_color</item>
+        <item name="itemTextColor">@color/bnv_item_color</item>
+        <item name="colorControlHighlight">@color/secondary_light</item>
     </style>
 </resources>
