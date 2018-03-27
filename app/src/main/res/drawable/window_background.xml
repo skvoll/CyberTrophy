@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape>
+        <shape android:dither="true">
             <gradient
-                android:gradientRadius="200%p"
+                android:gradientRadius="175%p"
                 android:centerY="0.2"
                 android:startColor="@color/primary_light"
                 android:centerColor="@color/primary"

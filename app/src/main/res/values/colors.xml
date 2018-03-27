@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_light">@color/blue_gray700</color>
-    <color name="primary">@color/blue_gray800</color>
-    <color name="primary_dark">@color/blue_gray900</color>
-    <color name="primary_text">@color/white</color>
-    <color name="primary_text_inverse">@color/black</color>
+    <color name="primary_light">#445062</color>
+    <color name="primary">#1B2838</color>
+    <color name="primary_dark">#000013</color>
 
-    <color name="secondary_light">@color/teal100</color>
-    <color name="secondary">@color/teal200</color>
-    <color name="secondary_dark">@color/teal300</color>
-    <color name="secondary_text">@color/black</color>
-    <color name="secondary_text_inverse">@color/white</color>
+    <color name="secondary_light">#8FDBFF</color>
+    <color name="secondary">#5AA9D6</color>
+    <color name="secondary_dark">#1A7AA4</color>
 
     <color name="accent">@color/greenA700</color>
-    <color name="accent_text">@color/black</color>
+
+    <color name="text_primary">@color/white</color>
+    <color name="text_primary_inverse">@color/black</color>
+    <color name="text_secondary">@color/light_gray</color>
+    <color name="text_secondary_inverse">@color/light_gray</color>
 
     <color name="steam_header">#171A22</color>
     <color name="steam_background">#1C2939</color>
 
-    <color name="blue_gray700">#455A64</color>
-    <color name="blue_gray800">#37474F</color>
-    <color name="blue_gray900">#263238</color>
-    <color name="teal100">#B2DFDB</color>
-    <color name="teal200">#80CBC4</color>
-    <color name="teal300">#4DB6AC</color>
     <color name="greenA700">#00C853</color>
     <color name="amber500">#FFC107</color>
 

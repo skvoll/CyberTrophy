@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_item"
+    style="@style/AppTheme.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/card_horizontal_indent"
@@ -75,9 +76,9 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <Space
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/iv_new_indicator"
@@ -90,11 +91,11 @@
 
                 <TextView
                     android:id="@+id/tv_time"
-                    android:layout_marginStart="@dimen/default_vertical_indent"
-                    android:drawableStart="@drawable/new_notification_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:layout_marginStart="@dimen/default_vertical_indent"
+                    android:drawableStart="@drawable/new_notification_indicator"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                     tools:text="Jan 1, 1970 12:00AM" />
             </LinearLayout>

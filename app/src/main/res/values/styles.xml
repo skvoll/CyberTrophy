@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/secondary</item>
-
-        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:colorBackground">@color/primary_light</item>
         <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/text_primary_inverse</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/text_secondary_inverse</item>
+        <item name="android:windowBackground">@drawable/window_background</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/window_background</item>
+
+        <item name="colorControlHighlight">@color/secondary_light</item>
 
         <item name="buttonStyle">@style/AppTheme.Button.Borderless</item>
     </style>
@@ -27,17 +33,17 @@
     </style>
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:background">@drawable/button_background</item>
     </style>
 
     <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:background">@drawable/button_colored_background</item>
     </style>
 
     <style name="AppTheme.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:background">@drawable/button_borderless_background</item>
     </style>
 
@@ -47,7 +53,7 @@
     </style>
 
     <style name="AppTheme.Button.Bordered" parent="AppTheme.Button.Borderless">
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:background">@drawable/button_bordered_background</item>
     </style>
 
@@ -60,6 +66,14 @@
         <item name="android:background">@color/transparent</item>
         <item name="itemIconTint">@color/bnv_item_color</item>
         <item name="itemTextColor">@color/bnv_item_color</item>
-        <item name="colorControlHighlight">@color/secondary_light</item>
+    </style>
+
+    <style name="AppTheme.CardView">
+        <item name="cardBackgroundColor">?android:attr/colorBackground</item>
+    </style>
+
+    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextColor">@color/secondary_dark</item>
+        <item name="tabSelectedTextColor">@color/secondary_light</item>
     </style>
 </resources>

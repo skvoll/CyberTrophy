@@ -9,6 +9,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_item"
+        style="@style/AppTheme.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/card_horizontal_indent"
@@ -107,6 +108,7 @@
         android:textColor="@color/secondary" />
 
     <android.support.v7.widget.CardView
+        style="@style/AppTheme.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/card_horizontal_indent"

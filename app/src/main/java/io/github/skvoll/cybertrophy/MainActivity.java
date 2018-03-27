@@ -1,11 +1,14 @@
 package io.github.skvoll.cybertrophy;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +16,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+
+import java.lang.reflect.Field;
 
 import io.github.skvoll.cybertrophy.data.DataContract;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
@@ -111,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             selectedItem = bundle.getInt(KEY_FRAGMENT, FRAGMENT_DASHBOARD);
         }
 
+        disableShiftMode(mBnvNavigation);
         mBnvNavigation.setSelectedItemId(selectedItem);
         mBnvNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -197,6 +203,25 @@ public class MainActivity extends AppCompatActivity {
                 + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
         Log.d(TAG, RecentGamesParserJob.class.getSimpleName() + " has "
                 + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
+    }
+
+    @SuppressLint("RestrictedApi")
+    // TODO: review and remove code from proguard-rules.pro
+    private void disableShiftMode(BottomNavigationView view) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                item.setShiftingMode(false);
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private class NotificationObserver extends ContentObserver {
