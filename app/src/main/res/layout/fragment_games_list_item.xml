@@ -2,12 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.ListItem.Clickable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/colorBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/default_vertical_indent"
     android:paddingEnd="@dimen/default_horizontal_indent"
@@ -27,12 +24,10 @@
 
         <TextView
             android:id="@+id/tv_name"
+            style="@style/AppTheme.Text.Subhead.SingleLine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_horizontal_indent"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,12 +35,10 @@
 
         <TextView
             android:id="@+id/tv_last_play"
+            style="@style/AppTheme.Text.Caption.SingleLine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_horizontal_indent"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_logo"
@@ -55,12 +48,10 @@
 
         <TextView
             android:id="@+id/tv_playtime"
+            style="@style/AppTheme.Text.Caption.SingleLine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_horizontal_indent"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_logo"
@@ -70,12 +61,10 @@
 
         <TextView
             android:id="@+id/tv_achievements"
+            style="@style/AppTheme.Text.Caption.SingleLine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_horizontal_indent"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_logo"
@@ -85,9 +74,9 @@
 
         <TextView
             android:id="@+id/tv_progress"
+            style="@style/AppTheme.Text.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/pb_progress"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +91,6 @@
             android:layout_marginStart="@dimen/default_horizontal_indent"
             android:max="100"
             android:progress="75"
-            android:progressTint="@color/accent"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

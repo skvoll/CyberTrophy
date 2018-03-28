@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/secondary</item>
-        <item name="android:colorBackground">@color/primary_light</item>
+        <item name="android:colorBackground">@color/primary</item>
         <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
@@ -17,13 +17,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <item name="colorControlHighlight">@color/secondary_light</item>
+        <item name="colorControlHighlight">?android:attr/colorAccent</item>
 
         <item name="buttonStyle">@style/AppTheme.Button.Borderless</item>
+        <item name="cardViewStyle">@style/AppTheme.CardView</item>
+        <!--TODO: swipeRefreshLayout style-->
     </style>
 
     <style name="AppTheme.ActionBar" parent="AppTheme">
-        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <item name="android:statusBarColor">?android:attr/colorPrimaryDark</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
@@ -32,34 +34,13 @@
         <item name="android:windowBackground">@drawable/activity_splash_background</item>
     </style>
 
-    <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:background">@drawable/button_background</item>
+    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextColor">?android:attr/textColorSecondary</item>
+        <item name="tabSelectedTextColor">?android:attr/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:background">@drawable/button_colored_background</item>
-    </style>
-
-    <style name="AppTheme.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:background">@drawable/button_borderless_background</item>
-    </style>
-
-    <style name="AppTheme.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless.Colored">
-        <item name="android:textColor">@color/secondary</item>
-        <item name="android:background">@drawable/button_borderless_colored_background</item>
-    </style>
-
-    <style name="AppTheme.Button.Bordered" parent="AppTheme.Button.Borderless">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:background">@drawable/button_bordered_background</item>
-    </style>
-
-    <style name="AppTheme.Button.Bordered.Colored" parent="AppTheme.Button.Colored">
-        <item name="android:textColor">@color/secondary</item>
-        <item name="android:background">@drawable/button_bordered_colored_background</item>
+    <style name="AppTheme.TabLayout.Colored" parent="AppTheme.TabLayout">
+        <item name="android:background">?android:attr/colorPrimary</item>
     </style>
 
     <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
@@ -68,12 +49,125 @@
         <item name="itemTextColor">@color/bnv_item_color</item>
     </style>
 
-    <style name="AppTheme.CardView">
+    <!--TODO: set background color-->
+    <style name="AppTheme.BottomNavigationView.Colored" parent="AppTheme.BottomNavigationView" />
+
+    <style name="AppTheme.Text" />
+
+    <style name="AppTheme.Text.SingleLine">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="AppTheme.Text.Colored" parent="AppTheme.Text">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Colored.SingleLine" parent="AppTheme.Text.SingleLine">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Headline" parent="AppTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
+    </style>
+
+    <style name="AppTheme.Text.Headline.SingleLine" parent="AppTheme.Text.SingleLine">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
+    </style>
+
+    <style name="AppTheme.Text.Headline.Colored" parent="AppTheme.Text.Headline">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Headline.Colored.SingleLine" parent="AppTheme.Text.Headline.SingleLine">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Subhead" parent="AppTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
+    <style name="AppTheme.Text.Subhead.SingleLine" parent="AppTheme.Text.SingleLine">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
+    <style name="AppTheme.Text.Subhead.Colored" parent="AppTheme.Text.Subhead">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Subhead.Colored.SingleLine" parent="AppTheme.Text.Subhead.SingleLine">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Title" parent="AppTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="AppTheme.Text.Title.SingleLine" parent="AppTheme.Text.SingleLine">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="AppTheme.Text.Title.Colored" parent="AppTheme.Text.Title">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Title.Colored.SingleLine" parent="AppTheme.Text.Title.SingleLine">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Caption" parent="AppTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+    </style>
+
+    <style name="AppTheme.Text.Caption.SingleLine" parent="AppTheme.Text.SingleLine">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+    </style>
+
+    <style name="AppTheme.Text.Caption.Colored" parent="AppTheme.Text.Caption">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Text.Caption.Colored.SingleLine" parent="AppTheme.Text.Caption.SingleLine">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+    </style>
+
+    <style name="AppTheme.Button.Colored" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/button_colored_background</item>
+    </style>
+
+    <style name="AppTheme.Button.Borderless" parent="Widget.AppCompat.Button.Borderless" />
+
+    <style name="AppTheme.Button.Borderless.Colored" parent="Widget.AppCompat.Button.Borderless.Colored" />
+
+    <style name="AppTheme.Button.Bordered" parent="AppTheme.Button.Borderless">
+        <item name="android:background">@drawable/button_bordered_background</item>
+    </style>
+
+    <style name="AppTheme.Button.Bordered.Colored" parent="AppTheme.Button.Borderless.Colored">
+        <item name="android:background">@drawable/button_bordered_colored_background</item>
+    </style>
+
+    <style name="AppTheme.CardView" parent="@style/CardView">
         <item name="cardBackgroundColor">?android:attr/colorBackground</item>
     </style>
 
-    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabTextColor">@color/secondary_dark</item>
-        <item name="tabSelectedTextColor">@color/secondary_light</item>
+    <style name="AppTheme.CardView.Clickable" parent="@style/AppTheme.CardView">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.ListItem">
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
+
+    <style name="AppTheme.ListItem.Clickable">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 </resources>

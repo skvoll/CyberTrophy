@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme.ListItem.Clickable"
     android:layout_width="@dimen/achievement_icon_size"
     android:layout_height="@dimen/achievement_icon_size"
     android:layout_marginEnd="4dp"

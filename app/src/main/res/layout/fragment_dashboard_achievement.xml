@@ -3,14 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_item"
-    style="@style/AppTheme.CardView"
+    style="@style/AppTheme.CardView.Clickable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/card_horizontal_indent"
     android:layout_marginStart="@dimen/card_horizontal_indent"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -35,30 +32,25 @@
 
             <TextView
                 android:id="@+id/tv_achievement_name"
+                style="@style/AppTheme.Text.Subhead.SingleLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 tools:text="Achievement name" />
 
             <TextView
                 android:id="@+id/tv_achievement_description"
+                style="@style/AppTheme.Text.Caption.SingleLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/empty_achievement_description"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                android:text="@string/empty_achievement_description" />
 
             <TextView
                 android:id="@+id/tv_achievement_time"
+                style="@style/AppTheme.Text.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                 tools:text="3 days ago" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
-

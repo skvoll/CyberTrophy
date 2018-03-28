@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_light">#445062</color>
-    <color name="primary">#1B2838</color>
-    <color name="primary_dark">#000013</color>
+    <color name="primary_light">#3D4048</color>
+    <color name="primary">#171A21</color>
+    <color name="primary_dark">#000000</color>
 
-    <color name="secondary_light">#8FDBFF</color>
-    <color name="secondary">#5AA9D6</color>
-    <color name="secondary_dark">#1A7AA4</color>
-
-    <color name="accent">#A4D007</color>
+    <!--TODO: change this color-->
+    <color name="secondary_light">#9CFFFF</color>
+    <color name="secondary">#64D2FF</color>
+    <color name="secondary_dark">#17435C</color>
 
     <color name="text_primary">@color/white</color>
     <color name="text_primary_inverse">@color/black</color>
     <color name="text_secondary">@color/light_gray</color>
-    <color name="text_secondary_inverse">@color/light_gray</color>
+    <color name="text_secondary_inverse">@color/dark_gray</color>
+
+    <color name="accent">#5C7E10</color>
+
+    <color name="background">#1C2939</color>
 
     <color name="steam_header">#171A22</color>
     <color name="steam_background">#1C2939</color>
@@ -23,5 +26,6 @@
     <color name="transparent">@android:color/transparent</color>
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
-    <color name="light_gray">#C0C0C0</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="dark_gray">#757575</color>
 </resources>
