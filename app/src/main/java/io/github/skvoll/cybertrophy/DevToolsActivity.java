@@ -238,6 +238,7 @@ public class DevToolsActivity extends AppCompatActivity {
     private void showAuth() {
         Intent intent = new Intent(this, AuthActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     private void showPreview() {

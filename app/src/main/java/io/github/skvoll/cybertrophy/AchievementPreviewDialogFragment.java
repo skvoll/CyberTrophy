@@ -201,6 +201,10 @@ public class AchievementPreviewDialogFragment extends BottomSheetDialogFragment 
     }
 
     private void guidesSearchYoutube(String gameName, String achievementName) {
+        if (getActivity() == null) {
+            return;
+        }
+
         String query = gameName + " " + achievementName + " achievement";
 
         try {
@@ -208,8 +212,8 @@ public class AchievementPreviewDialogFragment extends BottomSheetDialogFragment 
             intent.setPackage("com.google.android.youtube");
             intent.putExtra("query", query);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
             startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         } catch (ActivityNotFoundException e) {
             ChromeCustomTab.show(mContext, "https://www.youtube.com/results?search_query=" + query);
         }

@@ -84,11 +84,7 @@ public class GamesFragment extends Fragment implements
 
     @Override
     public void onClick(GameModel gameModel) {
-        if (getContext() == null || getActivity() == null) {
-            return;
-        }
-
-        if (gameModel == null) {
+        if (getContext() == null || getActivity() == null || gameModel == null) {
             return;
         }
 
