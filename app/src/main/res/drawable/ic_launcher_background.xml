@@ -8,7 +8,7 @@
     <group android:name="fill">
         <path
             android:name="background_fill"
-            android:fillColor="?android:attr/colorPrimary"
+            android:fillColor="@color/primary"
             android:pathData="M0,0 L108,0 L108,108 L0,108 z" />
     </group>
 
@@ -25,7 +25,7 @@
         <path
             android:name="ribbon"
             android:pathData="M12,15 L54,83 L92,15 z"
-            android:strokeColor="?android:attr/colorAccent"
+            android:strokeColor="@color/secondary"
             android:strokeLineJoin="round"
             android:strokeWidth="8" />
     </group>

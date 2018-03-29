@@ -92,6 +92,13 @@ public class AuthActivity extends AppCompatActivity {
     private void showSteam() {
         mIsSteam = true;
 
+        if (BuildConfig.DEBUG) {
+            showLoading();
+            saveProfile(76561197996861846L);
+
+            return;
+        }
+
         getWindow().setStatusBarColor(getResources().getColor(R.color.steam_header));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.steam_background));
 

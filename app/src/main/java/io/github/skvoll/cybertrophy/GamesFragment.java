@@ -84,6 +84,10 @@ public class GamesFragment extends Fragment implements
 
     @Override
     public void onClick(GameModel gameModel) {
+        if (getContext() == null || getActivity() == null) {
+            return;
+        }
+
         if (gameModel == null) {
             return;
         }
@@ -91,8 +95,8 @@ public class GamesFragment extends Fragment implements
         Intent intent = new Intent(getContext(), GameActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
-
         startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {

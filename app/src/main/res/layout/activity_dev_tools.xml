@@ -14,27 +14,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/default_vertical_indent"
-                android:paddingEnd="@dimen/default_horizontal_indent"
-                android:paddingStart="@dimen/default_horizontal_indent"
-                android:paddingTop="@dimen/default_vertical_indent"
-                android:text="Notifications"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/light_gray" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/default_horizontal_indent"
-                android:layout_marginStart="@dimen/default_horizontal_indent">
+                android:padding="8dp">
 
                 <Spinner
                     android:id="@+id/sp_notifications"
@@ -48,9 +31,7 @@
                     android:id="@+id/cd_notification_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/light_gray"
-                    android:text="Delay"
-                    android:textColor="@color/light_gray" />
+                    android:text="Delay" />
 
                 <Button
                     android:id="@+id/btn_notification_check"
@@ -65,22 +46,6 @@
                     android:text="Reset" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/default_vertical_indent"
-                android:paddingEnd="@dimen/default_horizontal_indent"
-                android:paddingStart="@dimen/default_horizontal_indent"
-                android:paddingTop="@dimen/default_vertical_indent"
-                android:text="Data"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/light_gray" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_gray" />
-
             <Button
                 android:id="@+id/btn_wipe_data"
                 android:layout_width="match_parent"
@@ -90,6 +55,26 @@
                 android:layout_marginStart="@dimen/default_horizontal_indent"
                 android:layout_marginTop="@dimen/default_vertical_indent"
                 android:text="Wipe data" />
+
+            <Button
+                android:id="@+id/btn_show_auth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_vertical_indent"
+                android:layout_marginEnd="@dimen/default_horizontal_indent"
+                android:layout_marginStart="@dimen/default_horizontal_indent"
+                android:layout_marginTop="@dimen/default_vertical_indent"
+                android:text="Show auth" />
+
+            <Button
+                android:id="@+id/btn_show_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_vertical_indent"
+                android:layout_marginEnd="@dimen/default_horizontal_indent"
+                android:layout_marginStart="@dimen/default_horizontal_indent"
+                android:layout_marginTop="@dimen/default_vertical_indent"
+                android:text="Show preview" />
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

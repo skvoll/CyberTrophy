@@ -1,6 +1,7 @@
 package io.github.skvoll.cybertrophy.games.list;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         final GameModel gameModel = mItems.get(position);
         float playTime = gameModel.getPlaytimeForever() / 60;
         GameViewHolder gameViewHolder = (GameViewHolder) viewHolder;

@@ -105,11 +105,15 @@ public class DashboardFragment extends Fragment implements
         cvGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (getContext() == null || getActivity() == null) {
+                    return;
+                }
+
                 Intent intent = new Intent(getContext(), GameActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
-
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
             }
         });
 

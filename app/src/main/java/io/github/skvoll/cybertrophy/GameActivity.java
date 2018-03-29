@@ -119,10 +119,17 @@ public class GameActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 
     private void getParams(Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package io.github.skvoll.cybertrophy;
 
 import android.app.NotificationManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,6 +100,22 @@ public class DevToolsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 wipeData();
+            }
+        });
+
+        Button btnShowAuth = findViewById(R.id.btn_show_auth);
+        btnShowAuth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAuth();
+            }
+        });
+
+        Button btnShowPreview = findViewById(R.id.btn_show_preview);
+        btnShowPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPreview();
             }
         });
     }
@@ -216,5 +233,15 @@ public class DevToolsActivity extends AppCompatActivity {
                 });
 
         builder.create().show();
+    }
+
+    private void showAuth() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        startActivity(intent);
+    }
+
+    private void showPreview() {
+        setTheme(R.style.AppTheme);
+        setContentView(R.layout.theme_preview);
     }
 }

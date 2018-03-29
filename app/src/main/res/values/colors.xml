@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_light">#3D4048</color>
+    <color name="primary_light">#101924</color>
     <color name="primary">#171A21</color>
     <color name="primary_dark">#000000</color>
 
-    <!--TODO: change this color-->
-    <color name="secondary_light">#9CFFFF</color>
-    <color name="secondary">#64D2FF</color>
-    <color name="secondary_dark">#17435C</color>
+    <color name="secondary_light">#ACDBF5</color>
+    <color name="secondary">#66C0F4</color>
+    <color name="secondary_dark">#18425C</color>
 
     <color name="text_primary">@color/white</color>
     <color name="text_primary_inverse">@color/black</color>
@@ -17,6 +16,8 @@
     <color name="accent">#5C7E10</color>
 
     <color name="background">#1C2939</color>
+    <color name="background_gradient_start">#2B465E</color>
+    <color name="background_gradient_end">#1C2939</color>
 
     <color name="steam_header">#171A22</color>
     <color name="steam_background">#1C2939</color>
