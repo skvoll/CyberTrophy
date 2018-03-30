@@ -57,9 +57,10 @@
         android:layout_height="0dp"
         android:layout_weight="2">
 
-        <View
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_settings"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:text="settings" />
     </ScrollView>
 </LinearLayout>

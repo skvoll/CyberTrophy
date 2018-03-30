@@ -1,5 +1,6 @@
 package io.github.skvoll.cybertrophy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -29,11 +30,11 @@ public class ProfileFragment extends Fragment {
             return null;
         }
 
-        View mRootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ImageView ivProfileAvatar = mRootView.findViewById(R.id.iv_profile_avatar);
-        ImageView ivProfileBackground = mRootView.findViewById(R.id.iv_profile_background);
-        TextView tvProfileName = mRootView.findViewById(R.id.tv_profile_name);
+        ImageView ivProfileAvatar = rootView.findViewById(R.id.iv_profile_avatar);
+        ImageView ivProfileBackground = rootView.findViewById(R.id.iv_profile_background);
+        TextView tvProfileName = rootView.findViewById(R.id.tv_profile_name);
 
         GlideApp.with(getContext()).load(profileModel.getAvatarFull())
                 .fitCenter()
@@ -43,6 +44,18 @@ public class ProfileFragment extends Fragment {
                 .placeholder(R.color.primary).into(ivProfileBackground);
         tvProfileName.setText(profileModel.getName());
 
-        return mRootView;
+        rootView.findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() == null) {
+                    return;
+                }
+
+                Intent intent = new Intent(getContext(), SettingsActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
+        return rootView;
     }
 }
