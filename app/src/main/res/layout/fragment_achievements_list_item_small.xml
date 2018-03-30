@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/AppTheme.ListItem.Clickable"
     android:layout_width="@dimen/achievement_icon_size"
     android:layout_height="@dimen/achievement_icon_size"
     android:layout_marginEnd="4dp"
     android:layout_marginStart="4dp">
 
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,4 +20,4 @@
         android:contentDescription="@string/achievement_icon_description"
         android:src="@drawable/achievement_icon_hidden"
         android:visibility="gone" />
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

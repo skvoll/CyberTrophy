@@ -5,6 +5,7 @@
     android:id="@+id/ll_game"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -97,13 +98,10 @@
         android:paddingTop="@dimen/default_vertical_indent"
         android:text="@string/dashboard_subtitle_locked_achievements" />
 
-    <android.support.v7.widget.CardView
-        style="@style/AppTheme.CardView"
+    <FrameLayout
+        android:background="?android:attr/colorBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/card_horizontal_indent"
-        android:layout_marginStart="@dimen/card_horizontal_indent"
-        app:cardUseCompatPadding="true">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_locked_achievements"
@@ -124,5 +122,5 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:visibility="gone" />
-    </android.support.v7.widget.CardView>
+    </FrameLayout>
 </LinearLayout>

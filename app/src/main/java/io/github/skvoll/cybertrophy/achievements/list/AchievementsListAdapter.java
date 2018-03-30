@@ -133,7 +133,7 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                             .into(achievementSmallViewHolder.ivIcon);
                 }
 
-                achievementSmallViewHolder.ivIcon.setOnClickListener(new View.OnClickListener() {
+                achievementSmallViewHolder.vContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mOnItemClickListener.onClick(achievementModel);
@@ -191,11 +191,14 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private static final class AchievementSmallViewHolder extends RecyclerView.ViewHolder {
+        View vContainer;
         ImageView ivIcon;
         ImageView ivIconMask;
 
         AchievementSmallViewHolder(View itemView) {
             super(itemView);
+
+            vContainer = itemView;
 
             ivIcon = itemView.findViewById(R.id.iv_icon);
             ivIconMask = itemView.findViewById(R.id.iv_icon_mask);
