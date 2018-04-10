@@ -51,6 +51,8 @@ public final class ProfileFragment extends Fragment {
             }
         });
 
+        toolbar.inflateMenu(R.menu.fragment_profile_menu);
+
         GlideApp.with(getContext()).load(profileModel.getAvatarFull())
                 .placeholder(R.drawable.profile_avatar_empty).into(ivProfileAvatar);
         GlideApp.with(getContext()).load(profileModel.getBackgroundImage())
