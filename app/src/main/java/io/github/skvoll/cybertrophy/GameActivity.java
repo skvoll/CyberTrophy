@@ -1,6 +1,7 @@
 package io.github.skvoll.cybertrophy;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 
+import static java.lang.Math.abs;
+
 public final class GameActivity extends AppCompatActivity implements
         AchievementsListAdapter.OnItemClickListener {
     public static final String KEY_GAME_ID = "GAME_ID";
@@ -30,6 +34,8 @@ public final class GameActivity extends AppCompatActivity implements
 
     private GameModel mGameModel;
 
+    private AppBarLayout mAppBar;
+    private FrameLayout mHeaderBackgroundWrapper;
     private ImageView mHeaderBackground;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -45,11 +51,23 @@ public final class GameActivity extends AppCompatActivity implements
 
         getParams(savedInstanceState);
 
+        mAppBar = findViewById(R.id.ab_appbar);
+        mHeaderBackgroundWrapper = findViewById(R.id.fl_header_background_wrapper);
         mHeaderBackground = findViewById(R.id.iv_header_background);
         mToolbar = findViewById(R.id.tb_toolbar);
         mTabLayout = findViewById(R.id.tl_tabs);
         mViewPager = findViewById(R.id.vp_container);
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                float max = appBarLayout.getHeight() - mToolbar.getHeight();
+                float current = abs(verticalOffset);
+
+                mHeaderBackgroundWrapper.setAlpha(1f - current / max);
+            }
+        });
 
         GlideApp.with(this).load(mGameModel.getLogoUrl())
                 .placeholder(R.drawable.game_logo_empty)

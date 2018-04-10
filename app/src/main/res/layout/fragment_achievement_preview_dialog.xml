@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/window_background"
     android:orientation="vertical"
-    tools:context="io.github.skvoll.cybertrophy.AchievementPreviewDialogFragment">
+    tools:context=".AchievementPreviewDialogFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
