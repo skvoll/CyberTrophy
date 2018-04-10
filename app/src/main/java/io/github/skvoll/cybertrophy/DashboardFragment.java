@@ -27,7 +27,7 @@ import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
-public class DashboardFragment extends Fragment implements
+public final class DashboardFragment extends Fragment implements
         AchievementsListAdapter.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
     private ProfileModel mProfileModel;

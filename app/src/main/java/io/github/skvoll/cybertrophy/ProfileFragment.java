@@ -1,18 +1,17 @@
 package io.github.skvoll.cybertrophy;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
-public class ProfileFragment extends Fragment {
+public final class ProfileFragment extends Fragment {
     private static final String TAG = ProfileFragment.class.getSimpleName();
 
     public ProfileFragment() {
@@ -34,17 +33,15 @@ public class ProfileFragment extends Fragment {
 
         ImageView ivProfileAvatar = rootView.findViewById(R.id.iv_profile_avatar);
         ImageView ivProfileBackground = rootView.findViewById(R.id.iv_profile_background);
-        TextView tvProfileName = rootView.findViewById(R.id.tv_profile_name);
+        Toolbar toolbar = rootView.findViewById(R.id.tb_toolbar);
 
         GlideApp.with(getContext()).load(profileModel.getAvatarFull())
-                .fitCenter()
                 .placeholder(R.drawable.profile_avatar_empty).into(ivProfileAvatar);
         GlideApp.with(getContext()).load(profileModel.getBackgroundImage())
-                .centerCrop()
-                .placeholder(R.color.primary).into(ivProfileBackground);
-        tvProfileName.setText(profileModel.getName());
+                .placeholder(R.drawable.profile_background_empty).into(ivProfileBackground);
+        toolbar.setTitle(profileModel.getName());
 
-        rootView.findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
+        /*rootView.findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() == null) {
@@ -54,7 +51,7 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getContext(), SettingsActivity.class);
                 getActivity().startActivity(intent);
             }
-        });
+        });*/
 
         return rootView;
     }

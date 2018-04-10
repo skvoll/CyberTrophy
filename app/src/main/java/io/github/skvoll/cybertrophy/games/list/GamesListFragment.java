@@ -25,7 +25,7 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 import static io.github.skvoll.cybertrophy.data.DataContract.GameEntry;
 
-public class GamesListFragment extends Fragment {
+public final class GamesListFragment extends Fragment {
     private static final String TAG = GamesListFragment.class.getSimpleName();
     private static final String KEY_PROFILE_ID = "PROFILE_ID";
     private static final String KEY_GAME_STATUS = "GAME_STATUS";

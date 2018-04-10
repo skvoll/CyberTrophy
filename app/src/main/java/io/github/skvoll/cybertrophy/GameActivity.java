@@ -22,7 +22,7 @@ import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 
-public class GameActivity extends AppCompatActivity implements
+public final class GameActivity extends AppCompatActivity implements
         AchievementsListAdapter.OnItemClickListener {
     public static final String KEY_GAME_ID = "GAME_ID";
 

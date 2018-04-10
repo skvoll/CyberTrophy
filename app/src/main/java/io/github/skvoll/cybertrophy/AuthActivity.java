@@ -29,7 +29,7 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.steam.SteamApi;
 import io.github.skvoll.cybertrophy.steam.SteamProfile;
 
-public class AuthActivity extends AppCompatActivity {
+public final class AuthActivity extends AppCompatActivity {
     private static final String TAG = AuthActivity.class.getSimpleName();
 
     private boolean mIsSteam = false;

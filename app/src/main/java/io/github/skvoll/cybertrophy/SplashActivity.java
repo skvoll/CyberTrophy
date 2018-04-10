@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
-public class SplashActivity extends AppCompatActivity {
+public final class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
 
     @Override

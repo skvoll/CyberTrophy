@@ -23,7 +23,7 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
-public class AchievementsListFragment extends Fragment {
+public final class AchievementsListFragment extends Fragment {
     private static final String TAG = AchievementsListFragment.class.getSimpleName();
     private static final String KEY_GAME_ID = "GAME_ID";
     private static final String KEY_ACHIEVEMENTS_STATUS = "ACHIEVEMENTS_STATUS";

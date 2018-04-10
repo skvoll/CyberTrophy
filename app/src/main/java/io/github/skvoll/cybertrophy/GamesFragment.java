@@ -21,7 +21,7 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.games.list.GamesListAdapter;
 import io.github.skvoll.cybertrophy.games.list.GamesListFragment;
 
-public class GamesFragment extends Fragment implements
+public final class GamesFragment extends Fragment implements
         GamesListAdapter.OnItemClickListener {
     public static final String KEY_TAB = "TAB";
 

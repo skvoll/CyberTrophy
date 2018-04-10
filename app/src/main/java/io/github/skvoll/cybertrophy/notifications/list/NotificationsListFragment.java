@@ -29,7 +29,7 @@ import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 import static io.github.skvoll.cybertrophy.data.DataContract.NotificationEntry;
 
-public class NotificationsListFragment extends Fragment implements
+public final class NotificationsListFragment extends Fragment implements
         SwipeRefreshLayout.OnRefreshListener,
         NotificationsListAdapter.OnItemClickListener {
     private static final String TAG = NotificationsListFragment.class.getSimpleName();

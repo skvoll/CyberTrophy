@@ -33,7 +33,7 @@ import io.github.skvoll.cybertrophy.notifications.NewAchievementNotification;
 import io.github.skvoll.cybertrophy.notifications.NewGameNotification;
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
-public class DevToolsActivity extends AppCompatActivity {
+public final class DevToolsActivity extends AppCompatActivity {
     private static final String TAG = DevToolsActivity.class.getSimpleName();
 
     private static ArrayList<String> sNotificationsList = new ArrayList<>();

@@ -23,7 +23,7 @@ import java.util.Date;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
-public class AchievementPreviewDialogFragment extends BottomSheetDialogFragment {
+public final class AchievementPreviewDialogFragment extends BottomSheetDialogFragment {
     private static final String TAG = AchievementPreviewDialogFragment.class.getSimpleName();
     private static final String KEY_ID = "ID";
 

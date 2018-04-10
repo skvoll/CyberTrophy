@@ -28,7 +28,7 @@ import io.github.skvoll.cybertrophy.services.AllGamesParserJob;
 import io.github.skvoll.cybertrophy.services.FirstGamesParserService;
 import io.github.skvoll.cybertrophy.services.RecentGamesParserJob;
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
     public static final String KEY_FRAGMENT = "FRAGMENT";
     public static final int FRAGMENT_DASHBOARD = R.id.menu_dashboard;
     public static final int FRAGMENT_GAMES = R.id.menu_games;
