@@ -163,7 +163,6 @@ public final class NotificationsListFragment extends Fragment implements
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(GameActivity.KEY_GAME_ID, gameModel.getId());
         startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     private void showAchievement(AchievementModel achievementModel) {

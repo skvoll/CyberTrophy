@@ -1,11 +1,14 @@
 package io.github.skvoll.cybertrophy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,14 +37,6 @@ public final class GameActivity extends AppCompatActivity implements
 
     private GameModel mGameModel;
 
-    private AppBarLayout mAppBar;
-    private FrameLayout mHeaderBackgroundWrapper;
-    private ImageView mHeaderBackground;
-    private Toolbar mToolbar;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,29 +46,29 @@ public final class GameActivity extends AppCompatActivity implements
 
         getParams(savedInstanceState);
 
-        mAppBar = findViewById(R.id.ab_appbar);
-        mHeaderBackgroundWrapper = findViewById(R.id.fl_header_background_wrapper);
-        mHeaderBackground = findViewById(R.id.iv_header_background);
-        mToolbar = findViewById(R.id.tb_toolbar);
-        mTabLayout = findViewById(R.id.tl_tabs);
-        mViewPager = findViewById(R.id.vp_container);
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        AppBarLayout appBar = findViewById(R.id.ab_appbar);
+        final FrameLayout headerBackgroundWrapper = findViewById(R.id.fl_header_background_wrapper);
+        ImageView headerBackground = findViewById(R.id.iv_header_background);
+        final Toolbar toolbar = findViewById(R.id.tb_toolbar);
+        TabLayout tabLayout = findViewById(R.id.tl_tabs);
+        ViewPager viewPager = findViewById(R.id.vp_container);
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
-        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                float max = appBarLayout.getHeight() - mToolbar.getHeight();
+                float max = appBarLayout.getHeight() - toolbar.getHeight();
                 float current = abs(verticalOffset);
 
-                mHeaderBackgroundWrapper.setAlpha(1f - current / max);
+                headerBackgroundWrapper.setAlpha(1f - current / max);
             }
         });
 
         GlideApp.with(this).load(mGameModel.getLogoUrl())
                 .placeholder(R.drawable.game_logo_empty)
-                .into(mHeaderBackground);
+                .into(headerBackground);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
@@ -83,7 +78,7 @@ public final class GameActivity extends AppCompatActivity implements
 
         switch (mGameModel.getStatus()) {
             case GameModel.STATUS_INCOMPLETE:
-                mPagerAdapter.addFragment(
+                pagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
                                 AchievementModel.STATUS_LOCKED,
@@ -92,10 +87,10 @@ public final class GameActivity extends AppCompatActivity implements
                         null
                 );
 
-                mTabLayout.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.GONE);
                 break;
             case GameModel.STATUS_IN_PROGRESS:
-                mPagerAdapter.addFragment(
+                pagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
                                 AchievementModel.STATUS_LOCKED,
@@ -103,7 +98,7 @@ public final class GameActivity extends AppCompatActivity implements
                         ),
                         getString(R.string.achievements_list_locked)
                 );
-                mPagerAdapter.addFragment(
+                pagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
                                 AchievementModel.STATUS_UNLOCKED,
@@ -113,7 +108,7 @@ public final class GameActivity extends AppCompatActivity implements
                 );
                 break;
             case GameModel.STATUS_COMPLETE:
-                mPagerAdapter.addFragment(
+                pagerAdapter.addFragment(
                         AchievementsListFragment.newInstance(
                                 mGameModel.getId(),
                                 AchievementModel.STATUS_UNLOCKED,
@@ -122,32 +117,35 @@ public final class GameActivity extends AppCompatActivity implements
                         null
                 );
 
-                mTabLayout.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.GONE);
                 break;
         }
 
-        mViewPager.setAdapter(mPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                Intent intent = NavUtils.getParentActivityIntent(this);
+                if (intent == null) {
+                    return super.onOptionsItemSelected(item);
+                }
+
+                if (NavUtils.shouldUpRecreateTask(this, intent) || isTaskRoot()) {
+                    TaskStackBuilder.create(this)
+                            .addNextIntentWithParentStack(intent)
+                            .startActivities();
+                } else {
+                    NavUtils.navigateUpTo(this, intent);
+                }
+
                 return true;
         }
 
-        return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        return super.onOptionsItemSelected(item);
     }
 
     private void getParams(Bundle savedInstanceState) {

@@ -10,7 +10,6 @@ import android.util.Log;
 import java.lang.ref.WeakReference;
 
 import io.github.skvoll.cybertrophy.GamesParserTask;
-import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
 import io.github.skvoll.cybertrophy.notifications.GamesParserNotification;

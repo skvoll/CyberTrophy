@@ -32,15 +32,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".GameActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.WithActionBar" />
         <activity
             android:name=".DevToolsActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.WithActionBar" />
 
         <provider
             android:name=".data.DataProvider"

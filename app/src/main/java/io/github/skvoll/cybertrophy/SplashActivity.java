@@ -26,7 +26,6 @@ public final class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
                 finish();
             }
         }, 500);

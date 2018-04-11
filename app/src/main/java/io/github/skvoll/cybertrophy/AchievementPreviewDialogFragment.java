@@ -213,7 +213,6 @@ public final class AchievementPreviewDialogFragment extends BottomSheetDialogFra
             intent.putExtra("query", query);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         } catch (ActivityNotFoundException e) {
             ChromeCustomTab.show(mContext, "https://www.youtube.com/results?search_query=" + query);
         }

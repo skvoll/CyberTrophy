@@ -14,7 +14,6 @@ import java.util.HashMap;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.DataContract;
 import io.github.skvoll.cybertrophy.data.GameModel;
-import io.github.skvoll.cybertrophy.data.NotificationModel;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 import io.github.skvoll.cybertrophy.notifications.AchievementRemovedNotification;
 import io.github.skvoll.cybertrophy.notifications.AchievementUnlockedNotification;

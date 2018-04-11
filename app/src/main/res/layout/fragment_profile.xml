@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
+        android:theme="@style/AppTheme.Toolbar"
         app:elevation="0dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -40,17 +41,22 @@
                     android:alpha="0.5"
                     android:background="@color/black" />
 
-                <ImageView
-                    android:id="@+id/iv_profile_avatar"
+                <android.support.v7.widget.CardView
                     android:layout_width="128dp"
                     android:layout_height="128dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/profile_avatar_description"
-                    android:src="@drawable/profile_avatar_empty"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/view"
                     app:layout_constraintStart_toStartOf="@+id/view"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_profile_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/profile_avatar_description"
+                        android:src="@drawable/profile_avatar_empty" />
+                </android.support.v7.widget.CardView>
             </android.support.constraint.ConstraintLayout>
 
             <android.support.v7.widget.Toolbar

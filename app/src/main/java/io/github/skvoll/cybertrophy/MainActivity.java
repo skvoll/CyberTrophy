@@ -70,7 +70,6 @@ public final class MainActivity extends AppCompatActivity {
 
         if (mProfileModel == null) {
             startActivity(new Intent(this, AuthActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
             finish();
 
             return;
@@ -191,7 +190,6 @@ public final class MainActivity extends AppCompatActivity {
             mDevToolsCounter = 0;
 
             startActivity(new Intent(this, DevToolsActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         }
 
         return true;
