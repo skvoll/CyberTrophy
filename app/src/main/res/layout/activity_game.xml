@@ -16,6 +16,8 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:collapsedTitleTextAppearance="@style/AppTheme.ActionBar.Title"
+            app:expandedTitleTextAppearance="@style/AppTheme.ActionBar.Title.Expanded"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="true">
 
@@ -43,9 +45,11 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tb_toolbar"
+                style="@style/AppTheme.ActionBar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:background="?android:attr/selectableItemBackground"
+                android:theme="@style/AppTheme.ActionBar.Theme"
                 app:layout_collapseMode="pin"
                 tools:title="Game name" />
         </android.support.design.widget.CollapsingToolbarLayout>

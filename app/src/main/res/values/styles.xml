@@ -26,13 +26,33 @@
     </style>
 
     <style name="AppTheme.WithActionBar" parent="AppTheme">
-        <item name="android:statusBarColor">?android:attr/colorPrimaryDark</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
+
+        <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
+        <item name="actionBarTheme">@style/AppTheme.ActionBar.Theme</item>
     </style>
 
     <style name="AppTheme.SplashScreen" parent="AppTheme">
         <item name="android:windowBackground">@drawable/activity_splash_background</item>
+    </style>
+
+    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/transparent</item>
+        <item name="titleTextColor">?android:attr/colorAccent</item>
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.Title</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.Theme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:tint">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.Title.Expanded" parent="TextAppearance.AppCompat.Display1">
+        <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
     <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
