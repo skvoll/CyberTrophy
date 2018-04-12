@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
-import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -104,7 +104,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
 
                 return true;
             }
-        } catch (InterruptedException | TimeoutError | Error e) {
+        } catch (InterruptedException | VolleyError e) {
             Log.d(TAG, "Failed.");
 
             if (isCancelled()) {
@@ -255,7 +255,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
                 }
 
                 retryAttempt = 0;
-            } catch (InterruptedException | TimeoutError | Error e) {
+            } catch (InterruptedException | VolleyError e) {
                 Log.d(TAG, "Failed.");
 
                 if (isCancelled()) {
@@ -295,7 +295,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
         return true;
     }
 
-    private LongSparseArray<SteamGame> getAllGames() throws InterruptedException, TimeoutError, Error {
+    private LongSparseArray<SteamGame> getAllGames() throws InterruptedException, VolleyError {
         SteamApi.FutureResponseListener<LongSparseArray<SteamGame>> listener =
                 new SteamApi.FutureResponseListener<>();
         mSteamApi.getOwnedGames(mProfileModel.getSteamId(),
@@ -304,7 +304,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
         return listener.get(SteamApi.REQUEST_TIMEOUT);
     }
 
-    private LongSparseArray<SteamGame> getRecentGames() throws InterruptedException, TimeoutError, Error {
+    private LongSparseArray<SteamGame> getRecentGames() throws InterruptedException, VolleyError {
         SteamApi.FutureResponseListener<LongSparseArray<SteamGame>> listener =
                 new SteamApi.FutureResponseListener<>();
         mSteamApi.getRecentlyPlayedGames(mProfileModel.getSteamId(), 100, listener);
@@ -312,7 +312,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
         return listener.get(SteamApi.REQUEST_TIMEOUT);
     }
 
-    private LongSparseArray<SteamGame> getGames(Long[] appIds) throws InterruptedException, TimeoutError, Error {
+    private LongSparseArray<SteamGame> getGames(Long[] appIds) throws InterruptedException, VolleyError {
         SteamApi.FutureResponseListener<LongSparseArray<SteamGame>> listener =
                 new SteamApi.FutureResponseListener<>();
         mSteamApi.getOwnedGames(mProfileModel.getSteamId(),
@@ -321,7 +321,7 @@ public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.Pr
         return listener.get(SteamApi.REQUEST_TIMEOUT);
     }
 
-    private void loadSteamGameAchievements(SteamGame steamGame, Long steamId) throws TimeoutError, InterruptedException {
+    private void loadSteamGameAchievements(SteamGame steamGame, Long steamId) throws InterruptedException, VolleyError {
         if (isCancelled()) {
             return;
         }

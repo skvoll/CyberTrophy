@@ -320,6 +320,7 @@ public final class SteamApi {
         private T mResponse;
         private VolleyError mVolleyError;
 
+        @Override
         public synchronized void setResponse(T response) {
             mResponse = response;
             mResponseReceived = true;
@@ -327,13 +328,14 @@ public final class SteamApi {
             notify();
         }
 
+        @Override
         public synchronized void setError(VolleyError error) {
             mVolleyError = error;
 
             notify();
         }
 
-        public final synchronized T get(long timeout) throws InterruptedException, TimeoutError, Error {
+        public final synchronized T get(long timeout) throws InterruptedException, VolleyError {
             if (mVolleyError != null) {
                 throw new Error(mVolleyError.toString());
             }
@@ -349,7 +351,7 @@ public final class SteamApi {
             }
 
             if (mVolleyError != null) {
-                throw new Error(mVolleyError.toString());
+                throw mVolleyError;
             }
 
             if (!mResponseReceived) {
