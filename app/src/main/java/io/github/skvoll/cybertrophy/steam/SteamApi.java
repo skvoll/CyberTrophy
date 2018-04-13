@@ -25,7 +25,7 @@ import io.github.skvoll.cybertrophy.VolleySingleton;
 public final class SteamApi {
     public static final Long REQUEST_TIMEOUT = 60000L;
     private static final String TAG = SteamApi.class.getSimpleName();
-    private static final String HOST = "http://api.steampowered.com";
+    private static final String HOST = "https://api.steampowered.com";
     private static final String KEY = "09B2CD771C3E7F9B99D91E12EF384B21";
     private VolleySingleton mVolleySingleton;
 
@@ -359,6 +359,10 @@ public final class SteamApi {
             }
 
             return mResponse;
+        }
+
+        public final synchronized T get() throws InterruptedException, VolleyError {
+            return get(REQUEST_TIMEOUT);
         }
     }
 
