@@ -9,6 +9,7 @@ import android.net.Uri;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import io.github.skvoll.cybertrophy.data.DataContract.AchievementEntry;
 import io.github.skvoll.cybertrophy.steam.SteamAchievement;
@@ -319,5 +320,11 @@ public final class AchievementModel extends Model<AchievementModel> {
         contentValues.put(AchievementEntry.COLUMN_UNLOCK_TIME, mUnlockTime);
 
         return contentValues;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s: %s(%d)",
+                this.getClass().getSimpleName(), getName(), getId());
     }
 }

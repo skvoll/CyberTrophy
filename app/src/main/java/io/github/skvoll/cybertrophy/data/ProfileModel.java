@@ -12,6 +12,7 @@ import android.util.Patterns;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -145,28 +146,70 @@ public final class ProfileModel extends Model<ProfileModel> {
         return mUrl;
     }
 
+    public ProfileModel setUrl(String url) {
+        mUrl = url;
+
+        return this;
+    }
+
     public String getName() {
         return mName;
+    }
+
+    public ProfileModel setName(String name) {
+        mName = name;
+
+        return this;
     }
 
     public String getRealName() {
         return mRealName;
     }
 
+    public ProfileModel setRealName(String realName) {
+        mRealName = realName;
+
+        return this;
+    }
+
     public String getAvatar() {
         return mAvatar;
+    }
+
+    public ProfileModel setAvatar(String avatar) {
+        mAvatar = avatar;
+
+        return this;
     }
 
     public String getAvatarMedium() {
         return mAvatarMedium;
     }
 
+    public ProfileModel setAvatarMedium(String avatarMedium) {
+        mAvatarMedium = avatarMedium;
+
+        return this;
+    }
+
     public String getAvatarFull() {
         return mAvatarFull;
     }
 
+    public ProfileModel setAvatarFull(String avatarFull) {
+        mAvatarFull = avatarFull;
+
+        return this;
+    }
+
     public String getLocCountryCode() {
         return mLocCountryCode;
+    }
+
+    public ProfileModel setLocCountryCode(String locCountryCode) {
+        mLocCountryCode = locCountryCode;
+
+        return this;
     }
 
     public String getBackgroundImage() {
@@ -187,10 +230,10 @@ public final class ProfileModel extends Model<ProfileModel> {
         return mIsActive == 1;
     }
 
-    public void loadBackgroundImage(Context context) {
+    public void loadBackgroundImage(VolleySingleton volleySingleton) {
         RequestFuture<String> requestFuture = RequestFuture.newFuture();
         StringRequest stringRequest = new StringRequest(mUrl, requestFuture, requestFuture);
-        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+        volleySingleton.addToRequestQueue(stringRequest);
         String response;
 
         try {
@@ -210,6 +253,10 @@ public final class ProfileModel extends Model<ProfileModel> {
         }
     }
 
+    public void loadBackgroundImage(Context context) {
+        loadBackgroundImage(VolleySingleton.getInstance(context));
+    }
+
     @Override
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
@@ -227,5 +274,11 @@ public final class ProfileModel extends Model<ProfileModel> {
         contentValues.put(ProfileEntry.COLUMN_IS_ACTIVE, mIsActive);
 
         return contentValues;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s: %s(%d)",
+                this.getClass().getSimpleName(), getName(), getId());
     }
 }

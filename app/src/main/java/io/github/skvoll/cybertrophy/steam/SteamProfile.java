@@ -2,6 +2,8 @@ package io.github.skvoll.cybertrophy.steam;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Locale;
+
 public final class SteamProfile {
     @SerializedName("steamid")
     public Long steamId;
@@ -39,4 +41,10 @@ public final class SteamProfile {
     public String locstatecode;
     @SerializedName("loccityid")
     public Integer loccityid;
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s: %s(%d)",
+                this.getClass().getSimpleName(), personaName, steamId);
+    }
 }

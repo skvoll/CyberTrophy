@@ -3,6 +3,7 @@ package io.github.skvoll.cybertrophy.steam;
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 public final class SteamAchievement {
     @SerializedName("name")
@@ -51,5 +52,11 @@ public final class SteamAchievement {
 
     public void setUnlockTime(Integer unlockTime) {
         mUnlockTime = unlockTime;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s: %s(%s)",
+                this.getClass().getSimpleName(), displayName, name);
     }
 }

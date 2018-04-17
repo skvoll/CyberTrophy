@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v4.util.LongSparseArray;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
@@ -338,5 +339,11 @@ public final class GameModel extends Model<GameModel> {
         contentValues.put(GameEntry.COLUMN_ACHIEVEMENTS_UNLOCKED_COUNT, mAchievementsUnlockedCount);
 
         return contentValues;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s: %s(%d)",
+                this.getClass().getSimpleName(), getName(), getId());
     }
 }

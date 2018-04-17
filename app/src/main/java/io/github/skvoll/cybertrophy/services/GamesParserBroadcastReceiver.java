@@ -9,7 +9,6 @@ import io.github.skvoll.cybertrophy.notifications.GamesParserRetryNotification;
 public final class GamesParserBroadcastReceiver extends BroadcastReceiver {
     public static final String ACTION_STOP = "STOP";
     public static final String ACTION_RETRY = "RETRY";
-    private static final String TAG = GamesParserBroadcastReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {

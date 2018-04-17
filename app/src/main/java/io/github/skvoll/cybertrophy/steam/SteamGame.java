@@ -3,6 +3,7 @@ package io.github.skvoll.cybertrophy.steam;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public final class SteamGame {
     @SerializedName("appid")
@@ -43,5 +44,11 @@ public final class SteamGame {
         }
 
         mSteamAchievements.put(steamAchievement.name, steamAchievement);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.getDefault(), "%s: %s(%d)",
+                this.getClass().getSimpleName(), name, appId);
     }
 }
