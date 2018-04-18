@@ -61,14 +61,14 @@ public final class AchievementPreviewDialogFragment extends BottomSheetDialogFra
         }
 
         if (bundle == null) {
-            throw new IllegalArgumentException("Params are missing");
+            throw new IllegalArgumentException("Params are missing.");
         }
 
         Long id = bundle.getLong(KEY_ID);
         mAchievementModel = AchievementModel.getById(mContext.getContentResolver(), id);
 
         if (mAchievementModel == null) {
-            throw new IllegalArgumentException("Achievement id is missing");
+            throw new IllegalArgumentException("Achievement id is missing.");
         }
 
         mGameModel = GameModel.getById(mContext.getContentResolver(), mAchievementModel.getGameId());

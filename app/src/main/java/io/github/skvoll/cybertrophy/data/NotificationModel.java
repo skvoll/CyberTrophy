@@ -22,13 +22,13 @@ public final class NotificationModel extends Model<NotificationModel> {
     public static final int TYPE_CATEGORY_SEPARATOR = 1;
     public static final int TYPE_DEBUG = 1000;
     public static final int TYPE_MESSAGE = 1001;
-    public static final int TYPE_NEW_GAME = 2001;
-    public static final int TYPE_GAME_REMOVED = 2002;
-    public static final int TYPE_NEW_ACHIEVEMENT = 2011;
-    public static final int TYPE_ACHIEVEMENT_REMOVED = 2012;
-    public static final int TYPE_ACHIEVEMENT_UNLOCKED = 2021;
-    public static final int TYPE_GAME_COMPLETE = 2022;
-    public static final int TYPE_NEWS = 3001;
+    public static final int TYPE_NEW_GAME = 3001;
+    public static final int TYPE_GAME_REMOVED = 3002;
+    public static final int TYPE_NEW_ACHIEVEMENT = 3011;
+    public static final int TYPE_ACHIEVEMENT_REMOVED = 3012;
+    public static final int TYPE_ACHIEVEMENT_UNLOCKED = 3021;
+    public static final int TYPE_GAME_COMPLETE = 3022;
+    public static final int TYPE_NEWS = 4001;
 
     private Long mId;
     private Long mTime;

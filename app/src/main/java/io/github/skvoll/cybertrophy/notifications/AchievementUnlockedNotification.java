@@ -14,16 +14,19 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class AchievementUnlockedNotification extends BaseNotification {
-    public static final int ID = 2021;
+    public static final int ID = 3021;
 
+    private Context mContext;
     private ArrayList<String> mGames = new ArrayList<>();
     private ArrayList<String> mAchievements = new ArrayList<>();
 
     public AchievementUnlockedNotification(Context context) {
         super(context);
 
-        mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_achievements_unlocked, 1))
-                .setContentText(mResources.getString(R.string.empty));
+        mContext = context;
+
+        getBuilder().setContentTitle(getResources().getQuantityString(R.plurals.notification_achievements_unlocked, 1))
+                .setContentText(getResources().getString(R.string.empty));
     }
 
     public AchievementUnlockedNotification addAchievement(GameModel gameModel, AchievementModel achievementModel) {
@@ -43,9 +46,9 @@ public final class AchievementUnlockedNotification extends BaseNotification {
             pendingIntent = PendingIntent.getActivity(
                     mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mBuilder.setContentTitle(mResources.getQuantityString(
+            getBuilder().setContentTitle(getResources().getQuantityString(
                     R.plurals.notification_achievements_unlocked, mAchievements.size(), mAchievements.size()));
-            mBuilder.setContentText(mResources.getString(
+            getBuilder().setContentText(getResources().getString(
                     R.string.notification_achievements_unlocked_in_games,
                     mAchievements.size(), mGames.size()));
         } else {
@@ -55,17 +58,17 @@ public final class AchievementUnlockedNotification extends BaseNotification {
                     mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             if (mAchievements.size() > 1) {
-                mBuilder.setContentText(mGames.get(0));
-                mBuilder.setContentTitle(mResources.getQuantityString(
+                getBuilder().setContentText(mGames.get(0));
+                getBuilder().setContentTitle(getResources().getQuantityString(
                         R.plurals.notification_achievements_unlocked, mAchievements.size(), mAchievements.size()));
             } else {
-                mBuilder.setContentText(mAchievements.get(0));
-                mBuilder.setContentTitle(mResources.getQuantityString(
+                getBuilder().setContentText(mAchievements.get(0));
+                getBuilder().setContentTitle(getResources().getQuantityString(
                         R.plurals.notification_achievements_unlocked, 1));
             }
         }
 
-        mBuilder.setContentIntent(pendingIntent);
+        getBuilder().setContentIntent(pendingIntent);
 
         return this;
     }

@@ -200,9 +200,9 @@ public final class MainActivity extends AppCompatActivity {
         BaseNotification.cancelNotifications(this);
 
         Log.d(TAG, AllGamesParserJob.class.getSimpleName() + " has "
-                + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
+                + (AllGamesParserJob.setup(getApplicationContext()) == 1 ? "been set." : "not been set."));
         Log.d(TAG, RecentGamesParserJob.class.getSimpleName() + " has "
-                + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "been set" : "not been set"));
+                + (RecentGamesParserJob.setup(getApplicationContext()) == 1 ? "been set." : "not been set."));
     }
 
     @SuppressLint("RestrictedApi")

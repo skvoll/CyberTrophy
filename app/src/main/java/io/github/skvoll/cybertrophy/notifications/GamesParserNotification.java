@@ -10,28 +10,28 @@ import io.github.skvoll.cybertrophy.services.GamesParserBroadcastReceiver;
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 public final class GamesParserNotification extends BaseNotification {
-    public static final int ID = 1001;
+    public static final int ID = 2001;
 
     public GamesParserNotification(Context context) {
         super(context);
 
-        Intent intent = new Intent(mContext, MainActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
-                mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent postponeIntent = new Intent(mContext, GamesParserBroadcastReceiver.class);
+        Intent postponeIntent = new Intent(context, GamesParserBroadcastReceiver.class);
         postponeIntent.setAction(GamesParserBroadcastReceiver.ACTION_STOP);
         PendingIntent postponePendingIntent = PendingIntent.getBroadcast(
-                mContext, 0, postponeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, 0, postponeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mBuilder.setProgress(1, 0, true)
-                .setContentTitle(mResources.getString(R.string.notification_games_parser_collecting_games))
-                .setContentText(mResources.getString(R.string.notification_games_parser_downloading))
+        getBuilder().setProgress(1, 0, true)
+                .setContentTitle(getResources().getString(R.string.notification_games_parser_collecting_games))
+                .setContentText(getResources().getString(R.string.notification_games_parser_downloading))
                 .setSmallIcon(android.R.drawable.stat_sys_download);
 
-        mBuilder.setContentIntent(pendingIntent)
+        getBuilder().setContentIntent(pendingIntent)
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel,
-                        mContext.getResources().getString(R.string.notification_games_parser_postpone),
+                        getResources().getString(R.string.notification_games_parser_postpone),
                         postponePendingIntent);
     }
 
@@ -45,10 +45,10 @@ public final class GamesParserNotification extends BaseNotification {
         return ID;
     }
 
-    public GamesParserNotification setProgress(Integer max, Integer min, SteamGame steamGame) {
-        Double progress = min.doubleValue() / max.doubleValue() * 100;
-        mBuilder.setSubText(progress.intValue() + "%")
-                .setProgress(max, min, false)
+    public GamesParserNotification setProgress(Integer processed, Integer total, SteamGame steamGame) {
+        Double progress = processed.doubleValue() / total.doubleValue() * 100;
+        getBuilder().setSubText(progress.intValue() + "%")
+                .setProgress(total, processed, false)
                 .setContentText(steamGame.name);
 
         return this;

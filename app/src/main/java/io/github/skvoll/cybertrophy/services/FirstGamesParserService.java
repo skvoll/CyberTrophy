@@ -1,7 +1,9 @@
 package io.github.skvoll.cybertrophy.services;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -9,15 +11,20 @@ import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
-import io.github.skvoll.cybertrophy.GamesParserTask;
+import io.github.skvoll.cybertrophy.GamesParserAsyncTask;
+import io.github.skvoll.cybertrophy.R;
+import io.github.skvoll.cybertrophy.data.GamesParser;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
+import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 import io.github.skvoll.cybertrophy.notifications.GamesParserCompleteNotification;
 import io.github.skvoll.cybertrophy.notifications.GamesParserNotification;
+import io.github.skvoll.cybertrophy.notifications.GamesParserRetryNotification;
+import io.github.skvoll.cybertrophy.steam.SteamGame;
 
 public final class FirstGamesParserService extends Service {
     private static final String TAG = FirstGamesParserService.class.getSimpleName();
-    public static boolean sIsRunning = false;
-    private ServiceTask mServiceTask;
+
+    private ServiceAsyncTask mServiceAsyncTask;
     private GamesParserNotification mNotification;
 
     @Override
@@ -28,7 +35,7 @@ public final class FirstGamesParserService extends Service {
             return;
         }
 
-        mServiceTask = new ServiceTask(this, profileModel, GamesParserTask.ACTION_FIRST);
+        mServiceAsyncTask = new ServiceAsyncTask(this, profileModel);
         mNotification = new GamesParserNotification(this);
 
         Log.d(TAG, "Created.");
@@ -36,20 +43,18 @@ public final class FirstGamesParserService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mServiceTask == null) {
+        if (mServiceAsyncTask == null) {
             return START_NOT_STICKY;
         }
 
-        if (mServiceTask.getStatus() == AsyncTask.Status.RUNNING
-                || mServiceTask.getStatus() == AsyncTask.Status.FINISHED) {
+        if (mServiceAsyncTask.getStatus() == AsyncTask.Status.RUNNING
+                || mServiceAsyncTask.getStatus() == AsyncTask.Status.FINISHED) {
             return START_STICKY;
         }
 
         startForeground(mNotification.getId(), mNotification.build());
 
-        mServiceTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        sIsRunning = true;
+        mServiceAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, GamesParser.Action.FIRST);
 
         Log.d(TAG, "Started.");
 
@@ -58,13 +63,13 @@ public final class FirstGamesParserService extends Service {
 
     @Override
     public void onDestroy() {
-        if (mServiceTask != null) {
-            mServiceTask.cancel(true);
+        if (mServiceAsyncTask != null) {
+            mServiceAsyncTask.cancel();
+
+            Log.d(TAG, "Async task canceled.");
         }
 
         stopForeground(true);
-
-        sIsRunning = false;
 
         Log.d(TAG, "Destroyed.");
     }
@@ -75,36 +80,22 @@ public final class FirstGamesParserService extends Service {
         return null;
     }
 
-    private static class ServiceTask extends GamesParserTask {
-        private WeakReference<FirstGamesParserService> mServiceWeakReference;
+    private static class ServiceAsyncTask extends GamesParserAsyncTask {
+        private WeakReference<Service> mServiceWeakReference;
         private ProfileModel mProfileModel;
 
-        ServiceTask(FirstGamesParserService service, ProfileModel profileModel, int action) {
-            super(service, profileModel, action);
+        ServiceAsyncTask(Service service, ProfileModel profileModel) {
+            super(service, profileModel);
 
             mServiceWeakReference = new WeakReference<>(service);
             mProfileModel = profileModel;
-        }
 
-        @Override
-        protected void onProgressUpdate(ProgressParams... values) {
-            ProgressParams progressParams = values[0];
-
-            FirstGamesParserService service = mServiceWeakReference.get();
-
-            if (service == null) {
-                return;
-            }
-
-            GamesParserNotification notification = new GamesParserNotification(service);
-
-            service.startForeground(notification.getId(), notification.setProgress(progressParams.getMax(),
-                    progressParams.getMin(), progressParams.getSteamGame()).build());
+            setProgressListener(new ProgressListener());
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
-            FirstGamesParserService service = mServiceWeakReference.get();
+            Service service = mServiceWeakReference.get();
 
             if (service == null) {
                 return;
@@ -118,6 +109,60 @@ public final class FirstGamesParserService extends Service {
             }
 
             service.stopSelf();
+        }
+
+        private class ProgressListener extends GamesParser.GamesParserProgressListener {
+            @Override
+            public void onError(GamesParser.GamesParserException e) {
+                Service service = mServiceWeakReference.get();
+
+                if (service == null) {
+                    return;
+                }
+
+                BaseNotification notification;
+
+                if (e instanceof GamesParser.ProfileIsPrivateException) {
+                    notification = new GamesParserRetryNotification(service);
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setData(Uri.parse(mProfileModel.getUrl() + "/edit/settings"));
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                            service, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    notification.getBuilder()
+                            .setContentText("Profile is probably private");
+
+                    notification.getBuilder().addAction(
+                            R.drawable.ic_settings_black_24dp,
+                            "Check preferences",
+                            pendingIntent);
+
+                    notification.show();
+
+                    return;
+                }
+
+                if (e instanceof GamesParser.ParsingFailureException) {
+                    notification = new GamesParserRetryNotification(service);
+                    notification.show();
+                }
+            }
+
+            @Override
+            public void onProgress(int processed, int total, SteamGame steamGame) {
+                Service service = mServiceWeakReference.get();
+
+                if (service == null) {
+                    return;
+                }
+
+                GamesParserNotification notification = new GamesParserNotification(service);
+                notification.setProgress(processed, total, steamGame);
+
+                service.startForeground(notification.getId(), notification.build());
+            }
         }
     }
 }

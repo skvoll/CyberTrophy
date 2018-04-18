@@ -27,6 +27,7 @@ import io.github.skvoll.cybertrophy.steam.SteamApi;
 import io.github.skvoll.cybertrophy.steam.SteamGame;
 import io.github.skvoll.cybertrophy.steam.SteamPlayerAchievement;
 
+@Deprecated
 public abstract class GamesParserTask extends AsyncTask<Long, GamesParserTask.ProgressParams, Boolean> {
     public static final int ACTION_FIRST = 0;
     public static final int ACTION_ALL = 1;

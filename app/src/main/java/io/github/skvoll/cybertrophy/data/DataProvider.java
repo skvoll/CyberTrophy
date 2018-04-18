@@ -98,7 +98,7 @@ public final class DataProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for query");
+                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for query.");
         }
 
         return database.query(tableName, columns, selection, selectionArgs,
@@ -130,7 +130,7 @@ public final class DataProvider extends ContentProvider {
                 tableName = NotificationEntry.TABLE_NAME;
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for insert");
+                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for insert.");
         }
 
         long id = database.insert(tableName, null, contentValues);
@@ -187,7 +187,7 @@ public final class DataProvider extends ContentProvider {
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for update");
+                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for update.");
         }
 
         mContentResolver.notifyChange(uri, contentObserver);
@@ -241,7 +241,7 @@ public final class DataProvider extends ContentProvider {
                 whereArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for delete");
+                throw new IllegalArgumentException("Unsupported URI \"" + uri + "\" for delete.");
         }
 
         mContentResolver.notifyChange(uri, contentObserver);

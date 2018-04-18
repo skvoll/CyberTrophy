@@ -155,14 +155,14 @@ public final class GameActivity extends AppCompatActivity implements
         }
 
         if (bundle == null) {
-            throw new IllegalArgumentException("Params are missing");
+            throw new IllegalArgumentException("Params are missing.");
         }
 
         Long gameId = bundle.getLong(KEY_GAME_ID);
         mGameModel = GameModel.getById(getContentResolver(), gameId);
 
         if (mGameModel == null) {
-            throw new IllegalArgumentException("Game id is missing");
+            throw new IllegalArgumentException("Game id is missing.");
         }
     }
 

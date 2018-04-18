@@ -8,22 +8,22 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.services.GamesParserBroadcastReceiver;
 
 public final class GamesParserRetryNotification extends BaseNotification {
-    public static final int ID = 1002;
+    public static final int ID = 2002;
 
     public GamesParserRetryNotification(Context context) {
         super(context);
 
-        Intent intent = new Intent(mContext, GamesParserBroadcastReceiver.class);
+        Intent intent = new Intent(context, GamesParserBroadcastReceiver.class);
         intent.setAction(GamesParserBroadcastReceiver.ACTION_RETRY);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mBuilder.setContentTitle(mResources.getString(R.string.notification_games_parser_collecting_games))
-                .setContentText(mResources.getString(R.string.notification_games_parser_download_failed))
+        getBuilder().setContentTitle(getResources().getString(R.string.notification_games_parser_collecting_games))
+                .setContentText(getResources().getString(R.string.notification_games_parser_download_failed))
                 .setSmallIcon(android.R.drawable.stat_notify_error);
 
-        mBuilder.addAction(android.R.drawable.stat_notify_error,
-                mContext.getResources().getString(R.string.notification_games_parser_retry),
+        getBuilder().addAction(android.R.drawable.stat_notify_error,
+                getResources().getString(R.string.notification_games_parser_retry),
                 pendingIntent);
     }
 

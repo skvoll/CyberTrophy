@@ -14,8 +14,9 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class AchievementRemovedNotification extends BaseNotification {
-    public static final int ID = 2012;
+    public static final int ID = 3012;
 
+    private Context mContext;
     private ArrayList<String> mGames = new ArrayList<>();
     private int mAchievementsCount = 0;
     private LongSparseArray<NotificationModel> mNotificationModels
@@ -24,8 +25,10 @@ public final class AchievementRemovedNotification extends BaseNotification {
     public AchievementRemovedNotification(Context context) {
         super(context);
 
-        mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_achievements_removed, 1))
-                .setContentText(mResources.getString(R.string.empty));
+        mContext = context;
+
+        getBuilder().setContentTitle(getResources().getQuantityString(R.plurals.notification_achievements_removed, 1))
+                .setContentText(getResources().getString(R.string.empty));
     }
 
     public AchievementRemovedNotification addGame(GameModel gameModel) {
@@ -45,7 +48,7 @@ public final class AchievementRemovedNotification extends BaseNotification {
         }
         mAchievementsCount++;
 
-        mBuilder.setContentTitle(mResources.getQuantityString(
+        getBuilder().setContentTitle(getResources().getQuantityString(
                 R.plurals.notification_achievements_removed, mAchievementsCount));
 
         Intent intent;
@@ -57,7 +60,7 @@ public final class AchievementRemovedNotification extends BaseNotification {
             pendingIntent = PendingIntent.getActivity(
                     mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mBuilder.setContentText(mResources.getString(
+            getBuilder().setContentText(getResources().getString(
                     R.string.notification_achievements_removed_from_games,
                     mAchievementsCount, mGames.size()));
         } else {
@@ -66,12 +69,12 @@ public final class AchievementRemovedNotification extends BaseNotification {
             pendingIntent = PendingIntent.getActivity(
                     mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mBuilder.setContentText(mResources.getQuantityString(
+            getBuilder().setContentText(getResources().getQuantityString(
                     R.plurals.notification_achievements_removed_from_game,
                     mAchievementsCount, mAchievementsCount, mGames.get(0)));
         }
 
-        mBuilder.setContentIntent(pendingIntent);
+        getBuilder().setContentIntent(pendingIntent);
 
         return this;
     }

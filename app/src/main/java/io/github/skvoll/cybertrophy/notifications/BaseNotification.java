@@ -21,18 +21,15 @@ public abstract class BaseNotification {
 
     private static final String TAG = BaseNotification.class.getSimpleName();
 
-    final Context mContext;
-    final NotificationCompat.Builder mBuilder;
-    final Resources mResources;
-
+    private final NotificationCompat.Builder mBuilder;
+    private final Resources mResources;
     private final NotificationManager mManager;
 
     public BaseNotification(Context context) {
-        mContext = context;
-        mManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(mContext, getChannel());
+        mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(context, getChannel());
         mBuilder.setSmallIcon(R.drawable.ic_notification);
-        mResources = mContext.getResources();
+        mResources = context.getResources();
     }
 
     public static void createChannels(Context context) {
@@ -58,7 +55,7 @@ public abstract class BaseNotification {
 
             for (NotificationChannel notificationChannel : notificationChannels) {
                 manager.createNotificationChannel(notificationChannel);
-                Log.d(TAG, "Notification channel " + notificationChannel.getName() + " created.");
+                Log.d(TAG, String.format("Notification channel %s created.", notificationChannel.getName()));
             }
         }
     }
@@ -76,21 +73,29 @@ public abstract class BaseNotification {
         (new GamesParserCompleteNotification(context)).cancel();
     }
 
-    public abstract int getId();
+    public NotificationCompat.Builder getBuilder() {
+        return mBuilder;
+    }
 
-    public String getChannel() {
+    protected abstract int getId();
+
+    protected String getChannel() {
         return CHANNEL_DEFAULT;
     }
 
-    public Notification build() {
+    protected Resources getResources() {
+        return mResources;
+    }
+
+    public final Notification build() {
         return mBuilder.build();
     }
 
-    public void show() {
+    public final void show() {
         mManager.notify(getId(), build());
     }
 
-    public void cancel() {
+    public final void cancel() {
         mManager.cancel(getId());
     }
 }

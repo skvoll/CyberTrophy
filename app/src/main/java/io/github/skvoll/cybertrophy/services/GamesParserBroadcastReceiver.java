@@ -3,6 +3,8 @@ package io.github.skvoll.cybertrophy.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 
 import io.github.skvoll.cybertrophy.notifications.GamesParserRetryNotification;
 
@@ -19,7 +21,7 @@ public final class GamesParserBroadcastReceiver extends BroadcastReceiver {
         final String action = intent.getAction();
 
         if (action == null) {
-            throw new IllegalArgumentException("Action is missing");
+            throw new IllegalArgumentException("Action is missing.");
         }
 
         switch (action) {
@@ -31,7 +33,7 @@ public final class GamesParserBroadcastReceiver extends BroadcastReceiver {
                 (new GamesParserRetryNotification(context)).cancel();
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported action: " + action);
+                throw new IllegalArgumentException(String.format("Unsupported action: %s.", action));
         }
     }
 }

@@ -15,15 +15,18 @@ import io.github.skvoll.cybertrophy.data.GameModel;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class GameCompleteNotification extends BaseNotification {
-    public static final int ID = 2022;
+    public static final int ID = 3022;
 
+    private Context mContext;
     private ArrayList<String> mGames = new ArrayList<>();
 
     public GameCompleteNotification(Context context) {
         super(context);
 
-        mBuilder.setContentTitle(mResources.getQuantityString(R.plurals.notification_games_complete, 1))
-                .setContentText(mResources.getString(R.string.empty));
+        mContext = context;
+
+        getBuilder().setContentTitle(getResources().getQuantityString(R.plurals.notification_games_complete, 1))
+                .setContentText(getResources().getString(R.string.empty));
     }
 
     public GameCompleteNotification addGame(GameModel gameModel) {
@@ -46,14 +49,14 @@ public final class GameCompleteNotification extends BaseNotification {
                     mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        mBuilder.setContentIntent(pendingIntent);
+        getBuilder().setContentIntent(pendingIntent);
 
-        mBuilder.setContentTitle(mResources.getQuantityString(
+        getBuilder().setContentTitle(getResources().getQuantityString(
                 R.plurals.notification_games_complete, mGames.size(), mGames.size()));
 
         String contentText = TextUtils.join("\n", mGames);
-        mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(contentText));
-        mBuilder.setContentText(contentText);
+        getBuilder().setStyle(new NotificationCompat.BigTextStyle().bigText(contentText));
+        getBuilder().setContentText(contentText);
 
         return this;
     }
