@@ -29,7 +29,7 @@ public final class FirstGamesParserService extends Service {
 
     @Override
     public void onCreate() {
-        ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+        final ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
         if (profileModel == null || profileModel.isInitialized()) {
             return;
