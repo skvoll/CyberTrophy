@@ -3,8 +3,7 @@ package io.github.skvoll.cybertrophy.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
+import android.os.Build;
 
 import io.github.skvoll.cybertrophy.notifications.GamesParserRetryNotification;
 
@@ -29,7 +28,12 @@ public final class GamesParserBroadcastReceiver extends BroadcastReceiver {
                 context.stopService(new Intent(context, FirstGamesParserService.class));
                 break;
             case ACTION_RETRY:
-                context.startService(new Intent(context, FirstGamesParserService.class));
+                Intent serviceIntent = new Intent(context, FirstGamesParserService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(serviceIntent);
+                } else {
+                    context.startService(serviceIntent);
+                }
                 (new GamesParserRetryNotification(context)).cancel();
                 break;
             default:

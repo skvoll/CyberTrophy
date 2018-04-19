@@ -29,7 +29,7 @@ public final class FirstGamesParserService extends Service {
 
     @Override
     public void onCreate() {
-        final ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+        ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
         if (profileModel == null || profileModel.isInitialized()) {
             return;
@@ -128,15 +128,15 @@ public final class FirstGamesParserService extends Service {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.setData(Uri.parse(mProfileModel.getUrl() + "/edit/settings"));
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    PendingIntent pendingIntent = PendingIntent.getActivity(
                             service, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     notification.getBuilder()
                             .setContentText("Profile is probably private");
 
                     notification.getBuilder().addAction(
-                            R.drawable.ic_settings_black_24dp,
-                            "Check preferences",
+                            R.drawable.ic_steam_black_24,
+                            "Profile settings",
                             pendingIntent);
 
                     notification.show();

@@ -30,11 +30,11 @@ public final class AllGamesParserJob extends JobService {
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setOverrideDeadline(RUN_PERIOD_MILLISECONDS);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             jobInfoBuilder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_NOT_ROAMING);
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             jobInfoBuilder.setRequiresBatteryNotLow(true);
         }
 
@@ -49,7 +49,7 @@ public final class AllGamesParserJob extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        final ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+        ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
         if (profileModel == null || !profileModel.isInitialized()) {
             return false;

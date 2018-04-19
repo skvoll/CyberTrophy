@@ -30,11 +30,11 @@ public final class RecentGamesParserJob extends JobService {
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPeriodic(RUN_PERIOD_MILLISECONDS);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             jobInfoBuilder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_NOT_ROAMING);
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             jobInfoBuilder.setRequiresBatteryNotLow(true);
         }
 
@@ -49,10 +49,16 @@ public final class RecentGamesParserJob extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        final ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
+        ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
-        if (profileModel == null || !profileModel.isInitialized()) {
-            startService(new Intent(this, FirstGamesParserService.class));
+        if (profileModel == null) {
+            return false;
+        }
+
+        if (!profileModel.isInitialized()) {
+            Intent intent = new Intent(this, GamesParserBroadcastReceiver.class);
+            intent.setAction(GamesParserBroadcastReceiver.ACTION_RETRY);
+            sendBroadcast(intent);
 
             return false;
         }
