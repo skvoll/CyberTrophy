@@ -169,7 +169,7 @@ public final class AuthActivity extends AppCompatActivity {
     }
 
     private static class ProfileAsyncTask extends AsyncTask<SteamProfile, Void, Void> {
-        private WeakReference<Activity> mContextWeakReference;
+        private final WeakReference<Activity> mContextWeakReference;
 
         ProfileAsyncTask(Activity activity) {
             mContextWeakReference = new WeakReference<>(activity);

@@ -24,10 +24,10 @@ import io.github.skvoll.cybertrophy.steam.SteamProfile;
 public final class ProfileModel extends Model<ProfileModel> {
     private static final String TAG = ProfileModel.class.getSimpleName();
 
-    private static String sBackgroundImagePattern = "url\\(\\s\\'(.*)\\'\\s\\);";
+    private static final String sBackgroundImagePattern = "url\\(\\s'(.*)'\\s\\);";
 
     private Long mId;
-    private Long mSteamId;
+    private final Long mSteamId;
     private String mUrl;
     private String mName;
     private String mRealName;
@@ -37,7 +37,7 @@ public final class ProfileModel extends Model<ProfileModel> {
     private String mLocCountryCode;
     private String mBackgroundImage;
     private Integer mIsInitialized;
-    private Integer mIsActive;
+    private final Integer mIsActive;
 
     public ProfileModel(Cursor cursor) {
         mId = cursor.getLong(cursor.getColumnIndex(ProfileEntry._ID));

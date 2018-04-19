@@ -7,16 +7,14 @@ import io.github.skvoll.cybertrophy.data.GamesParser;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public abstract class GamesParserAsyncTask extends AsyncTask<GamesParser.Action, Void, Boolean> {
-    private GamesParser mGamesParser;
+    private final GamesParser mGamesParser;
 
     public GamesParserAsyncTask(Context context, ProfileModel profileModel) {
         mGamesParser = new GamesParser(context, profileModel);
     }
 
     public void cancel() {
-        if (mGamesParser != null) {
-            mGamesParser.cancel();
-        }
+        mGamesParser.cancel();
 
         cancel(true);
     }

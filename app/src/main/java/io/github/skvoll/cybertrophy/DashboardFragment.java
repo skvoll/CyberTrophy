@@ -279,9 +279,9 @@ public final class DashboardFragment extends Fragment implements
         }
 
         static class LoadDataTaskResult {
-            GameModel gameModel;
-            ArrayList<AchievementModel> recentAchievementModels;
-            ArrayList<AchievementModel> lockedAchievementModels;
+            final GameModel gameModel;
+            final ArrayList<AchievementModel> recentAchievementModels;
+            final ArrayList<AchievementModel> lockedAchievementModels;
 
             LoadDataTaskResult(GameModel gameModel,
                                ArrayList<AchievementModel> recentAchievementModels,
@@ -294,8 +294,8 @@ public final class DashboardFragment extends Fragment implements
     }
 
     private static class UpdateGameTask extends GamesParserTask {
-        private WeakReference<DashboardFragment> mFragmentWeakReference;
-        private ProfileModel mProfileModel;
+        private final WeakReference<DashboardFragment> mFragmentWeakReference;
+        private final ProfileModel mProfileModel;
 
         UpdateGameTask(DashboardFragment fragment, ProfileModel profileModel) {
             super(fragment.getContext(), profileModel, ACTION_RECENT);

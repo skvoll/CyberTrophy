@@ -5,10 +5,10 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 
 public final class ChromeCustomTab {
-    private Context mContext;
-    private Uri mUri;
+    private final Context mContext;
+    private final Uri mUri;
 
-    private CustomTabsIntent.Builder mBuilder;
+    private final CustomTabsIntent.Builder mBuilder;
 
     private ChromeCustomTab(Context context, Uri uri) {
         mContext = context;

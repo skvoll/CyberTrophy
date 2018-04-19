@@ -31,7 +31,7 @@ public final class SteamAchievement {
     }
 
     public void setPercent(BigDecimal percent) {
-        if (percent.compareTo(new BigDecimal("0")) == 1 && percent.compareTo(new BigDecimal("0.1")) == -1) {
+        if (percent.compareTo(new BigDecimal("0")) > 0 && percent.compareTo(new BigDecimal("0.1")) < 0) {
             percent = new BigDecimal("0.1");
         }
 

@@ -17,9 +17,9 @@ import io.github.skvoll.cybertrophy.notifications.BaseNotification;
 import io.github.skvoll.cybertrophy.notifications.GamesParserRetryNotification;
 
 public final class GamesParserJobAsyncTask extends GamesParserAsyncTask {
-    private WeakReference<JobService> mServiceWeakReference;
-    private JobParameters mJobParameters;
-    private ProfileModel mProfileModel;
+    private final WeakReference<JobService> mServiceWeakReference;
+    private final JobParameters mJobParameters;
+    private final ProfileModel mProfileModel;
 
     GamesParserJobAsyncTask(JobService jobService, JobParameters jobParameters, ProfileModel profileModel) {
         super(jobService, profileModel);

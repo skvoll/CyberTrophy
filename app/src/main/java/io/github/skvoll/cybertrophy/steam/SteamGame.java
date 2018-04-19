@@ -22,7 +22,7 @@ public final class SteamGame {
     // additional
     private Integer mAchievementsTotalCount = 0;
     private Integer mAchievementsUnlockedCount = 0;
-    private HashMap<String, SteamAchievement> mSteamAchievements = new HashMap<>();
+    private final HashMap<String, SteamAchievement> mSteamAchievements = new HashMap<>();
 
     public Integer getAchievementsTotalCount() {
         return mAchievementsTotalCount;

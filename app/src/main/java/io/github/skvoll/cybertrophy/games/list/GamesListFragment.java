@@ -34,7 +34,7 @@ public final class GamesListFragment extends Fragment {
     private Long mProfileId;
     private int mGameStatus;
 
-    private GamesObserver mGamesObserver = new GamesObserver(new Handler());
+    private final GamesObserver mGamesObserver = new GamesObserver(new Handler());
 
     private RecyclerView mRvList;
     private View mIvPlaceholder;

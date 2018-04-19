@@ -16,10 +16,10 @@ import io.github.skvoll.cybertrophy.data.NotificationModel;
 public final class NewAchievementNotification extends BaseNotification {
     public static final int ID = 3011;
 
-    private Context mContext;
-    private ArrayList<String> mGames = new ArrayList<>();
+    private final Context mContext;
+    private final ArrayList<String> mGames = new ArrayList<>();
     private int mAchievementsCount = 0;
-    private LongSparseArray<NotificationModel> mNotificationModels
+    private final LongSparseArray<NotificationModel> mNotificationModels
             = new LongSparseArray<>();
 
     public NewAchievementNotification(Context context) {

@@ -72,7 +72,6 @@
     </style>
 
     <!--TODO: set background color-->
-    <style name="AppTheme.BottomNavigationView.Colored" parent="AppTheme.BottomNavigationView" />
 
     <style name="AppTheme.Text" />
 
@@ -85,23 +84,11 @@
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Text.Colored.SingleLine" parent="AppTheme.Text.SingleLine">
-        <item name="android:textColor">?android:attr/colorAccent</item>
-    </style>
-
     <style name="AppTheme.Text.Headline" parent="AppTheme.Text">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
     </style>
 
-    <style name="AppTheme.Text.Headline.SingleLine" parent="AppTheme.Text.SingleLine">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
-    </style>
-
     <style name="AppTheme.Text.Headline.Colored" parent="AppTheme.Text.Headline">
-        <item name="android:textColor">?android:attr/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.Text.Headline.Colored.SingleLine" parent="AppTheme.Text.Headline.SingleLine">
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
@@ -117,23 +104,11 @@
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Text.Subhead.Colored.SingleLine" parent="AppTheme.Text.Subhead.SingleLine">
-        <item name="android:textColor">?android:attr/colorAccent</item>
-    </style>
-
     <style name="AppTheme.Text.Title" parent="AppTheme.Text">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
     </style>
 
-    <style name="AppTheme.Text.Title.SingleLine" parent="AppTheme.Text.SingleLine">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
-    </style>
-
     <style name="AppTheme.Text.Title.Colored" parent="AppTheme.Text.Title">
-        <item name="android:textColor">?android:attr/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.Text.Title.Colored.SingleLine" parent="AppTheme.Text.Title.SingleLine">
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
@@ -146,10 +121,6 @@
     </style>
 
     <style name="AppTheme.Text.Caption.Colored" parent="AppTheme.Text.Caption">
-        <item name="android:textColor">?android:attr/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.Text.Caption.Colored.SingleLine" parent="AppTheme.Text.Caption.SingleLine">
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 

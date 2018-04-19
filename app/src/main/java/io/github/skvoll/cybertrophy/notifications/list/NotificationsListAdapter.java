@@ -2,6 +2,7 @@ package io.github.skvoll.cybertrophy.notifications.list;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,10 +21,10 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.NotificationModel;
 
 public final class NotificationsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
-    private ArrayList<NotificationModel> mItems;
-    private OnItemClickListener mOnItemClickListener;
-    private OnItemRenderListener mOnItemRenderListener;
+    private final Context mContext;
+    private final ArrayList<NotificationModel> mItems;
+    private final OnItemClickListener mOnItemClickListener;
+    private final OnItemRenderListener mOnItemRenderListener;
 
     NotificationsListAdapter(Context context, ArrayList<NotificationModel> notificationModels,
                              OnItemClickListener onItemClickListener,
@@ -40,7 +41,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case NotificationModel.TYPE_CATEGORY_SEPARATOR:
                 return new SeparatorViewHolder(LayoutInflater.from(parent.getContext())
@@ -52,7 +53,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         final NotificationModel notificationModel = mItems.get(position);
         Date date = new Date();
         date.setTime(notificationModel.getTime() * 1000L);
@@ -189,7 +190,7 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     }
 
     private static final class SeparatorViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
+        final TextView tvTitle;
 
         SeparatorViewHolder(View itemView) {
             super(itemView);
@@ -199,13 +200,13 @@ public final class NotificationsListAdapter extends RecyclerView.Adapter<Recycle
     }
 
     private static final class NotificationViewHolder extends RecyclerView.ViewHolder {
-        CardView cvItem;
-        ImageView ivImage;
-        ImageView ivIcon;
-        ImageView ivNewIndicator;
-        TextView tvTitle;
-        TextView tvMessage;
-        TextView tvTime;
+        final CardView cvItem;
+        final ImageView ivImage;
+        final ImageView ivIcon;
+        final ImageView ivNewIndicator;
+        final TextView tvTitle;
+        final TextView tvMessage;
+        final TextView tvTime;
 
         NotificationViewHolder(View itemView) {
             super(itemView);

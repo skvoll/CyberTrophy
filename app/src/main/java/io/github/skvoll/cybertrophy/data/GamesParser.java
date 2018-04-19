@@ -29,12 +29,11 @@ public final class GamesParser {
         RECENT,
     }
 
+    private final ContentResolver mContentResolver;
+    private final VolleySingleton mVolleySingleton;
+    private final SteamApi mSteamApi;
+    private final ProfileModel mProfileModel;
     private boolean mIsCanceled;
-
-    private ContentResolver mContentResolver;
-    private VolleySingleton mVolleySingleton;
-    private SteamApi mSteamApi;
-    private ProfileModel mProfileModel;
     private GamesParserProgressListener mProgressListener;
 
     public GamesParser(Context context, ProfileModel profileModel, GamesParserProgressListener progressListener) {
@@ -436,27 +435,35 @@ public final class GamesParser {
 
     public static class GamesParserProgressListener {
         public void onError(GamesParserException e) {
+            // Implementation is not necessary
         }
 
         public void onProgress(int processed, int total, SteamGame steamGame) {
+            // Implementation is not necessary
         }
 
         public void onNewGame(GameModel gameModel) {
+            // Implementation is not necessary
         }
 
         public void onGameRemoved(GameModel gameModel) {
+            // Implementation is not necessary
         }
 
         public void onNewAchievement(GameModel gameModel, AchievementModel achievementModel) {
+            // Implementation is not necessary
         }
 
         public void onAchievementRemoved(GameModel gameModel, AchievementModel achievementModel) {
+            // Implementation is not necessary
         }
 
         public void onAchievementUnlocked(GameModel gameModel, AchievementModel achievementModel) {
+            // Implementation is not necessary
         }
 
         public void onGameComplete(GameModel gameModel) {
+            // Implementation is not necessary
         }
     }
 

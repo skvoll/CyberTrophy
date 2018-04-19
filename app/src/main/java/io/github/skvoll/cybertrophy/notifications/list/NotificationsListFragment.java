@@ -34,7 +34,7 @@ public final class NotificationsListFragment extends Fragment implements
         NotificationsListAdapter.OnItemClickListener {
     private static final String TAG = NotificationsListFragment.class.getSimpleName();
 
-    private NotificationObserver mNotificationObserver = new NotificationObserver(new Handler());
+    private final NotificationObserver mNotificationObserver = new NotificationObserver(new Handler());
 
     private SwipeRefreshLayout mSrlRefresh;
     private RecyclerView mRvList;

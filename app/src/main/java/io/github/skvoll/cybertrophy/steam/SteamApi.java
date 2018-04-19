@@ -27,7 +27,7 @@ public final class SteamApi {
     private static final String TAG = SteamApi.class.getSimpleName();
     private static final String HOST = "https://api.steampowered.com";
     private static final String KEY = "09B2CD771C3E7F9B99D91E12EF384B21";
-    private VolleySingleton mVolleySingleton;
+    private final VolleySingleton mVolleySingleton;
 
     public SteamApi(VolleySingleton volleySingleton) {
         mVolleySingleton = volleySingleton;
@@ -367,8 +367,8 @@ public final class SteamApi {
     }
 
     private static abstract class SteamApiRequest<T> extends Request<T> {
-        private Response.Listener<T> mListener;
-        private JSONObject mParams;
+        private final Response.Listener<T> mListener;
+        private final JSONObject mParams;
 
         SteamApiRequest(int method, String url, JSONObject params, final SteamApiResponseListener<T> listener) {
             super(method, url, new Response.ErrorListener() {

@@ -17,8 +17,8 @@ import io.github.skvoll.cybertrophy.data.NotificationModel;
 public final class GameCompleteNotification extends BaseNotification {
     public static final int ID = 3022;
 
-    private Context mContext;
-    private ArrayList<String> mGames = new ArrayList<>();
+    private final Context mContext;
+    private final ArrayList<String> mGames = new ArrayList<>();
 
     public GameCompleteNotification(Context context) {
         super(context);

@@ -16,8 +16,8 @@ import io.github.skvoll.cybertrophy.data.NotificationModel;
 public final class GameRemovedNotification extends BaseNotification {
     public static final int ID = 3002;
 
-    private Context mContext;
-    private ArrayList<String> mGames = new ArrayList<>();
+    private final Context mContext;
+    private final ArrayList<String> mGames = new ArrayList<>();
 
     public GameRemovedNotification(Context context) {
         super(context);

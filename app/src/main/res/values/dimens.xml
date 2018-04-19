@@ -11,8 +11,6 @@
     <!-- material -->
     <dimen name="control_inset_material">4dp</dimen>
     <dimen name="control_padding_material">4dp</dimen>
-    <dimen name="button_elevation_material">2dp</dimen>
-    <dimen name="button_pressed_z_material">4dp</dimen>
     <dimen name="button_inset_vertical_material">6dp</dimen>
     <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>
     <dimen name="button_padding_vertical_material">@dimen/control_padding_material</dimen>

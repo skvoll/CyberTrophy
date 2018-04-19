@@ -24,15 +24,15 @@ public final class AchievementModel extends Model<AchievementModel> {
     public static final int RARITY_LEGENDARY = 4;
 
     private Long mId;
-    private Long mProfileId;
-    private Long mGameId;
-    private Long mAppId;
-    private String mCode;
+    private final Long mProfileId;
+    private final Long mGameId;
+    private final Long mAppId;
+    private final String mCode;
     private String mName;
     private Integer mIsHidden;
     private String mDescription;
-    private String mIconUrl;
-    private String mIconGrayUrl;
+    private final String mIconUrl;
+    private final String mIconGrayUrl;
     private BigDecimal mPercent;
     private Integer mIsUnlocked;
     private Integer mUnlockTime;
@@ -290,12 +290,12 @@ public final class AchievementModel extends Model<AchievementModel> {
         return this;
     }
 
-    public Integer getRatity() {
-        if (mPercent.compareTo(new BigDecimal(5)) == -1) {
+    public Integer getRarity() {
+        if (mPercent.compareTo(new BigDecimal(5)) < 0) {
             return RARITY_LEGENDARY;
-        } else if (mPercent.compareTo(new BigDecimal(30)) == -1) {
+        } else if (mPercent.compareTo(new BigDecimal(30)) < 0) {
             return RARITY_EPIC;
-        } else if (mPercent.compareTo(new BigDecimal(70)) == -1) {
+        } else if (mPercent.compareTo(new BigDecimal(70)) < 0) {
             return RARITY_RARE;
         } else {
             return RARITY_COMMON;

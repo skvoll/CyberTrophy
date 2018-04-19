@@ -32,7 +32,7 @@ public final class AchievementsListFragment extends Fragment {
     private Long mGameId;
     private int mAchievementsStatus;
 
-    private AchievementsObserver mAchievementsObserver = new AchievementsObserver(new Handler());
+    private final AchievementsObserver mAchievementsObserver = new AchievementsObserver(new Handler());
 
     private RecyclerView mRvList;
     private View mIvPlaceholder;

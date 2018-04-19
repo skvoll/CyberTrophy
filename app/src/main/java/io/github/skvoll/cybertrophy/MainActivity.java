@@ -50,7 +50,7 @@ public final class MainActivity extends AppCompatActivity {
     private Fragment mProfileFragment;
     private Fragment mCurrentFragment;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override

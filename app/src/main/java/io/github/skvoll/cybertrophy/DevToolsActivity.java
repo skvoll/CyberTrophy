@@ -36,7 +36,7 @@ import io.github.skvoll.cybertrophy.steam.SteamGame;
 public final class DevToolsActivity extends AppCompatActivity {
     private static final String TAG = DevToolsActivity.class.getSimpleName();
 
-    private static ArrayList<String> sNotificationsList = new ArrayList<>();
+    private static final ArrayList<String> sNotificationsList = new ArrayList<>();
 
     static {
         sNotificationsList.add("AchievementRemoved");

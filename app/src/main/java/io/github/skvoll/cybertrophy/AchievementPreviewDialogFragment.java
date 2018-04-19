@@ -149,7 +149,7 @@ public final class AchievementPreviewDialogFragment extends BottomSheetDialogFra
 
         tvUnlockDate.setText(unlockDate);
         tvRarity.setText(getResources().getString(R.string.achievement_rarity,
-                getRarityString(mAchievementModel.getRatity()), mAchievementModel.getPercent()));
+                getRarityString(mAchievementModel.getRarity()), mAchievementModel.getPercent()));
 
         btnGuidesSteam.setOnClickListener(new View.OnClickListener() {
             @Override

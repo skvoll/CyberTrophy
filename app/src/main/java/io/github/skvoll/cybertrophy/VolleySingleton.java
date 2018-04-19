@@ -10,7 +10,7 @@ public final class VolleySingleton {
     private static final String TAG = VolleySingleton.class.getSimpleName();
 
     private static VolleySingleton sInstance;
-    private RequestQueue mRequestQueue;
+    private final RequestQueue mRequestQueue;
 
     private VolleySingleton(Context context) {
         mRequestQueue = Volley.newRequestQueue(context);

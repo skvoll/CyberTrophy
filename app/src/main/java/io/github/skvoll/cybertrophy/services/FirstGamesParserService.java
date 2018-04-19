@@ -81,8 +81,8 @@ public final class FirstGamesParserService extends Service {
     }
 
     private static class ServiceAsyncTask extends GamesParserAsyncTask {
-        private WeakReference<Service> mServiceWeakReference;
-        private ProfileModel mProfileModel;
+        private final WeakReference<Service> mServiceWeakReference;
+        private final ProfileModel mProfileModel;
 
         ServiceAsyncTask(Service service, ProfileModel profileModel) {
             super(service, profileModel);

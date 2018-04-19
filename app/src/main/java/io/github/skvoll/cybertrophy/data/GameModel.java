@@ -22,16 +22,16 @@ public final class GameModel extends Model<GameModel> {
     public static final int STATUS_COMPLETE = 3;
     public static final int STATUS_NO_ACHIEVEMENTS = 4;
 
-    private static String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
-    private static String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
+    private static final String MEDIA_URL_TEMPLATE = "http://media.steampowered.com/steamcommunity/public/images/apps/%s/%s.jpg";
+    private static final String MEDIA_LOGO_TEMPLATE = "http://cdn.edgecast.steamstatic.com/steam/apps/%s/header.jpg";
 
     private Long mId;
-    private Long mProfileId;
-    private Long mAppId;
+    private final Long mProfileId;
+    private final Long mAppId;
     private String mName;
     private Integer mPlaytimeForever;
-    private String mIconUrl;
-    private String mLogoUrl;
+    private final String mIconUrl;
+    private final String mLogoUrl;
     private Long mLastPlay;
     private Integer mAchievementsTotalCount;
     private Integer mAchievementsUnlockedCount;

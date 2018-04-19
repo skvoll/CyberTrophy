@@ -16,9 +16,9 @@ import io.github.skvoll.cybertrophy.data.NotificationModel;
 public final class AchievementUnlockedNotification extends BaseNotification {
     public static final int ID = 3021;
 
-    private Context mContext;
-    private ArrayList<String> mGames = new ArrayList<>();
-    private ArrayList<String> mAchievements = new ArrayList<>();
+    private final Context mContext;
+    private final ArrayList<String> mGames = new ArrayList<>();
+    private final ArrayList<String> mAchievements = new ArrayList<>();
 
     public AchievementUnlockedNotification(Context context) {
         super(context);

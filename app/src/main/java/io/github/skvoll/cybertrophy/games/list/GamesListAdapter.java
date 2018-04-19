@@ -18,9 +18,9 @@ import io.github.skvoll.cybertrophy.R;
 import io.github.skvoll.cybertrophy.data.GameModel;
 
 public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
-    private ArrayList<GameModel> mItems;
-    private OnItemClickListener mOnItemClickListener;
+    private final Context mContext;
+    private final ArrayList<GameModel> mItems;
+    private final OnItemClickListener mOnItemClickListener;
 
     GamesListAdapter(Context context, ArrayList<GameModel> gameModels,
                      OnItemClickListener onItemClickListener) {
@@ -135,14 +135,14 @@ public final class GamesListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private static final class GameViewHolder extends RecyclerView.ViewHolder {
-        View vContainer;
-        ImageView ivLogo;
-        TextView tvName;
-        TextView tvLastPLay;
-        TextView tvPlaytime;
-        TextView tvAchievements;
-        TextView tvProgress;
-        ProgressBar pbProgress;
+        final View vContainer;
+        final ImageView ivLogo;
+        final TextView tvName;
+        final TextView tvLastPLay;
+        final TextView tvPlaytime;
+        final TextView tvAchievements;
+        final TextView tvProgress;
+        final ProgressBar pbProgress;
 
         GameViewHolder(View itemView) {
             super(itemView);

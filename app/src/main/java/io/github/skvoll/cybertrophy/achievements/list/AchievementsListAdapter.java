@@ -2,6 +2,7 @@ package io.github.skvoll.cybertrophy.achievements.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
@@ -21,11 +22,11 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     public static final int TYPE_FULL = 1;
     public static final int TYPE_SMALL = 2;
 
-    private Context mContext;
-    private ArrayList<AchievementModel> mItems;
-    private int mType;
-    private OnItemClickListener mOnItemClickListener;
-    private int mMaxWidth;
+    private final Context mContext;
+    private final ArrayList<AchievementModel> mItems;
+    private final int mType;
+    private final OnItemClickListener mOnItemClickListener;
+    private final int mMaxWidth;
 
     public AchievementsListAdapter(Context context, ArrayList<AchievementModel> achievementModels,
                                    OnItemClickListener onItemClickListener, int type) {
@@ -41,7 +42,7 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (mType) {
             case TYPE_FULL:
                 return new AchievementFullViewHolder(LayoutInflater.from(parent.getContext())
@@ -50,12 +51,12 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                 return new AchievementSmallViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.fragment_achievements_list_item_small, parent, false));
             default:
-                return null;
+                throw new IllegalArgumentException("Unknown view holder type.");
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         final AchievementModel achievementModel = mItems.get(position);
 
         switch (mType) {
@@ -101,7 +102,7 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
                 } else {
                     achievementFullViewHolder.tvInfo.setText(
                             mContext.getResources().getString(R.string.achievement_rarity,
-                            getRarityString(achievementModel.getRatity()), achievementModel.getPercent()));
+                                    getRarityString(achievementModel.getRarity()), achievementModel.getPercent()));
                     achievementFullViewHolder.vProgress.getLayoutParams().width
                             = Math.round(mMaxWidth * (achievementModel.getPercent().floatValue() / 100f));
                 }
@@ -168,13 +169,13 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private static final class AchievementFullViewHolder extends RecyclerView.ViewHolder {
-        View vContainer;
-        View vProgress;
-        ImageView ivIcon;
-        ImageView ivIconMask;
-        TextView tvName;
-        TextView tvDescription;
-        TextView tvInfo;
+        final View vContainer;
+        final View vProgress;
+        final ImageView ivIcon;
+        final ImageView ivIconMask;
+        final TextView tvName;
+        final TextView tvDescription;
+        final TextView tvInfo;
 
         AchievementFullViewHolder(View itemView) {
             super(itemView);
@@ -191,9 +192,9 @@ public final class AchievementsListAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private static final class AchievementSmallViewHolder extends RecyclerView.ViewHolder {
-        View vContainer;
-        ImageView ivIcon;
-        ImageView ivIconMask;
+        final View vContainer;
+        final ImageView ivIcon;
+        final ImageView ivIconMask;
 
         AchievementSmallViewHolder(View itemView) {
             super(itemView);
