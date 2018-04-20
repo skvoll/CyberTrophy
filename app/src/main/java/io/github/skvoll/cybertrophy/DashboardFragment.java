@@ -1,11 +1,18 @@
 package io.github.skvoll.cybertrophy;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,17 +26,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import io.github.skvoll.cybertrophy.achievements.list.AchievementsListAdapter;
 import io.github.skvoll.cybertrophy.data.AchievementModel;
 import io.github.skvoll.cybertrophy.data.GameModel;
+import io.github.skvoll.cybertrophy.data.GamesParser;
 import io.github.skvoll.cybertrophy.data.ProfileModel;
 
 public final class DashboardFragment extends Fragment implements
         AchievementsListAdapter.OnItemClickListener,
+        LoaderManager.LoaderCallbacks<DashboardFragment.DataLoader.DataLoaderResult>,
         SwipeRefreshLayout.OnRefreshListener {
+    private static int LOADER_ID = 1;
+
+    private final ProfileObserver mProfileObserver = new ProfileObserver(new Handler());
+
     private ProfileModel mProfileModel;
     private ViewGroup mRootView;
     private SwipeRefreshLayout mSrlRefresh;
@@ -62,12 +74,74 @@ public final class DashboardFragment extends Fragment implements
         rvLockedAchievements.setAdapter(new AchievementsListAdapter(getContext(), new ArrayList<AchievementModel>(),
                 this, AchievementsListAdapter.TYPE_SMALL));
 
-        (new LoadDataTask(this)).execute(mProfileModel);
-
         return mRootView;
     }
 
-    private void setData(LoadDataTask.LoadDataTaskResult result) {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (getContext() == null) {
+            return;
+        }
+
+        if (!mProfileModel.isInitialized()) {
+            getContext().getContentResolver().registerContentObserver(
+                    mProfileModel.getUri(mProfileModel.getId()), true, mProfileObserver);
+
+            mProfileObserver.checkProfile();
+        } else {
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (getContext() == null) {
+            return;
+        }
+
+        getContext().getContentResolver().unregisterContentObserver(mProfileObserver);
+    }
+
+    @Override
+    public void onClick(AchievementModel achievementModel) {
+        showAchievement(achievementModel);
+    }
+
+    @NonNull
+    @Override
+    public Loader<DataLoader.DataLoaderResult> onCreateLoader(int id, @Nullable Bundle args) {
+        return new DataLoader(getContext(), mProfileModel);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<DataLoader.DataLoaderResult> loader, DataLoader.DataLoaderResult data) {
+        setData(data);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<DataLoader.DataLoaderResult> loader) {
+    }
+
+    @Override
+    public void onRefresh() {
+        if (getContext() == null) {
+            return;
+        }
+
+        Loader loader = getLoaderManager().getLoader(LOADER_ID);
+
+        if (loader == null) {
+            return;
+        }
+
+        loader.startLoading();
+    }
+
+    private void setData(DataLoader.DataLoaderResult result) {
         mSrlRefresh.setRefreshing(false);
         mRootView.findViewById(android.R.id.progress).setVisibility(View.GONE);
 
@@ -194,62 +268,33 @@ public final class DashboardFragment extends Fragment implements
                 achievementPreviewDialogFragment.getTag());
     }
 
-    @Override
-    public void onClick(AchievementModel achievementModel) {
-        showAchievement(achievementModel);
-    }
+    static class DataLoader extends AsyncTaskLoader<DataLoader.DataLoaderResult> {
+        private final ProfileModel mProfileModel;
+        private final ContentResolver mContentResolver;
+        private GamesParser mGamesParser;
+        private DataLoaderResult mResult;
 
-    @Override
-    public void onRefresh() {
-        if (getContext() == null) {
-            mSrlRefresh.setRefreshing(false);
+        DataLoader(Context context, ProfileModel profileModel) {
+            super(context);
 
-            return;
-        }
-
-        GameModel gameModel = GameModel.getCurrent(getContext().getContentResolver(), mProfileModel);
-
-        if (gameModel == null) {
-            mSrlRefresh.setRefreshing(false);
-
-            setData(null);
-
-            return;
-        }
-
-        if (mProfileModel.isInitialized()) {
-            (new UpdateGameTask(this, mProfileModel)).execute();
-        } else {
-            (new LoadDataTask(this)).execute(mProfileModel);
-        }
-    }
-
-    private static class LoadDataTask extends AsyncTask<ProfileModel, Void, LoadDataTask.LoadDataTaskResult> {
-        private WeakReference<DashboardFragment> mFragmentWeakReference;
-        private ContentResolver mContentResolver;
-
-        LoadDataTask(DashboardFragment fragment) {
-            if (fragment.getContext() == null) {
-                return;
-            }
-
-            mFragmentWeakReference = new WeakReference<>(fragment);
-            mContentResolver = fragment.getContext().getContentResolver();
+            mProfileModel = profileModel;
+            mContentResolver = context.getContentResolver();
+            mGamesParser = new GamesParser(getContext(), mProfileModel);
         }
 
         @Override
-        protected LoadDataTaskResult doInBackground(ProfileModel... profileModels) {
-            if (mContentResolver == null) {
-                return null;
+        public DataLoaderResult loadInBackground() {
+            try {
+                if (mGamesParser.isIdle() || mGamesParser.isFinished()) {
+                    mGamesParser.run(GamesParser.Action.RECENT);
+                } else {
+                    return mResult;
+                }
+            } catch (GamesParser.GamesParserException e) {
+                return mResult;
             }
 
-            ProfileModel profileModel = profileModels[0];
-
-            if (profileModel == null) {
-                return null;
-            }
-
-            GameModel gameModel = GameModel.getCurrent(mContentResolver, profileModel);
+            GameModel gameModel = GameModel.getCurrent(mContentResolver, mProfileModel);
 
             if (gameModel == null) {
                 return null;
@@ -260,32 +305,36 @@ public final class DashboardFragment extends Fragment implements
             ArrayList<AchievementModel> lockedAchievementModels = AchievementModel.getByGame(
                     mContentResolver, gameModel, AchievementModel.STATUS_LOCKED);
 
-            return new LoadDataTaskResult(gameModel, recentAchievementModels, lockedAchievementModels);
+            mResult = new DataLoaderResult(gameModel, recentAchievementModels, lockedAchievementModels);
+
+            return mResult;
         }
 
         @Override
-        protected void onPostExecute(LoadDataTaskResult result) {
-            if (mFragmentWeakReference == null) {
-                return;
-            }
-
-            DashboardFragment fragment = mFragmentWeakReference.get();
-
-            if (fragment == null) {
-                return;
-            }
-
-            fragment.setData(result);
+        protected void onStartLoading() {
+            forceLoad();
         }
 
-        static class LoadDataTaskResult {
+        @Override
+        protected boolean onCancelLoad() {
+            mGamesParser.cancel();
+
+            return super.onCancelLoad();
+        }
+
+        @Override
+        protected void onStopLoading() {
+            mGamesParser.cancel();
+        }
+
+        static class DataLoaderResult {
             final GameModel gameModel;
             final ArrayList<AchievementModel> recentAchievementModels;
             final ArrayList<AchievementModel> lockedAchievementModels;
 
-            LoadDataTaskResult(GameModel gameModel,
-                               ArrayList<AchievementModel> recentAchievementModels,
-                               ArrayList<AchievementModel> lockedAchievementModels) {
+            DataLoaderResult(GameModel gameModel,
+                             ArrayList<AchievementModel> recentAchievementModels,
+                             ArrayList<AchievementModel> lockedAchievementModels) {
                 this.gameModel = gameModel;
                 this.recentAchievementModels = recentAchievementModels;
                 this.lockedAchievementModels = lockedAchievementModels;
@@ -293,41 +342,36 @@ public final class DashboardFragment extends Fragment implements
         }
     }
 
-    private static class UpdateGameTask extends GamesParserTask {
-        private final WeakReference<DashboardFragment> mFragmentWeakReference;
-        private final ProfileModel mProfileModel;
+    private class ProfileObserver extends ContentObserver {
+        ProfileObserver(Handler handler) {
+            super(handler);
+        }
 
-        UpdateGameTask(DashboardFragment fragment, ProfileModel profileModel) {
-            super(fragment.getContext(), profileModel, ACTION_RECENT);
+        @Override
+        public void onChange(boolean selfChange) {
+            this.onChange(selfChange, null);
+        }
 
-            mFragmentWeakReference = new WeakReference<>(fragment);
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            checkProfile();
+        }
+
+        void checkProfile() {
+            if (getContext() == null) {
+                return;
+            }
+
+            ProfileModel profileModel = ProfileModel.getById(
+                    getContext().getContentResolver(), mProfileModel.getId());
+
+            if (profileModel == null || !profileModel.isInitialized()) {
+                return;
+            }
+
             mProfileModel = profileModel;
-        }
-
-        @Override
-        protected Boolean doInBackground(Long... appIds) {
-            if (!mProfileModel.isInitialized()) {
-                return false;
-            }
-
-            return super.doInBackground(appIds);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (mFragmentWeakReference == null) {
-                return;
-            }
-
-            DashboardFragment fragment = mFragmentWeakReference.get();
-
-            if (fragment == null) {
-                return;
-            }
-
-            if (success) {
-                (new LoadDataTask(fragment)).execute(mProfileModel);
-            }
+            getContext().getContentResolver().unregisterContentObserver(this);
+            getLoaderManager().initLoader(LOADER_ID, null, DashboardFragment.this);
         }
     }
 }
