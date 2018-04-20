@@ -65,8 +65,6 @@ public final class FirstGamesParserService extends Service {
     public void onDestroy() {
         if (mServiceAsyncTask != null) {
             mServiceAsyncTask.cancel();
-
-            Log.d(TAG, "Async task canceled.");
         }
 
         stopForeground(true);

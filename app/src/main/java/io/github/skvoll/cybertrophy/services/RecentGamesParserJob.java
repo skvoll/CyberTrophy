@@ -51,15 +51,7 @@ public final class RecentGamesParserJob extends JobService {
     public boolean onStartJob(final JobParameters jobParameters) {
         ProfileModel profileModel = ProfileModel.getActive(getContentResolver());
 
-        if (profileModel == null) {
-            return false;
-        }
-
-        if (!profileModel.isInitialized()) {
-            Intent intent = new Intent(this, GamesParserBroadcastReceiver.class);
-            intent.setAction(GamesParserBroadcastReceiver.ACTION_RETRY);
-            sendBroadcast(intent);
-
+        if (profileModel == null || !profileModel.isInitialized()) {
             return false;
         }
 
@@ -82,12 +74,15 @@ public final class RecentGamesParserJob extends JobService {
             }
 
             mJobAsyncTask.cancel();
-
-            Log.d(TAG, "Async task canceled.");
         }
 
         Log.d(TAG, "Stopped.");
 
         return needsReschedule;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "Destroyed.");
     }
 }

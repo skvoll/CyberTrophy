@@ -74,12 +74,15 @@ public final class AllGamesParserJob extends JobService {
             }
 
             mJobAsyncTask.cancel();
-
-            Log.d(TAG, "Async task canceled.");
         }
 
         Log.d(TAG, "Stopped.");
 
         return needsReschedule;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "Destroyed.");
     }
 }
