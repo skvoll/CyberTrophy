@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.skvoll.cybertrophy">
+    package="app.cybertrophy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -47,7 +47,7 @@
 
         <provider
             android:name=".data.DataProvider"
-            android:authorities="io.github.skvoll.cybertrophy"
+            android:authorities="app.cybertrophy"
             android:exported="false" />
 
         <service
