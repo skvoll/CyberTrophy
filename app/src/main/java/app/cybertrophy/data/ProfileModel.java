@@ -21,6 +21,7 @@ import app.cybertrophy.VolleySingleton;
 import app.cybertrophy.data.DataContract.ProfileEntry;
 import app.cybertrophy.steam.SteamProfile;
 
+@Deprecated
 public final class ProfileModel extends Model<ProfileModel> {
     private static final String TAG = ProfileModel.class.getSimpleName();
 

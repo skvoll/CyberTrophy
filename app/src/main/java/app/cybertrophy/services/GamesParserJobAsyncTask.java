@@ -64,7 +64,7 @@ public final class GamesParserJobAsyncTask extends GamesParserAsyncTask {
         service.jobFinished(mJobParameters, !success);
     }
 
-    private class ProgressListener extends GamesParser.GamesParserProgressListener {
+    private class ProgressListener implements GamesParser.GamesParserProgressListener {
         @Override
         public void onError(GamesParser.GamesParserException e) {
             Service service = mServiceWeakReference.get();

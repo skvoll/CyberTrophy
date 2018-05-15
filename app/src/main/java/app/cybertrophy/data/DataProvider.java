@@ -17,6 +17,7 @@ import static app.cybertrophy.data.DataContract.GameEntry;
 import static app.cybertrophy.data.DataContract.NotificationEntry;
 import static app.cybertrophy.data.DataContract.ProfileEntry;
 
+@Deprecated
 public final class DataProvider extends ContentProvider {
     private static final String TAG = DataProvider.class.getSimpleName();
 

@@ -14,6 +14,7 @@ import java.util.Locale;
 import app.cybertrophy.data.DataContract.AchievementEntry;
 import app.cybertrophy.steam.SteamAchievement;
 
+@Deprecated
 public final class AchievementModel extends Model<AchievementModel> {
     public static final int STATUS_ALL = 0;
     public static final int STATUS_LOCKED = 1;

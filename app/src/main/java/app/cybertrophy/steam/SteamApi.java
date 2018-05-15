@@ -210,7 +210,7 @@ public final class SteamApi {
             inputJson.put("steamid", steamId);
             inputJson.put("count", count);
         } catch (JSONException e) {
-            listener.setResponse(new LongSparseArray<SteamGame>());
+            listener.setResponse(new LongSparseArray<>());
 
             return listener;
         }
@@ -371,20 +371,10 @@ public final class SteamApi {
         private final JSONObject mParams;
 
         SteamApiRequest(int method, String url, JSONObject params, final SteamApiResponseListener<T> listener) {
-            super(method, url, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    listener.setError(error);
-                }
-            });
+            super(method, url, listener::setError);
 
             mParams = params;
-            mListener = new Response.Listener<T>() {
-                @Override
-                public void onResponse(T response) {
-                    listener.setResponse(response);
-                }
-            };
+            mListener = listener::setResponse;
         }
 
         @Override

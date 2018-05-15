@@ -3,6 +3,7 @@ package app.cybertrophy.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+@Deprecated
 public abstract class DataContract {
     public static final String AUTHORITY = "app.cybertrophy";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);

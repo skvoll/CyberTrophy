@@ -8,6 +8,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Build;
 
+@Deprecated
 abstract class Model<T> {
     public abstract Uri getUri(Long id);
 

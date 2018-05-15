@@ -15,6 +15,7 @@ import app.cybertrophy.steam.SteamGame;
 import static app.cybertrophy.data.DataContract.GameEntry;
 import static app.cybertrophy.data.DataContract.ProfileEntry;
 
+@Deprecated
 public final class GameModel extends Model<GameModel> {
     public static final int STATUS_ALL = 0;
     public static final int STATUS_INCOMPLETE = 1;

@@ -56,7 +56,8 @@ public final class GamesParser {
     }
 
     public GamesParser(Context context, ProfileModel profileModel) {
-        this(context, profileModel, new GamesParserProgressListener());
+        this(context, profileModel, new GamesParserProgressListener() {
+        });
     }
 
     public static void setLanguage(String language) {
@@ -487,37 +488,29 @@ public final class GamesParser {
         Log.d(mTag, String.format("%s updated.", achievementModel));
     }
 
-    public static class GamesParserProgressListener {
-        public void onError(GamesParserException e) {
-            // Implementation is not necessary
+    public interface GamesParserProgressListener {
+        default void onError(GamesParserException e) {
         }
 
-        public void onProgress(int processed, int total, SteamGame steamGame) {
-            // Implementation is not necessary
+        default void onProgress(int processed, int total, SteamGame steamGame) {
         }
 
-        public void onNewGame(GameModel gameModel) {
-            // Implementation is not necessary
+        default void onNewGame(GameModel gameModel) {
         }
 
-        public void onGameRemoved(GameModel gameModel) {
-            // Implementation is not necessary
+        default void onGameRemoved(GameModel gameModel) {
         }
 
-        public void onNewAchievement(GameModel gameModel, AchievementModel achievementModel) {
-            // Implementation is not necessary
+        default void onNewAchievement(GameModel gameModel, AchievementModel achievementModel) {
         }
 
-        public void onAchievementRemoved(GameModel gameModel, AchievementModel achievementModel) {
-            // Implementation is not necessary
+        default void onAchievementRemoved(GameModel gameModel, AchievementModel achievementModel) {
         }
 
-        public void onAchievementUnlocked(GameModel gameModel, AchievementModel achievementModel) {
-            // Implementation is not necessary
+        default void onAchievementUnlocked(GameModel gameModel, AchievementModel achievementModel) {
         }
 
-        public void onGameComplete(GameModel gameModel) {
-            // Implementation is not necessary
+        default void onGameComplete(GameModel gameModel) {
         }
     }
 
@@ -537,10 +530,6 @@ public final class GamesParser {
     public static final class ParsingFailureException extends GamesParserException {
         ParsingFailureException(String message) {
             super(message);
-        }
-
-        ParsingFailureException(Throwable cause) {
-            super(cause);
         }
     }
 

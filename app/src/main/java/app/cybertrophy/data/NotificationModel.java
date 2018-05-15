@@ -18,6 +18,7 @@ import java.util.Objects;
 
 import app.cybertrophy.data.DataContract.NotificationEntry;
 
+@Deprecated
 public final class NotificationModel extends Model<NotificationModel> {
     public static final int TYPE_CATEGORY_SEPARATOR = 1;
     public static final int TYPE_DEBUG = 1000;
